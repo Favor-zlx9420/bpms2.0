@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    username: root
+    password: 201314
+    url: jdbc:mysql://localhost:3306/author2.0?characterEncoding=UTF-8&rewriteBatchedStatements=true&generateSimpleParameterMetadata=true&serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+  output:
+    ansi:
+      #      在控制台输出彩色日志
+      enabled: always
+  profiles:
+    active: dev,param
+  #    当遇到命名相同时，是否允许覆盖注册
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    #日志级别，显示SQL语句
+    com.zlx.bpms.dao: debug
+
+server:
+  port: 8082
+  #  暂时不需要
+#  servlet:
+#    context-path: /bpm
+mybatis-plus:
+  #  xml位置
+  mapper-locations: classpath:mapper/*.xml
+  #  实体扫描，多个实体之间用逗号分隔
+  type-aliases-package: com.zlx.bpms.bean
+  global-config:
+    #    数据库类型
+    db-type: mysql
+    #    主键类型：0："数据库ID自增"，1："用户输入ID，2："全局唯一I（数字类型唯一ID）"，3："全局唯一ID UUID";
+    id-type: 2
+    #    驼峰下划线转换
+    db-column-underline: true
+    #    刷新mapper 调试神器
+    refresh-mapper: true
+  configuration:
+    #    启用缓存
+    cache-enabled: false
+    #    开启自动驼峰命名规则（camel case）映射
+    #    即从经典数据库列名 A_COLUMN（下划线命名）到经典Java属性名 aColumn（驼峰命名）的类似映射。
+    #    当为true时：mybatis-plus会将Java对象的驼峰式命名的常量转成下划线的方式，再与数据库表列字段进行匹配，必须使用@TableField注解指定常量在表中的列名。
+    #    当为false时：此时就需要数据库里每列都是下划线的命名方式。
+    map-underscore-to-camel-case: true
