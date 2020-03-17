@@ -1,4 +1,17 @@
 spring:
+  security:
+    #   登陆路径
+    login-url: /login
+    #    登出路径
+    logout-url: /logout
+    #    免认证静态资源路径
+    anon-resources-url: /css/**,/js/**,/skin/**,/images/**,/font/**,/fonts/**,/dist/**
+    #    放行路径
+    release-url: /login,/getVerificationCode
+    # 记住我超时时间
+    remember-me-timeout: 300
+    #        对应登录页面 form表单的 action属性
+    login-processing-url: /authentication/form
   redis:
     host: localhost
     port: 6379
@@ -19,30 +32,3 @@ spring:
         #        空闲链接检测线程检测周期(ms)(负数表示不运行检测线程)
         time-between-eviction-runs: 3000
     password: 201314
-  security:
-    #   登陆路径
-    login-url: /login
-    #    登出路径
-    logout-url: /logout
-    #    免认证静态资源路径
-    anon-resources-url: /css/**,/js/**,/skin/**,/images/**,/font/**,/fonts/**,/dist/**
-    #    放行路径
-    release-url: /login,/getVerificationCode
-    # 记住我超时时间
-    remember-me-timeout: 300
-    #验证码相关配置
-    code:
-      #图形验证码相关配置
-      image:
-        #        图形验证码图片长度（px）
-        width:  130
-        #        图形验证码图片高度（px）
-        hight:  40
-        #          图形验证码由（n）组成字符位数
-        length: 4
-        #          图形验证码失效时间（秒）
-        expiration-in: 60
-        #          以下资源需要验证图形验证码
-        url: /user,/user/*
-        #        对应登录页面 form表单的 action属性
-        login-processing-url: /authentication/form

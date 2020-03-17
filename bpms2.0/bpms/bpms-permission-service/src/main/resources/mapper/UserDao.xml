@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlx.bpms.dao.UserDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zlx.bpms.bean.User">
+        <id column="id" property="id"/>
+        <result column="remark_name" property="remarkName"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_status" property="isStatus"/>
+    </resultMap>
+
+    <sql id="overall_column">
+        id,remark_name,user_name,password,phone_number,create_time,update_time,is_status
+    </sql>
+
+    <select id="findRolePermission" resultType="java.lang.String">
+        SELECT
+	        ap.role_permission
+        FROM
+	        sys_permission AS ap
+        LEFT JOIN sys_user AS au ON ap.user_id = au.id
+        LEFT JOIN sys_role AS ar ON ar.permission_id = ap.id
+        AND ar.user_id = au.id
+        WHERE au.user_name = #{username,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
