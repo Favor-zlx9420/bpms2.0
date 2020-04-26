@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.member.mapper.MemCompanyUserinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.member.module.entity.TbMemCompanyUserinfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="call" property="call" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.member.module.view.TvMemCompanyUserinfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.member.module.view.TvMemCompanyUserinfo" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`company_name`, e.`country`, 
+    e.`province`, e.`city`, e.`area`, e.`address`, e.`call`, e.`post_code`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_company_userinfo e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.member.module.query.TsMemCompanyUserinfo" >
+    select count(1) as recordCount from tb_mem_company_userinfo e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.member.module.query.TsMemCompanyUserinfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

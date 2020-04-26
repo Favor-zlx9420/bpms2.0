@@ -1,0 +1,91 @@
+
+<style type="text/css">
+    .list-btn{float:right;width:80px !important;margin-left:5px;}
+</style>
+<div class="boxSearch searchLong">
+    <div>预约状态：</div>
+    <div>
+        <select class="selSearch no-render" name="e.state.in" multiple="multiple" size="5"
+                data-enumber="Consts.CustomerUserState"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>提交时间：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.createDate.ge" id="beginCreateDate" value=''/>
+        <br />
+        至
+        <br />
+        <input type="text" class="timeSearch" name="e.createDate.le" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>客户姓名：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.name.like" /></div>
+    <div>手机号码：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.phone.like" /></div>
+</div>
+<script>
+    ifwin.width=1250;
+    ifwin.height =650;
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+    });
+    function binCustomerStateFunc(tr,v,i){
+        var html="";
+        if(tr["state"] == Consts.CustomerUserState.未处理){
+            html +="<div class=\"viyui-btn viyui-btn-xs list-btn list-audit\" data-id='"+tr["id"]+"'>更新为已处理</div>";
+        }
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.CustomerUserState,v)+"</div>";
+        return html;
+    }
+    $(function(){
+        $(viyGrid.selector).on("click",".list-audit",function(){
+            var id = $(this).attr("data-id");
+            lBox.confirm({
+                title:"将该预约用户更新为已处理",
+                content:"是否将该用户更新为已处理？",
+                btnConfirmFunc:function(){
+                    var w = lBox.wait({content:"操作中..."});
+                    $.ajax({
+                        url: "${auditAction}",
+                        type: "post",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({
+                            entity: {
+                                id: id,
+                                state: Consts.CustomerUserState.已处理
+                            }
+                        }),
+                        dataType: "json",
+                        success: function (data) {
+                            w.close(function () {
+                                if (!checkResultIsOk(data)) {
+                                    return;
+                                }
+                                viyGrid.reload.call(viyGrid);
+                            });
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            w.close(function () {
+                                lBox.alert({
+                                    content: "保存时出现异常！", success: function () {
+                                        LET.openEvt = true;
+                                    }
+                                });
+                            })
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

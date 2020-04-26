@@ -1,0 +1,94 @@
+<style type="text/css">
+    #dynItemBox select {
+        display: inline;
+    }
+    .pic-box img{height:80px;}
+</style>
+<script type="text/javascript">
+    var viewParam = {
+        beforeBindFunc:function(entity){
+            $("#auditBtnBox").children().eq(0).attr("data-result",Consts.CustomerAuditState.未通过审核).next().attr("data-result",Consts.CustomerAuditState.通过审核);
+            $("#auditBtnBox .audit-btn").removeClass("hide").click(function () {
+                var _this = $(this);
+                var thisk={
+                    form : _this.closest("form"),
+                };
+                if (!LET.checkForm(thisk.form)) {
+                    return false;
+                }
+                var result = _this.attr("data-result");
+                var title = _this.find("span").text();
+                var id = entity.id;
+                var memo = $("#memo").val();
+                _audit(title, result, id,memo);
+            }).insertAfter(".ifrcom-btm-btn-box .btn-cancel");
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form" name="comm-alter-form" action="${auditAction}">
+    <div class="comm-outer-box">
+        <input type="hidden" value="0" name="entity.id" id="id"/>
+        <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+            <tbody>
+            <tr class="">
+                <th width="150px">
+                    <div>机构：</div>
+                </th>
+                <td>
+                    <div id="partyShortName"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>用户：</div>
+                </th>
+                <td colspan="2">
+                    <div id="userId">
+                        <span id="appUserName"></span>/
+                        <span id="appRealName"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>标题：</div>
+                </th>
+                <td colspan="2">
+                    <div id="title"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>副标题：</div>
+                </th>
+                <td colspan="2">
+                    <div id="subTitle"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>创建时间：</div>
+                </th>
+                <td colspan="2">
+                    <div id="createDate" data-bind-function="dateTimeFunc"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>内容：</div>
+                </th>
+                <td colspan="2">
+                    <div id="content"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+    <#if hasAuditPermission!false>
+    <div id="auditBtnBox">
+        <div class="viyui-btn viyui-btn-sm viyui-danger hide audit-btn"><i class="icon-ban-circle"></i><span>驳回申请</span></div>
+        <div class="viyui-btn viyui-btn-sm hide audit-btn"><i class="icon-check"></i><span>通过申请</span></div>
+    </div>
+    </#if>
+</form>

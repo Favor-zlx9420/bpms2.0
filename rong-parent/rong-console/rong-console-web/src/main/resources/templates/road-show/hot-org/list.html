@@ -1,0 +1,41 @@
+
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.visible.eq"
+        >
+
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>机构简称：</div>
+    <div><input type="text" value='' class="input textSearch" name="mi.partyShortName.like" /></div>
+    <div>机构全称：</div>
+    <div><input type="text" value='' class="input textSearch" name="mi.partyFullName.like" /></div>
+</div>
+<script>
+    ifwin.btnAddText = "热门机构";
+    ifwin.width = 700;
+    ifwin.height = 450;
+    param.pageInfo.sortField="e.id";
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+</script>

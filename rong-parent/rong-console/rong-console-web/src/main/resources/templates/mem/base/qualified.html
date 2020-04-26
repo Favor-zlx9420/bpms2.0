@@ -1,0 +1,84 @@
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+    #btnAdd{display:none !important;}
+</style>
+
+<div class="box-search">
+    <div>注册时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>认证时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="iq.updateDate.ge" id="beginQualifiedDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="iq.updateDate.le" id="endQualifiedDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>真实姓名：<input placeholder="请输入真实姓名" type="text" value='' class="input textSearch w189" name="mb.realName.like" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>测试类型：
+        <select class="selSearch no-render w194" name="iq.qualifiedResult.in"
+        >
+            <option value="">全部</option>
+            <option value="C1">保守型</option>
+            <option value="C2">谨慎型</option>
+            <option value="C3">稳健型</option>
+            <option value="C4">积极型</option>
+            <option value="C5">激进型</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>注册来源：
+        <select class="selSearch no-render w194"
+        >
+            <option value="">全部</option>
+            <option value="">邀请码</option>
+            <option value="">手机号码注册</option>
+            <option value="">其他</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>　手机号：<input placeholder="请输入手机号" type="text" value='' class="input textSearch w189" name="e.phone.like" /></div>
+</div>
+<script>
+    //初始化信息重写
+    ifwin.width=1250;
+    ifwin.showView = false;
+    ifwin.listEditWidth = 160;
+    param.queryParams["qualified"] = "true";
+    function showEditInfo(tr, v, i) {
+        var html = "<a class='btn-list-view' style='margin-right:5px;' data-id='" + v + "'>查看详情</a>";
+        <#if hasDelPermission!false >
+            html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+        </#if>
+        return html;
+    }
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        $('#beginQualifiedDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endQualifiedDate').getDateValue()})}
+        });
+        $('#endQualifiedDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginQualifiedDate').getDateValue()})}
+        });
+    });
+    function bindQualifiedResultFunc(tr,v,i){
+        return Consts.InvestorQualifiedResult[tr["qualifiedResult"]];
+    }
+    function bindRecommendUserFunc(tr,v,i){
+        return !LE.isEmpty(tr["recommendUser"]) ? tr["recommendUser"] : "-";
+    }
+</script>

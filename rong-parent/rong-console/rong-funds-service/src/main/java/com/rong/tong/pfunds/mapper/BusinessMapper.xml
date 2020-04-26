@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rong.tong.pfunds.mapper.BusinessMapper">
+    <!--注意上面的namespace一定要修改-->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="TvProduceSummaryMap" type="com.rong.tong.pfunds.module.view.TvProduceSummary">
+        <result column="SECURITY_ID" property="securityId" />
+        <result column="SEC_SHORT_NAME" property="secShortName" />
+        <result column="SEC_FULL_NAME" property="secFullName" />
+        <result column="produceType" property="produceType" />
+        <result column="INVEST_STRATEGY" property="investStrategy" />
+        <result column="STATUS" property="status" />
+        <result column="nav" property="nav" />
+        <result column="END_DATE" property="endDate" />
+        <result column="RETURN_RATE_1Y" property="returnRate1y" />
+        <result column="RETURN_RATE_EST" property="returnRateEst" />
+        <result column="ACCUM_NAV" property="accumNav" />
+        <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" />
+        <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+        <result column="SHARPE_RATIO" property="sharpeRatio" />
+        <result column="ESTABLISH_DATE" property="establishDate" />
+        <result column="PARTY_SHORT_NAME" property="partyShortName" />
+        <result column="PARTY_FULL_NAME" property="partyFullName" />
+        <result column="PARTY_ID" property="partyId" />
+        <result column="NAME" property="userName" />
+        <result column="person_id" property="personId" />
+        <result column="RECORD_CD" property="recordCd" />
+        <result column="storeUser" property="storeUser" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="TvHisNavMap" type="com.rong.tong.pfunds.module.view.TvHisNav">
+        <result column="END_DATE" property="endDate" />
+        <result column="NAV" property="nav" />
+        <result column="ADJ_NAV" property="adjNav" />
+        <result column="ACCUM_NAV" property="accumNav" />
+        <result column="adjNavChange" property="adjNavChange" />
+        <result column="accumNavChange" property="accumNavChange" />
+        <result column="RETURN_RATE" property="returnRate" />
+        <result column="DIVIDEND" property="dividend" />
+        <result column="SPLIT" property="split" />
+    </resultMap>
+
+    <resultMap id="TvDateBoundaryMap" type="com.rong.tong.pfunds.module.view.TvDateBoundary">
+        <result column="startDate" property="startDate" />
+        <result column="endDate" property="endDate" />
+    </resultMap>
+
+    <resultMap id="TvMaxDrawdownTrendMap" type="com.rong.tong.pfunds.module.view.TvMaxDrawdownTrend">
+        <result column="END_DATE" property="endDate" />
+        <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    </resultMap>
+
+    <resultMap id="TvIntervalReturnMap" type="com.rong.tong.pfunds.module.view.TvIntervalReturn">
+        <result column="END_DATE" property="endDate" />
+        <result column="RETURN_RATE_EST" property="returnRateEst" />
+        <result column="RETURN_RATE_YTD" property="returnRateYtd" />
+        <result column="RETURN_RATE_1M" property="returnRate1m" />
+        <result column="RETURN_RATE_3M" property="returnRate3m" />
+        <result column="RETURN_RATE_6M" property="returnRate6m" />
+        <result column="RETURN_RATE_1Y" property="returnRate1y" />
+        <result column="RETURN_RATE_2Y" property="returnRate2y" />
+        <result column="RETURN_RATE_3Y" property="returnRate3y" />
+        <result column="RETURN_RATE_5Y" property="returnRate5y" />
+    </resultMap>
+
+    <resultMap id="TvYearMonReturnMap" type="com.rong.tong.pfunds.module.view.TvYearMonReturn">
+        <result column="END_DATE" property="endDate" />
+        <result column="NAV_RETURN" property="navReturn" />
+    </resultMap>
+
+    <resultMap id="TvRiskAssessmentMap" type="com.rong.tong.pfunds.module.view.TvRiskAssessment">
+        <result column="WINDOW" property="window" />
+        <result column="END_DATE" property="endDate" />
+        <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" />
+        <result column="ANNUAL_TOTAL_RISK" property="annualTotalRisk" />
+        <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+        <result column="DOWNSIDE_RISK" property="downsideRisk" />
+        <result column="SHARPE_RATIO" property="sharpeRatio" />
+        <result column="JENSENS_ALPHA" property="jensensAlpha" />
+        <result column="SORTINO_RATIO" property="sortinoRatio" />
+        <result column="UP_CAPTURE_RATE" property="upCaptureRate" />
+        <result column="DOWN_CAPTURE_RATE" property="downCaptureRate" />
+    </resultMap>
+
+    <resultMap id="TvFundStyleMap" type="com.rong.tong.pfunds.module.view.TvFundStyle">
+        <result column="END_DATE" property="endDate" />
+        <result column="UP_CAPTURE_RATE" property="upCaptureRate" />
+        <result column="DOWN_CAPTURE_RATE" property="downCaptureRate" />
+    </resultMap>
+
+    <resultMap id="TvProduceInformationMap" type="com.rong.tong.pfunds.module.view.TvProduceInformation">
+        <result column="SEC_FULL_NAME" property="secFullName" />
+        <result column="SEC_SHORT_NAME" property="secShortName" />
+        <result column="PARTY_FULL_NAME" property="partyFullName" />
+        <result column="PARTY_SHORT_NAME" property="partyShortName" />
+        <result column="ISSUE_PLATFORM" property="issuePlatform" />
+        <result column="CUSTODIAN" property="custodian" />
+        <result column="TRADING_BROKER" property="tradingBroker" />
+        <result column="ESTABLISH_DATE" property="establishDate" />
+        <result column="STATUS" property="status" />
+        <result column="PF_STYLE" property="pfStyle" />
+        <result column="SCALE_INITIAL" property="scaleInitial" />
+        <result column="INVEST_STRATEGY" property="investStrategy" />
+        <result column="INVEST_STRATEGY_CHILD" property="investStrategyChild" />
+        <result column="fen" property="fen" />
+        <result column="san" property="san" />
+        <result column="SUBSCRIPTION_START_POINT" property="subscriptionStartPoint" />
+        <result column="CLOSING_DURA_DESC" property="closingDuraDesc" />
+        <result column="OPEN_DATE_DESC" property="openDateDesc" />
+        <result column="ISSUE_FEE" property="issueFee" />
+        <result column="REDEEM_FEE" property="redeemFee" />
+        <result column="MANAGEMENT_FEE" property="managementFee" />
+        <result column="PERFORMANECE_RETURN" property="performaneceReturn" />
+        <result column="DURATION" property="duration" />
+        <result column="RECORD_CD" property="recordCd" />
+        <result column="MIN_ADD" property="minAdd" />
+        <result column="WARN_LINE" property="warnLine" />
+        <result column="STOP_LOSS_LINE" property="stopLossLine" />
+    </resultMap>
+
+    <resultMap id="TvCompanySummaryMap" type="com.rong.tong.pfunds.module.view.TvCompanySummary">
+        <result column="PARTY_ID" property="partyId" />
+        <result column="PARTY_SHORT_NAME" property="partyShortName" />
+        <result column="PARTY_FULL_NAME" property="partyFullName" />
+        <result column="RETURN_ACCUM" property="returnAccum" />
+        <result column="RETURN_A" property="returnA" />
+        <result column="KEY_PERSON" property="keyPerson" />
+        <result column="SEC_SHORT_NAME" property="secShortName" />
+        <result column="SEC_FULL_NAME" property="secFullName" />
+        <result column="SECURITY_ID" property="securityId" />
+        <result column="NUM_ALL" property="numAll" />
+        <result column="NUM_DURA" property="numDura" />
+        <result column="RECORD_DATE" property="recordDate" />
+        <result column="REG_CITY" property="regCity" />
+        <result column="REG_CD" property="regCd" />
+        <result column="SCALE" property="scale" />
+    </resultMap>
+
+    <resultMap id="TvSearchPfundInfoResultMap" type="com.rong.tong.pfunds.module.view.TvSearchPfundInfo">
+        <result column="no" property="no" />
+        <result column="SECURITY_ID" property="securityId" />
+        <result column="SEC_SHORT_NAME" property="secShortName" />
+        <result column="SEC_FULL_NAME" property="secFullName" />
+        <result column="PARTY_SHORT_NAME" property="partyShortName" />
+        <result column="PARTY_FULL_NAME" property="partyFullName" />
+        <result column="ESTABLISH_DATE" property="establishDate" />
+        <result column="nav" property="nav" />
+        <result column="END_DATE" property="endDate" />
+        <result column="ACCUM_NAV" property="accumNav" />
+        <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" />
+        <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    </resultMap>
+
+    <!--查询方法-->
+    <select id="hostSearch" resultType="com.rong.tong.pfunds.module.view.TvHostSearch">
+        SELECT k.SECURITY_ID id,e.SEC_SHORT_NAME hostSearch,1 type
+        FROM `rong-manage`.tb_security_manage k
+        JOIN `tong-rong`.md_security e ON k.SECURITY_ID = e.SECURITY_ID
+        WHERE k.hot_search = 1
+        UNION ALL
+        SELECT k.PARTY_ID id,b.PARTY_SHORT_NAME hostSearch,2 type
+        FROM `rong-manage`.tb_org_manage k
+		JOIN `tong-rong`.md_institution b ON k.PARTY_ID = b.PARTY_ID
+        WHERE k.hot_search = 1
+        UNION ALL
+        SELECT k.person_id id,b.NAME hostSearch,3 type
+        FROM `rong-manage`.tb_people_manage k
+        JOIN `tong-rong`.md_people b ON k.person_id = b.PERSON_ID
+        WHERE k.hot_search = 1
+    </select>
+
+    <select id="hostSearchFull" resultType="com.rong.tong.pfunds.module.view.TvHostSearch">
+        SELECT k.SECURITY_ID id,e.SEC_FULL_NAME hostSearch,1 type
+        FROM `rong-manage`.tb_security_manage k
+        JOIN `tong-rong`.md_security e ON k.SECURITY_ID = e.SECURITY_ID
+        WHERE k.hot_search = 1
+        UNION ALL
+        SELECT k.PARTY_ID id,b.PARTY_FULL_NAME hostSearch,2 type
+        FROM `rong-manage`.tb_org_manage k
+		JOIN `tong-rong`.md_institution b ON k.PARTY_ID = b.PARTY_ID
+        WHERE k.hot_search = 1
+        UNION ALL
+        SELECT k.person_id id,b.NAME hostSearch,3 type
+        FROM `rong-manage`.tb_people_manage k
+        JOIN `tong-rong`.md_people b ON k.person_id = b.PERSON_ID
+        WHERE k.hot_search = 1
+    </select>
+    
+    <select id="getFundInfoSummary" resultMap="TvProduceSummaryMap">
+        SELECT a.SECURITY_ID
+        ,b.SEC_SHORT_NAME
+        ,b.SEC_FULL_NAME
+        ,'私募产品' as produceType
+        ,a.INVEST_STRATEGY
+        ,a.`STATUS`
+        ,truncate(c.NAV,4) NAV
+        ,DATE_FORMAT(c.END_DATE,'%Y-%m-%d') END_DATE
+        ,e.RETURN_RATE_1Y
+        ,e.RETURN_RATE_EST
+        ,truncate(c.ACCUM_NAV,4) ACCUM_NAV
+        ,concat(truncate(h.ANNUAL_TOTAL_RETURN *100,2),'%') as ANNUAL_TOTAL_RETURN
+        ,concat(truncate(h.MAX_DRAWDOWN *100,2),'%') as MAX_DRAWDOWN
+        ,truncate(h.SHARPE_RATIO,2) SHARPE_RATIO
+        ,a.ESTABLISH_DATE
+        ,i.PARTY_SHORT_NAME
+        ,i.PARTY_FULL_NAME
+        ,i.PARTY_ID
+		,d.`NAME`
+		,c.person_id
+        ,a.RECORD_CD
+        ,(SELECT count( DISTINCT 1 ) FROM `rong-manage`.tb_direct_store_org WHERE party_id = a.INVEST_CONSULTANT) storeUser
+        ,(CASE WHEN j.id IS NOT NULL THEN TRUE ELSE FALSE END) fav
+        FROM
+        `tong-rong`.pfund a
+        LEFT JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+        LEFT JOIN `rong-manage`.tb_private_funds_current_nav c ON a.SECURITY_ID = c.SECURITY_ID
+		LEFT JOIN `tong-rong`.md_people d ON c.PERSON_ID = d.PERSON_ID
+		LEFT JOIN `rong-manage`.tb_private_funds_current_gr e ON a.SECURITY_ID = e.SECURITY_ID
+        LEFT JOIN (SELECT MAX(END_DATE) AS END_DATE FROM `tong-rong`.pfund_perf_indic WHERE SECURITY_ID = #{securityId} AND WINDOW = 8) g ON 1 = 1
+        LEFT JOIN `tong-rong`.pfund_perf_indic h ON g.END_DATE = h.END_DATE AND h.SECURITY_ID = a.SECURITY_ID AND h.WINDOW = 8
+        LEFT JOIN `tong-rong`.md_institution i ON a.INVEST_CONSULTANT = i.PARTY_ID
+        LEFT JOIN `rong-manage`.tb_user_pro_fav j ON a.SECURITY_ID = j.security_id AND deltag = FALSE AND j.user_id = #{userId}
+        WHERE a.SECURITY_ID = #{securityId}
+        limit 1
+    </select>
+
+
+    <select id="hisNav" resultMap="TvHisNavMap">
+        SELECT
+        a.END_DATE
+        ,truncate(a.NAV,4) NAV
+        ,truncate(a.ADJ_NAV,4) ADJ_NAV
+        ,truncate(a.ACCUM_NAV,4) ACCUM_NAV
+        ,concat(truncate(a.ADJ_RETURN_RATE *100,2),'%') as RETURN_RATE
+        ,truncate(b.DIVIDEND,2) DIVIDEND
+        ,truncate(b.SPLIT,2) SPLIT
+        FROM
+        `tong-rong`.pfund_nav a
+        LEFT JOIN `tong-rong`.pfund_div b ON a.SECURITY_ID = b.SECURITY_ID AND a.END_DATE = b.EFFECT_DATE
+        WHERE a.SECURITY_ID = #{securityId}
+        ORDER BY a.END_DATE DESC
+        limit #{limitStart},#{limitEnd}
+    </select>
+
+    <select id="hisNavCount" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM `tong-rong`.pfund_nav
+        WHERE SECURITY_ID = #{securityId}
+    </select>
+
+    <select id="hisNavDateBoundary" resultMap="TvDateBoundaryMap">
+        SELECT MAX(END_DATE) endDate
+        ,MIN(END_DATE) startDate
+        FROM `tong-rong`.pfund_nav
+        WHERE SECURITY_ID = #{securityId}
+    </select>
+
+    <select id="accumNavTrend" resultMap="TvHisNavMap">
+        SELECT
+        END_DATE
+        ,truncate(NAV,4) NAV
+        ,truncate(ADJ_NAV,4) ADJ_NAV
+        ,truncate(ACCUM_NAV,4) ACCUM_NAV
+        ,concat(truncate(RETURN_RATE *100,2),'%') as RETURN_RATE
+        ,concat(truncate((ADJ_NAV - @startAdjNav)/@startAdjNav *100,2),'%') adjNavChange
+        ,concat(truncate((ACCUM_NAV - @startAccumNav)/@startAccumNav *100,2),'%') accumNavChange
+        FROM
+        `tong-rong`.pfund_nav
+        LEFT JOIN(SELECT @startAdjNav := ADJ_NAV,@startAccumNav := ACCUM_NAV FROM `tong-rong`.pfund_nav WHERE SECURITY_ID = #{securityId}
+        <if test="startDate != null">
+            AND END_DATE >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND END_DATE &lt;= #{endDate}
+        </if>
+        ORDER BY END_DATE
+        LIMIT 1) r ON 1 = 1
+        WHERE SECURITY_ID = #{securityId}
+        <if test="startDate != null">
+            AND END_DATE >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND END_DATE &lt;= #{endDate}
+        </if>
+        ORDER BY END_DATE
+    </select>
+
+    <select id="maxDrawdownTrend" resultMap="TvMaxDrawdownTrendMap">
+        SELECT
+        DATE_FORMAT(END_DATE,'%Y-%m-%d') END_DATE
+        ,concat('-',truncate(MAX_DRAWDOWN *100,2),'%') as MAX_DRAWDOWN
+        FROM `tong-rong`.pfund_perf_indic
+        WHERE SECURITY_ID = #{securityId}
+        AND WINDOW = #{window}
+        ORDER BY END_DATE
+    </select>
+
+    <select id="maxHisDrawdown" resultMap="TvMaxDrawdownTrendMap">
+        SELECT
+        MAX(a.END_DATE) END_DATE
+        ,concat('-',truncate(MAX(a.MAX_DRAWDOWN) *100,2),'%') as MAX_DRAWDOWN
+        FROM `tong-rong`.pfund_perf_indic a
+        JOIN (SELECT MAX(MAX_DRAWDOWN) MAX_DRAWDOWN FROM `tong-rong`.pfund_perf_indic WHERE SECURITY_ID = #{securityId} AND WINDOW = 1) b ON a.MAX_DRAWDOWN = b.MAX_DRAWDOWN
+        WHERE SECURITY_ID = #{securityId}
+        AND WINDOW = #{window}
+    </select>
+
+    <select id="getIntervalReturn" resultMap="TvIntervalReturnMap">
+        SELECT
+        a.END_DATE
+        ,concat(truncate(a.RETURN_RATE_EST,2),'%') as RETURN_RATE_EST
+        ,concat(truncate(a.RETURN_RATE_YTD,2),'%') as RETURN_RATE_YTD
+        ,concat(truncate(a.RETURN_RATE_1M,2),'%') as RETURN_RATE_1M
+        ,concat(truncate(a.RETURN_RATE_3M,2),'%') as RETURN_RATE_3M
+        ,concat(truncate(a.RETURN_RATE_6M,2),'%') as RETURN_RATE_6M
+        ,concat(truncate(a.RETURN_RATE_1Y,2),'%') as RETURN_RATE_1Y
+        ,concat(truncate(a.RETURN_RATE_2Y,2),'%') as RETURN_RATE_2Y
+        ,concat(truncate(a.RETURN_RATE_3Y,2),'%') as RETURN_RATE_3Y
+        ,concat(truncate(a.RETURN_RATE_5Y,2),'%') as RETURN_RATE_5Y
+        FROM
+        `rong-manage`.tb_private_funds_current_gr a
+        WHERE a.SECURITY_ID = #{securityId}
+    </select>
+
+    <select id="getYearReturn" resultMap="TvYearMonReturnMap">
+        SELECT END_DATE,NAV_RETURN FROM
+        (SELECT YEAR(NOW()) END_DATE,RETURN_RATE_YTD NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-1 END_DATE,RETURN_RATE_1A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-2 END_DATE,RETURN_RATE_2A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-3 END_DATE,RETURN_RATE_3A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-4 END_DATE,RETURN_RATE_4A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-5 END_DATE,RETURN_RATE_5A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-6 END_DATE,RETURN_RATE_6A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-7 END_DATE,RETURN_RATE_7A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}
+        UNION ALL SELECT YEAR(NOW())-8 END_DATE,RETURN_RATE_8A NAV_RETURN FROM `rong-manage`.tb_private_funds_current_gr_year WHERE SECURITY_ID = #{securityId}) a
+        WHERE NAV_RETURN IS NOT NULL
+    </select>
+
+    <select id="getMonReturn" resultMap="TvYearMonReturnMap">
+        SELECT DATE_FORMAT(a.END_DATE,'%Y-%m') END_DATE
+        ,NAV_RETURN
+        FROM
+        (SELECT
+        STR_TO_DATE(concat(`YEAR`,'-',MON,'-01'),'%Y-%m-%d') END_DATE
+        ,concat(truncate(NAV_RETURN,2),'%') as NAV_RETURN
+        FROM
+        `tong-rong`.pfund_return_freq
+        WHERE SECURITY_ID = #{securityId}
+        AND FREQ = 'M'
+        ORDER BY STR_TO_DATE(concat(`YEAR`,'-',MON,'-01'),'%Y-%m-%d') DESC
+        limit 0,9) a
+        ORDER BY DATE(a.END_DATE);
+    </select>
+
+    <select id="riskAssessment" resultMap="TvRiskAssessmentMap">
+        SELECT
+        a.WINDOW
+        ,a.END_DATE
+        ,concat(truncate(ANNUAL_TOTAL_RETURN *100,2),'%') ANNUAL_TOTAL_RETURN
+        ,concat(truncate(ANNUAL_TOTAL_RISK *100,2),'%') ANNUAL_TOTAL_RISK
+        ,concat(truncate(MAX_DRAWDOWN *100,2),'%') MAX_DRAWDOWN
+        ,concat(truncate(DOWNSIDE_RISK *100,2),'%') DOWNSIDE_RISK
+        ,truncate(SHARPE_RATIO,2) SHARPE_RATIO
+        ,concat(truncate(JENSENS_ALPHA,2),'%') JENSENS_ALPHA
+        ,truncate(SORTINO_RATIO,2) SORTINO_RATIO
+        ,concat(truncate(UP_CAPTURE_RATE *100,2),'%') UP_CAPTURE_RATE
+        ,concat(truncate(DOWN_CAPTURE_RATE *100,2),'%') DOWN_CAPTURE_RATE
+        FROM
+        `tong-rong`.pfund_perf_indic a
+        JOIN (SELECT WINDOW,MAX(END_DATE) END_DATE FROM `tong-rong`.pfund_perf_indic
+        WHERE SECURITY_ID = #{securityId} AND WINDOW IN (5,6,7,8) GROUP BY WINDOW) b ON a.WINDOW = b.WINDOW AND a.END_DATE = b.END_DATE
+        WHERE SECURITY_ID = #{securityId}
+        AND a.WINDOW IN (5,6,7,8)
+        ORDER BY a.WINDOW
+    </select>
+
+    <select id="fundStyle" resultMap="TvFundStyleMap">
+        SELECT
+        DATE_FORMAT(a.END_DATE,'%Y-%m') END_DATE
+        ,truncate(a.UP_CAPTURE_RATE,2) UP_CAPTURE_RATE
+        ,truncate(a.DOWN_CAPTURE_RATE,2) DOWN_CAPTURE_RATE
+        FROM
+        `tong-rong`.pfund_perf_indic a
+        JOIN (SELECT MAX(END_DATE) END_DATE FROM `tong-rong`.pfund_perf_indic
+            WHERE SECURITY_ID = #{securityId}
+            AND WINDOW = #{window}
+            AND UP_CAPTURE_RATE IS NOT NULL
+            AND DOWN_CAPTURE_RATE IS NOT NULL
+            GROUP BY DATE_FORMAT(END_DATE,'%Y%m')) b ON a.END_DATE = b.END_DATE
+        WHERE a.SECURITY_ID = #{securityId}
+        AND a.WINDOW = #{window}
+        ORDER BY a.END_DATE
+    </select>
+
+    <select id="produceInformation" resultMap="TvProduceInformationMap">
+        SELECT
+        b.SEC_FULL_NAME
+        ,b.SEC_SHORT_NAME
+        ,e.PARTY_FULL_NAME
+        ,e.PARTY_SHORT_NAME
+        ,a.ISSUE_PLATFORM
+        ,a.CUSTODIAN
+        ,a.TRADING_BROKER
+        ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+        ,h.VALUE_NAME_CN `STATUS`
+        ,i.VALUE_NAME_CN PF_STYLE
+        ,concat(a.SCALE_INITIAL,'万') SCALE_INITIAL
+        ,f.VALUE_NAME_CN INVEST_STRATEGY
+        ,g.VALUE_NAME_CN INVEST_STRATEGY_CHILD
+        ,IF(c.VALUE_NUM_CD = 1,'是','否') fen
+        ,IF(d.ID IS NOT NULL,'是','否') san
+        ,a.SUBSCRIPTION_START_POINT
+        ,a.CLOSING_DURA_DESC
+        ,a.OPEN_DATE_DESC
+        ,concat(truncate(a.ISSUE_FEE,2),'%') ISSUE_FEE
+        ,concat(truncate(a.REDEEM_FEE,2),'%') REDEEM_FEE
+        ,concat(truncate(a.MANAGEMENT_FEE,2),'%') MANAGEMENT_FEE
+        ,concat(truncate(a.PERFORMANECE_RETURN,2),'%') PERFORMANECE_RETURN
+        ,a.DURATION
+        ,a.RECORD_CD
+        ,a.MIN_ADD
+        ,truncate(a.WARN_LINE,2) WARN_LINE
+        ,truncate(a.STOP_LOSS_LINE,2) STOP_LOSS_LINE
+        FROM
+        `tong-rong`.pfund a
+        JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+        JOIN `tong-rong`.pfund_type c ON a.SECURITY_ID = c.SECURITY_ID
+        JOIN `tong-rong`.md_institution e ON e.PARTY_ID = a.INVEST_CONSULTANT
+        JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40032) f ON a.INVEST_STRATEGY = f.VALUE_NUM_CD
+        JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40033) g ON a.INVEST_STRATEGY_CHILD = g.VALUE_NUM_CD
+        JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40034) h ON a.`STATUS` = h.VALUE_NUM_CD
+        JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40031) i ON a.PF_STYLE = i.VALUE_NUM_CD
+        LEFT JOIN (SELECT id,SECURITY_ID FROM `tong-rong`.pfund_rel WHERE SECURITY_ID = #{securityId} LIMIT 1) d ON a.SECURITY_ID = d.SECURITY_ID
+        WHERE a.SECURITY_ID = #{securityId}
+        limit 1
+    </select>
+
+    <select id="companySummary" resultMap="TvCompanySummaryMap">
+        SELECT
+        a.PARTY_ID
+        ,b.PARTY_FULL_NAME
+        ,b.PARTY_SHORT_NAME
+        ,concat(truncate(avg(d.RETURN_ACCUM),2),'%') AS RETURN_ACCUM
+        ,concat(truncate(avg(d.RETURN_A),2),'%') AS RETURN_A
+        ,b.REG_DATE
+        ,b.REG_CITY
+        ,a.REG_CD
+        ,f.SCALE
+        ,h.SEC_FULL_NAME
+        ,h.SEC_SHORT_NAME
+        ,h.SECURITY_ID
+        ,a.KEY_PERSON
+        ,g.NUM_ALL
+        ,g.NUM_DURA
+        FROM
+        `tong-rong`.pfund_inst_info a
+        JOIN `tong-rong`.md_institution b ON a.PARTY_ID = b.PARTY_ID
+        JOIN `tong-rong`.pfund c ON a.PARTY_ID = c.INVEST_CONSULTANT
+        JOIN `tong-rong`.pfund_nav_return d ON c.SECURITY_ID = d.SECURITY_ID
+        JOIN `tong-rong`.pfund_inst_scale_amac f ON a.PARTY_ID = f.PARTY_ID
+        JOIN `tong-rong`.pfund_inst_rep g ON a.PARTY_ID = g.PARTY_ID
+        JOIN `tong-rong`.md_security h ON g.SECURITY_ID = h.SECURITY_ID
+        WHERE a.PARTY_ID = #{partyId} AND f.MAIN_FUND_TYPE = '私募证券自主发行'
+        GROUP BY a.PARTY_ID
+        ,b.PARTY_FULL_NAME
+        ,b.PARTY_SHORT_NAME
+        ,b.REG_DATE
+        ,b.REG_CITY
+        ,a.REG_CD
+        ,f.SCALE
+        ,h.SEC_FULL_NAME
+        ,h.SEC_SHORT_NAME
+        ,h.SECURITY_ID
+        ,a.KEY_PERSON
+        ,g.NUM_ALL
+        ,g.NUM_DURA
+    </select>
+
+    <select id="allProduce" resultMap="TvSearchPfundInfoResultMap">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT a.SECURITY_ID
+            ,b.SEC_SHORT_NAME
+            ,b.SEC_FULL_NAME
+            ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+            FROM
+            `tong-rong`.pfund a
+            JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+            WHERE a.INVEST_CONSULTANT = #{partyId}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+
+    <select id="rankingCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        `rong-manage`.tb_private_funds_current_pfund_ranking
+        WHERE 1 = 1
+        <if test="returnOfEstablish != null and returnOfEstablish != ''">
+            <if test="returnOfEstablish == 1">
+                AND return_of_establish > 0.5
+            </if>
+            <if test="returnOfEstablish == 2">
+                AND return_of_establish >= 0.4
+                AND return_of_establish &lt;= 0.5
+            </if>
+            <if test="returnOfEstablish == 3">
+                AND return_of_establish >= 0.3
+                AND return_of_establish &lt;= 0.4
+            </if>
+            <if test="returnOfEstablish == 4">
+                AND return_of_establish >= 0.2
+                AND return_of_establish &lt;= 0.3
+            </if>
+            <if test="returnOfEstablish == 5">
+                AND return_of_establish >= 0.1
+                AND return_of_establish &lt;= 0.2
+            </if>
+        </if>
+        <if test="key != null and key != ''">
+            AND (SEC_FULL_NAME LIKE #{key} OR SEC_SHORT_NAME LIKE #{key})
+        </if>
+        <if test="investStrategy != null and investStrategy != ''">
+            AND INVEST_STRATEGY IN (#{investStrategy})
+        </if>
+        <if test="pfStyle != null and pfStyle != ''">
+            AND PF_STYLE in (#{pfStyle})
+        </if>
+        <if test="valueNumCd != null and valueNumCd != ''">
+            AND fen = #{valueNumCd}
+        </if>
+        <if test="regCity != null and regCity != ''">
+            AND REG_CITY = #{regCity}
+        </if>
+        <if test="regProvince != null and regProvince != ''">
+            AND REG_PROVINCE = #{regProvince}
+        </if>
+        <if test="establishDate != null and establishDate != ''">
+            AND DATE_FORMAT(ESTABLISH_DATE,'%Y') = #{establishDate}
+        </if>
+        <if test="establishDateStart != null and establishDateStart != ''">
+            AND DATE_FORMAT(ESTABLISH_DATE,'%Y') >= #{establishDateStart}
+        </if>
+        <if test="establishDateEnd != null and establishDateEnd != ''">
+            AND DATE_FORMAT(ESTABLISH_DATE,'%Y') &lt;= #{establishDateEnd}
+        </if>
+        <if test="san != null and san != ''">
+            AND san = #{san}
+        </if>
+        <if test="endDate != null">
+            AND END_DATE >= #{endDate}
+        </if>
+        <if test="searchYear == 1">
+            AND RETURN_RATE_1A IS NOT NULL
+        </if>
+        <if test="searchYear == 2">
+            AND RETURN_RATE_2A IS NOT NULL
+        </if>
+        <if test="searchYear == 3">
+            AND RETURN_RATE_3A IS NOT NULL
+        </if>
+        <if test="searchYear == 4">
+            AND RETURN_RATE_4A IS NOT NULL
+        </if>
+        <if test="searchYear == 5">
+            AND RETURN_RATE_5A IS NOT NULL
+        </if>
+        <if test="searchYear == 6">
+            AND RETURN_RATE_6A IS NOT NULL
+        </if>
+        <if test="searchYear == 7">
+            AND RETURN_RATE_7A IS NOT NULL
+        </if>
+        <if test="searchYear == 8">
+            AND RETURN_RATE_EST IS NOT NULL
+        </if>
+        <if test="searchYear == 9">
+            AND RETURN_RATE_YTD IS NOT NULL
+        </if>
+    </select>
+
+    <select id="rankingInterval" resultType="com.rong.tong.pfunds.module.view.TvRanking">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT SECURITY_ID securityId
+            ,SEC_SHORT_NAME secShortName
+            ,SEC_FULL_NAME secFullName
+            ,PARTY_ID partyId
+            ,PARTY_SHORT_NAME partyShortName
+            ,PARTY_FULL_NAME partyFullName
+            ,DATE_FORMAT(ESTABLISH_DATE,'%Y-%m-%d') establishDate
+            ,truncate(nav,4) nav
+            ,DATE_FORMAT(end_date,'%Y-%m-%d') endDate
+            ,concat(truncate(return_of_establish * 100,2),'%') returnOfEstablish
+            ,concat(truncate(RETURN_RATE_1M,2),'%') one
+            ,concat(truncate(RETURN_RATE_3M,2),'%') two
+            ,concat(truncate(RETURN_RATE_6M,2),'%') three
+            ,concat(truncate(RETURN_RATE_1Y,2),'%') four
+            ,concat(truncate(RETURN_RATE_2Y,2),'%') five
+            ,concat(truncate(RETURN_RATE_3Y,2),'%') six
+            ,concat(truncate(RETURN_RATE_5Y,2),'%') seven
+            ,concat(truncate(RETURN_RATE_EST,2),'%') eight
+            ,concat(truncate(RETURN_RATE_YTD,2),'%') nine
+            FROM
+            `rong-manage`.tb_private_funds_current_pfund_ranking
+            WHERE 1 = 1
+            <if test="returnOfEstablish != null and returnOfEstablish != ''">
+                <if test="returnOfEstablish == 1">
+                    AND return_of_establish > 0.5
+                </if>
+                <if test="returnOfEstablish == 2">
+                    AND return_of_establish >= 0.4
+                    AND return_of_establish &lt;= 0.5
+                </if>
+                <if test="returnOfEstablish == 3">
+                    AND return_of_establish >= 0.3
+                    AND return_of_establish &lt;= 0.4
+                </if>
+                <if test="returnOfEstablish == 4">
+                    AND return_of_establish >= 0.2
+                    AND return_of_establish &lt;= 0.3
+                </if>
+                <if test="returnOfEstablish == 5">
+                    AND return_of_establish >= 0.1
+                    AND return_of_establish &lt;= 0.2
+                </if>
+            </if>
+            <if test="key != null and key != ''">
+                AND (SEC_FULL_NAME LIKE #{key} OR SEC_SHORT_NAME LIKE #{key})
+            </if>
+            <if test="investStrategy != null and investStrategy != ''">
+                AND INVEST_STRATEGY IN (#{investStrategy})
+            </if>
+            <if test="pfStyle != null and pfStyle != ''">
+                AND PF_STYLE in (#{pfStyle})
+            </if>
+            <if test="valueNumCd != null and valueNumCd != ''">
+                AND fen = #{valueNumCd}
+            </if>
+            <if test="regCity != null and regCity != ''">
+                AND REG_CITY = #{regCity}
+            </if>
+            <if test="regProvince != null and regProvince != ''">
+                AND REG_PROVINCE = #{regProvince}
+            </if>
+            <if test="establishDate != null and establishDate != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') = #{establishDate}
+            </if>
+            <if test="establishDateStart != null and establishDateStart != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') >= #{establishDateStart}
+            </if>
+            <if test="establishDateEnd != null and establishDateEnd != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') &lt;= #{establishDateEnd}
+            </if>
+            <if test="san != null and san != ''">
+                AND san = #{san}
+            </if>
+            <if test="endDate != null">
+                AND END_DATE >= #{endDate}
+            </if>
+            <if test="orderBy == null">
+                ORDER BY return_of_establish DESC
+            </if>
+            <if test="orderBy != null">
+                ORDER BY ${orderBy}
+            </if>
+            limit #{limitStart},#{limitEnd}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+    <select id="rankingYear" resultType="com.rong.tong.pfunds.module.view.TvRanking">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT SECURITY_ID securityId
+            ,SEC_SHORT_NAME secShortName
+            ,SEC_FULL_NAME secFullName
+            ,PARTY_ID partyId
+            ,PARTY_SHORT_NAME partyShortName
+            ,PARTY_FULL_NAME partyFullName
+            ,ESTABLISH_DATE establishDate
+            ,truncate(nav,4) nav
+            ,end_date endDate
+            ,concat(truncate(return_of_establish * 100,2),'%') returnOfEstablish
+            ,concat(truncate(RETURN_RATE_EST,2),'%') one
+            ,concat(truncate(RETURN_RATE_YTD,2),'%') two
+            ,concat(truncate(RETURN_RATE_1A,2),'%') three
+            ,concat(truncate(RETURN_RATE_2A,2),'%') four
+            ,concat(truncate(RETURN_RATE_3A,2),'%') five
+            ,concat(truncate(RETURN_RATE_4A,2),'%') six
+            ,concat(truncate(RETURN_RATE_5A,2),'%') seven
+            ,concat(truncate(RETURN_RATE_6A,2),'%') eight
+            ,concat(truncate(RETURN_RATE_7A,2),'%') nine
+            FROM
+            `rong-manage`.tb_private_funds_current_pfund_ranking
+            WHERE 1 = 1
+            <if test="returnOfEstablish != null and returnOfEstablish != ''">
+                <if test="returnOfEstablish == 1">
+                    AND return_of_establish > 0.5
+                </if>
+                <if test="returnOfEstablish == 2">
+                    AND return_of_establish >= 0.4
+                    AND return_of_establish &lt;= 0.5
+                </if>
+                <if test="returnOfEstablish == 3">
+                    AND return_of_establish >= 0.3
+                    AND return_of_establish &lt;= 0.4
+                </if>
+                <if test="returnOfEstablish == 4">
+                    AND return_of_establish >= 0.2
+                    AND return_of_establish &lt;= 0.3
+                </if>
+                <if test="returnOfEstablish == 5">
+                    AND return_of_establish >= 0.1
+                    AND return_of_establish &lt;= 0.2
+                </if>
+            </if>
+            <if test="key != null and key != ''">
+                AND (SEC_FULL_NAME LIKE #{key} OR SEC_SHORT_NAME LIKE #{key})
+            </if>
+            <if test="investStrategy != null and investStrategy != ''">
+                AND INVEST_STRATEGY IN (#{investStrategy})
+            </if>
+            <if test="pfStyle != null and pfStyle != ''">
+                AND PF_STYLE in (#{pfStyle})
+            </if>
+            <if test="valueNumCd != null and valueNumCd != ''">
+                AND fen = #{valueNumCd}
+            </if>
+            <if test="regCity != null and regCity != ''">
+                AND REG_CITY = #{regCity}
+            </if>
+            <if test="regProvince != null and regProvince != ''">
+                AND REG_PROVINCE = #{regProvince}
+            </if>
+            <if test="establishDate != null and establishDate != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') = #{establishDate}
+            </if>
+            <if test="establishDateStart != null and establishDateStart != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') >= #{establishDateStart}
+            </if>
+            <if test="establishDateEnd != null and establishDateEnd != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') &lt;= #{establishDateEnd}
+            </if>
+            <if test="san != null and san != ''">
+                AND san = #{san}
+            </if>
+            <if test="endDate != null">
+                AND END_DATE >= #{endDate}
+            </if>
+            <if test="searchYear == 1">
+                AND RETURN_RATE_1A IS NOT NULL
+            </if>
+            <if test="searchYear == 2">
+                AND RETURN_RATE_2A IS NOT NULL
+            </if>
+            <if test="searchYear == 3">
+                AND RETURN_RATE_3A IS NOT NULL
+            </if>
+            <if test="searchYear == 4">
+                AND RETURN_RATE_4A IS NOT NULL
+            </if>
+            <if test="searchYear == 5">
+                AND RETURN_RATE_5A IS NOT NULL
+            </if>
+            <if test="searchYear == 6">
+                AND RETURN_RATE_6A IS NOT NULL
+            </if>
+            <if test="searchYear == 7">
+                AND RETURN_RATE_7A IS NOT NULL
+            </if>
+            <if test="searchYear == 8">
+                AND RETURN_RATE_EST IS NOT NULL
+            </if>
+            <if test="searchYear == 9">
+                AND RETURN_RATE_YTD IS NOT NULL
+            </if>
+            <if test="orderBy == null">
+                ORDER BY return_of_establish DESC
+            </if>
+            <if test="orderBy != null">
+                ORDER BY ${orderBy}
+            </if>
+            limit #{limitStart},#{limitEnd}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+
+    <select id="rankingSimple" resultType="com.rong.tong.pfunds.module.view.TvRankingSimple">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT SECURITY_ID securityId
+            ,SEC_SHORT_NAME secShortName
+            ,truncate(nav,2) nav
+            <if test="searchInterval == 1">
+            ,concat(truncate(RETURN_RATE_1M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 2">
+            ,concat(truncate(RETURN_RATE_3M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 3">
+            ,concat(truncate(RETURN_RATE_6M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 4">
+            ,concat(truncate(RETURN_RATE_1Y,2),'%') returnRate
+            ,concat(truncate(SHARPE_RATIO_1Y,2)) sharpeRatio
+            </if>
+            <if test="searchInterval == 5">
+            ,concat(truncate(RETURN_RATE_2Y,2),'%') returnRate
+            ,concat(truncate(SHARPE_RATIO_2Y,2)) sharpeRatio
+            </if>
+            <if test="searchInterval == 6">
+            ,concat(truncate(RETURN_RATE_3Y,2),'%') returnRate
+            ,concat(truncate(SHARPE_RATIO_3Y,2)) sharpeRatio
+            </if>
+            <if test="searchInterval == 7">
+            ,concat(truncate(RETURN_RATE_5Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 8">
+            ,concat(truncate(RETURN_RATE_EST,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 9">
+            ,concat(truncate(RETURN_RATE_YTD,2),'%') returnRate
+            </if>
+            FROM
+            `rong-manage`.tb_private_funds_current_pfund_ranking
+            WHERE 1 = 1
+            <if test="returnOfEstablish != null and returnOfEstablish != ''">
+                <if test="returnOfEstablish == 1">
+                    AND return_of_establish > 0.5
+                </if>
+                <if test="returnOfEstablish == 2">
+                    AND return_of_establish >= 0.4
+                    AND return_of_establish &lt;= 0.5
+                </if>
+                <if test="returnOfEstablish == 3">
+                    AND return_of_establish >= 0.3
+                    AND return_of_establish &lt;= 0.4
+                </if>
+                <if test="returnOfEstablish == 4">
+                    AND return_of_establish >= 0.2
+                    AND return_of_establish &lt;= 0.3
+                </if>
+                <if test="returnOfEstablish == 5">
+                    AND return_of_establish >= 0.1
+                    AND return_of_establish &lt;= 0.2
+                </if>
+            </if>
+            <if test="key != null and key != ''">
+                AND (SEC_FULL_NAME LIKE #{key} OR SEC_SHORT_NAME LIKE #{key})
+            </if>
+            <if test="investStrategy != null and investStrategy != ''">
+                AND INVEST_STRATEGY IN (#{investStrategy})
+            </if>
+            <if test="pfStyle != null and pfStyle != ''">
+                AND PF_STYLE in (#{pfStyle})
+            </if>
+            <if test="valueNumCd != null and valueNumCd != ''">
+                AND fen = #{valueNumCd}
+            </if>
+            <if test="regCity != null and regCity != ''">
+                AND REG_CITY = #{regCity}
+            </if>
+            <if test="regProvince != null and regProvince != ''">
+                AND REG_PROVINCE = #{regProvince}
+            </if>
+            <if test="establishDate != null and establishDate != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') = #{establishDate}
+            </if>
+            <if test="establishDateStart != null and establishDateStart != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') >= #{establishDateStart}
+            </if>
+            <if test="establishDateEnd != null and establishDateEnd != ''">
+                AND DATE_FORMAT(ESTABLISH_DATE,'%Y') &lt;= #{establishDateEnd}
+            </if>
+            <if test="san != null and san != ''">
+                AND san = #{san}
+            </if>
+            <if test="endDate != null">
+                AND END_DATE >= #{endDate}
+            </if>
+            <if test="orderBy != null">
+                ORDER BY ${orderBy}
+            </if>
+            limit #{limitStart},#{limitEnd}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+    <select id="superProduceCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(a.SECURITY_ID)
+        FROM
+        `tong-rong`.pfund a
+        JOIN `rong-manage`.tb_product_label b ON a.SECURITY_ID = b.security_id AND b.label_id = #{labelId}
+        JOIN `tong-rong`.md_security c ON a.SECURITY_ID = c.SECURITY_ID
+        JOIN `rong-manage`.tb_private_funds_current_nav d ON a.SECURITY_ID = d.security_id
+        LEFT JOIN `tong-rong`.md_people e ON d.person_id = e.PERSON_ID
+        JOIN `rong-manage`.tb_private_funds_current_gr g ON a.SECURITY_ID = g.SECURITY_ID
+        LEFT JOIN `tong-rong`.sys_code f ON a.INVEST_STRATEGY = f.VALUE_NUM_CD AND f.CODE_TYPE_ID = 40032
+        LEFT JOIN (SELECT SECURITY_ID,MAX(END_DATE) END_DATE FROM `tong-rong`.pfund_perf_indic WHERE WINDOW = 8 GROUP BY SECURITY_ID) h ON a.SECURITY_ID = h.SECURITY_ID
+        LEFT JOIN `tong-rong`.pfund_perf_indic i ON i.END_DATE = h.END_DATE AND i.SECURITY_ID = a.SECURITY_ID AND i.WINDOW = 8
+        WHERE 1=1
+        <if test="investStrategy != null and investStrategy != ''">
+            AND a.INVEST_STRATEGY = #{investStrategy}
+        </if>
+    </select>
+
+    <select id="superProduce" resultType="com.rong.tong.pfunds.module.view.TvSuperProduce">
+        SELECT
+        a.SECURITY_ID securityId
+        ,c.SEC_FULL_NAME secFullName
+        ,c.SEC_SHORT_NAME secShortName
+        ,d.person_id personId
+        ,e.`NAME` userName
+        ,f.VALUE_NAME_CN investStrategy
+        ,concat(truncate(g.RETURN_RATE_EST,2),'%') returnRateEst
+        ,concat(truncate(g.RETURN_RATE_YTD,2),'%') returnRateYtd
+        ,truncate(d.nav,2) nav
+        ,DATE_FORMAT(d.end_date,'%Y-%m-%d') endDate
+        ,a.OPEN_DATE_DESC openDateDesc
+        ,truncate(i.SHARPE_RATIO,2) sharpeRatio
+        ,concat(truncate(i.MAX_DRAWDOWN*100,2),'%') maxDrawdown
+        ,b.label_reason labelReason
+        ,b.label_var0 labelVar0
+        ,b.label_var1 labelVar1
+        FROM
+        `tong-rong`.pfund a
+        JOIN `rong-manage`.tb_product_label b ON a.SECURITY_ID = b.security_id AND b.label_id = #{labelId}
+        JOIN `tong-rong`.md_security c ON a.SECURITY_ID = c.SECURITY_ID
+        JOIN `rong-manage`.tb_private_funds_current_nav d ON a.SECURITY_ID = d.security_id
+        LEFT JOIN `tong-rong`.md_people e ON d.person_id = e.PERSON_ID
+        JOIN `rong-manage`.tb_private_funds_current_gr g ON a.SECURITY_ID = g.SECURITY_ID
+        LEFT JOIN `tong-rong`.sys_code f ON a.INVEST_STRATEGY = f.VALUE_NUM_CD AND f.CODE_TYPE_ID = 40032
+        LEFT JOIN (SELECT SECURITY_ID,MAX(END_DATE) END_DATE FROM `tong-rong`.pfund_perf_indic WHERE WINDOW = 8 GROUP BY SECURITY_ID) h ON a.SECURITY_ID = h.SECURITY_ID
+        LEFT JOIN `tong-rong`.pfund_perf_indic i ON i.END_DATE = h.END_DATE AND i.SECURITY_ID = a.SECURITY_ID AND i.WINDOW = 8
+        WHERE 1=1
+        <if test="investStrategy != null and investStrategy != ''">
+            AND a.INVEST_STRATEGY = #{investStrategy}
+        </if>
+        ORDER BY b.sort
+        limit #{limitStart},#{limitEnd}
+    </select>
+
+    <select id="companyRankingCount" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM
+        `rong-manage`.tb_private_funds_current_company_ranking
+        WHERE 1=1
+        <if test="key != null and key != ''">
+            AND (PARTY_FULL_NAME LIKE #{key} OR PARTY_SHORT_NAME LIKE #{key})
+        </if>
+        <if test="regCity != null and regCity != ''">
+            AND REG_CITY = #{regCity}
+        </if>
+        <if test="regProvince != null and regProvince != ''">
+            AND REG_PROVINCE = #{regProvince}
+        </if>
+        <if test="scale != null and scale != ''">
+            AND SCALE = #{scale}
+        </if>
+    </select>
+
+    <select id="companyRanking" resultType="com.rong.tong.pfunds.module.view.TvCompanyRanking">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT PARTY_ID partyId
+            ,PARTY_SHORT_NAME partyShortName
+            ,PARTY_FULL_NAME partyFullName
+            ,KEY_PERSON keyPerson
+            ,NUM_ALL numAll
+            <if test="searchInterval == 1">
+                ,truncate(SHARPE_RATIO_1M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_1M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 2">
+                ,truncate(SHARPE_RATIO_3M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_3M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 3">
+                ,truncate(SHARPE_RATIO_6M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_6M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 4">
+                ,truncate(SHARPE_RATIO_1Y,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_1Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 5">
+                ,truncate(SHARPE_RATIO_2Y,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_2Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 6">
+                ,truncate(SHARPE_RATIO_3Y,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_3Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 7">
+                ,truncate(SHARPE_RATIO_EST,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_EST,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 8">
+                ,truncate(SHARPE_RATIO_YTD,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_YTD,2),'%') returnRate
+            </if>
+            ,SECURITY_ID securityId
+            ,SEC_SHORT_NAME secShortName
+            ,SEC_FULL_NAME secFullName
+            ,truncate(NAV,4) nav
+            ,DATE_FORMAT(END_DATE,'%Y-%m-%d') endDate
+            ,concat(truncate(RETURN_ACCUM,2),'%') returnAccum
+            FROM
+            `rong-manage`.tb_private_funds_current_company_ranking
+            WHERE 1=1
+            <if test="key != null and key != ''">
+                AND (PARTY_FULL_NAME LIKE #{key} OR PARTY_SHORT_NAME LIKE #{key})
+            </if>
+            <if test="regCity != null and regCity != ''">
+                AND REG_CITY = #{regCity}
+            </if>
+            <if test="regProvince != null and regProvince != ''">
+                AND REG_PROVINCE = #{regProvince}
+            </if>
+            <if test="scale != null and scale != ''">
+                AND SCALE = #{scale}
+            </if>
+            <if test="orderBy == null">
+                ORDER BY RETURN_RATE_1M DESC
+            </if>
+            <if test="orderBy != null">
+                ORDER BY ${orderBy}
+            </if>
+            limit #{limitStart},#{limitEnd}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+    <select id="managerRankingCount" resultType="java.lang.Integer">
+        SELECT COUNT(PERSON_ID)
+        FROM
+        `rong-manage`.tb_private_funds_current_manager_ranking
+        WHERE 1=1
+        <if test="key != null and key != ''">
+            AND `NAME` LIKE #{key}
+        </if>
+        <if test="regCity != null and regCity != ''">
+            AND REG_CITY = #{regCity}
+        </if>
+        <if test="regProvince != null and regProvince != ''">
+            AND REG_PROVINCE = #{regProvince}
+        </if>
+        <if test="year != null and year != ''">
+            <if test="year == 1">
+                AND `YEAR` > 20
+            </if>
+            <if test="year == 2">
+                AND `YEAR` > 15
+            </if>
+            <if test="year == 3">
+                AND `YEAR` > 10
+            </if>
+            <if test="year == 4">
+                AND `YEAR` > 5
+            </if>
+            <if test="year == 5">
+                AND `YEAR` &lt; 5
+            </if>
+            <if test="year == 6">
+                AND `YEAR` IS NULL
+            </if>
+        </if>
+        <if test="background != null and background != ''">
+            AND BACKGROUND = #{background}
+        </if>
+    </select>
+
+    <select id="managerRanking" resultType="com.rong.tong.pfunds.module.view.TvManagerRanking">
+        SELECT
+        @rowno:=@rowno+1 as no
+        ,r.* from
+        (SELECT PERSON_ID personId
+            ,`NAME` userName
+            ,PARTY_ID partyId
+            ,PARTY_SHORT_NAME partyShortName
+            ,PARTY_FULL_NAME partyFullName
+            ,`YEAR` year
+            ,BACKGROUND_VALUE background
+            ,NUM_ALL numAll
+            <if test="searchInterval == 1">
+                ,truncate(SHARPE_RATIO_1M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_1M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 2">
+                ,truncate(SHARPE_RATIO_3M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_3M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 3">
+                ,truncate(SHARPE_RATIO_6M,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_6M,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 4">
+                ,truncate(SHARPE_RATIO_1Y,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_1Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 5">
+                ,truncate(SHARPE_RATIO_2Y,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_2Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 6">
+                ,SHARPE_RATIO_3Y sharpeRatio
+                ,concat(truncate(RETURN_RATE_3Y,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 7">
+                ,truncate(SHARPE_RATIO_EST,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_EST,2),'%') returnRate
+            </if>
+            <if test="searchInterval == 8">
+                ,truncate(SHARPE_RATIO_YTD,2) sharpeRatio
+                ,concat(truncate(RETURN_RATE_YTD,2),'%') returnRate
+            </if>
+            ,SECURITY_ID securityId
+            ,SEC_SHORT_NAME secShortName
+            ,SEC_FULL_NAME secFullName
+            ,truncate(NAV,2)  nav
+            ,DATE_FORMAT(END_DATE,'%Y-%m-%d') endDate
+            ,concat(truncate(RETURN_ACCUM,2),'%') returnAccum
+            FROM
+            `rong-manage`.tb_private_funds_current_manager_ranking
+            WHERE 1=1
+            <if test="key != null and key != ''">
+                AND `NAME` LIKE #{key}
+            </if>
+            <if test="regCity != null and regCity != ''">
+                AND REG_CITY = #{regCity}
+            </if>
+            <if test="regProvince != null and regProvince != ''">
+                AND REG_PROVINCE = #{regProvince}
+            </if>
+            <if test="year != null and year != ''">
+                <if test="year == 1">
+                    AND `YEAR` > 20
+                </if>
+                <if test="year == 2">
+                    AND `YEAR` > 15
+                </if>
+                <if test="year == 3">
+                    AND `YEAR` > 10
+                </if>
+                <if test="year == 4">
+                    AND `YEAR` > 5
+                </if>
+                <if test="year == 5">
+                    AND `YEAR` &lt; 5
+                </if>
+                <if test="year == 6">
+                    AND `YEAR` IS NULL
+                </if>
+            </if>
+            <if test="background != null and background != ''">
+                AND BACKGROUND = #{background}
+            </if>
+            <if test="orderBy == null">
+                ORDER BY RETURN_RATE_1M DESC
+            </if>
+            <if test="orderBy != null">
+                ORDER BY ${orderBy}
+            </if>
+            limit #{limitStart},#{limitEnd}
+        ) r,(select @rowno:=#{limitStart}) t
+    </select>
+
+    <select id="countPfundBySecurityId" resultType="java.lang.Integer">
+        select count(1) from `tong-rong`.pfund where SECURITY_ID = #{securityId}
+    </select>
+
+    <select id="pfundMktList" resultType="com.rong.tong.pfunds.module.view.TvPfundMktList">
+        SELECT a.SECURITY_ID securityId
+        ,b.SEC_SHORT_NAME secShortName
+        FROM
+        `tong-rong`.pfund_mkt_idxd a
+        LEFT JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+        GROUP BY a.SECURITY_ID,b.SEC_SHORT_NAME
+    </select>
+
+    <select id="pfundMktHis" resultType="com.rong.tong.pfunds.module.view.TvPfundMktHisNav">
+        SELECT
+        a.SECURITY_ID securityId
+        ,b.SEC_SHORT_NAME secShortName
+        ,a.CLOSE_INDEX closeIndex
+        ,concat(truncate((a.CLOSE_INDEX - @startCloseIndex)/@startCloseIndex *100,2),'%') closeIndexChange
+        FROM `tong-rong`.pfund_mkt_idxd a
+        LEFT JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+        LEFT JOIN(SELECT @startCloseIndex := CLOSE_INDEX FROM `tong-rong`.pfund_mkt_idxd WHERE SECURITY_ID = #{securityId}
+        <if test="startDate != null">
+            AND TRADE_DATE >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND TRADE_DATE &lt;= #{endDate}
+        </if>
+        ORDER BY TRADE_DATE LIMIT 1) r ON 1 = 1
+        WHERE a.SECURITY_ID = #{securityId}
+        <if test="startDate != null">
+            AND a.TRADE_DATE >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND a.TRADE_DATE &lt;= #{endDate}
+        </if>
+        ORDER BY a.TRADE_DATE
+    </select>
+
+    <select id="getReturnByDate" resultType="java.lang.String">
+        SELECT concat(truncate((a.NAV-c.NAV)/c.NAV *100,2),'%') FROM `tong-rong`.pfund_nav a
+        ,(SELECT MAX(END_DATE) maxdate,MIN(END_DATE) mindate FROM `tong-rong`.pfund_nav WHERE SECURITY_ID = #{securityId}
+        <if test="startDate != null">
+            AND END_DATE >= #{startDate}
+        </if>
+        ) b
+        ,`tong-rong`.pfund_nav c
+        WHERE a.END_DATE = b.maxdate AND c.END_DATE = b.mindate AND a.SECURITY_ID = c.SECURITY_ID
+        AND a.SECURITY_ID = #{securityId}
+    </select>
+
+    <select id="getFav" resultType="java.lang.Boolean">
+        SELECT (CASE WHEN id IS NOT NULL THEN TRUE ELSE FALSE END) fav FROM
+        `rong-manage`.tb_user_pro_fav
+        WHERE
+        security_id = #{securityId} AND deltag = FALSE AND user_id = #{userId}
+    </select>
+
+    <select id="getRegCityCd" resultType="java.lang.String">
+        SELECT VALUE_NUM_CD FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =10003 AND VALUE_NAME_CN LIKE #{name} ORDER BY LENGTH(VALUE_NAME_CN) LIMIT 1
+    </select>
+</mapper>

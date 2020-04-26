@@ -1,0 +1,13 @@
+<script type="text/javascript">
+    param.treeFields.expand = false;
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+</script>

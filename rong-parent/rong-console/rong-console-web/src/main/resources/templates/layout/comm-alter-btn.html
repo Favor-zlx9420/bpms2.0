@@ -1,0 +1,150 @@
+<div class="alter-btm-btn-box" id="commonAlterBox">
+    <div class="viyui-btn viyui-btn-sm btn-cancel"><i class="icon-reply"></i>返回</div>
+    <div class="viyui-btn viyui-btn-sm btn-submit"><i class="icon-save"></i><span>保存</span></div>
+    <div class="viyui-btn viyui-btn-sm btn-save-as hide"><i class="icon-repeat"></i><span>另存为</span></div>
+</div>
+<div class="clear-all">
+<script>
+    var _ap = {
+
+    };
+    $(function(){
+        var btn = $("#commonAlterBox.alter-btm-btn-box");
+        var form = btn.closest("form");
+        _ap={
+            selector:form,
+            entity:null,
+            renderSelector:form,
+            intCheckFormTip:form,
+            beforeBindFunc:null,
+            afterBindFunc:null,
+            afterRenderFunc:null,
+            afterCheckFormFunc:null,
+            postForm:form
+        }
+        if(typeof alterBindParam == "object") {
+            $.extend(_ap, alterBindParam);
+        }
+        $(".comm-outer-box",_ap.selector).css("height",function(){
+            var totalHeight = $(this).closest("form").height();
+            var extHeight = 0;
+            var index = $(this).index();
+            $(this).parent().children("div").each(function(){
+                if($(this).index() != index){
+                    extHeight += $(this).visibleHeight();
+                }
+            });
+            return totalHeight - extHeight;
+        }).children(".comm-inner-box").width(function(){
+            return $(this).parent().width() + 24;
+        });
+        if(null == _ap.entity){
+            _ap.entity = ${entity};
+        }
+        if(null != _ap.beforeBindFunc){
+            _ap.beforeBindFunc(_ap.entity);
+        }
+        LET.dataBind(_ap.selector,_ap.entity);
+        LET.checkEditItem(_ap.selector);
+        if(null != _ap.afterBindFunc){
+            _ap.afterBindFunc(_ap.entity);
+        }
+        LET.render([{element:"form",selector:_ap.renderSelector}]);
+        if(null != _ap.afterRenderFunc){
+            _ap.afterRenderFunc(_ap.entity);
+        }
+
+        //参数校验设置
+        LET.intCheckFormTip(_ap.intCheckFormTip);
+        if(null != _ap.afterCheckFormFunc){
+            _ap.afterCheckFormFunc(_ap.entity);
+        }
+        $(".btn-submit",btn).click(function(){
+            submitOfJson.call(this,false,false);
+        });
+        $(".btn-save-as",btn).click(function(){
+            submitOfJson.call(this,true,true);
+        });
+        $(".btn-cancel",btn).click(function(){
+            lBox.closeWin();
+        });
+    });
+    function submitOfJson(postAll,saveAs){
+        var _this = $(this);
+        var thisk={
+            form : _this.closest("form"),
+            otherCheck:function(){return true;},
+            successFunc:null,
+            failureFunc:null,
+            otherPostParams:{
+
+            },
+            wrap:function(){return true;}
+        };
+        if(typeof submitOpt == "object") {
+            $.extend(thisk, submitOpt);
+        }
+        if (!LET.openEvt || !LET.checkForm(thisk.form) || !thisk.otherCheck(thisk)) {
+            return false;
+        }
+        LET.openEvt = false;
+        _this.find("span").html("提交中...");
+        var filterFunc = null;
+        if(_ap.entity["id"] != null){
+            filterFunc = function(element){
+                if(true){
+                    return postAll || jQuery(element).is(".had-edit") || jQuery(element).is(":hidden") || jQuery(element).is(":checkbox");
+                }
+                var ov = jQuery(element).attr("data-old-value");
+                var cv = jQuery(element).val();
+                var fc = LE.getFuncByName(jQuery(element).attr("data-post-fmt-func"));
+                if(null != fc){
+                    cv = fc(cv,this)+"";
+                }
+                return ov != cv;
+            }
+        }
+        var postData = $(thisk.form).serializeJsonOfEditFmt(filterFunc);
+        $.extend(postData, thisk.otherPostParams);
+        thisk.wrap(postData);
+        if(saveAs){
+            postData.entity.id = null;
+        }
+        $.ajax({
+            url : _ap.postForm.attr("action"),
+            type:"post",
+            contentType: "application/json; charset=utf-8",
+            data:JSON.stringify(postData),
+            dataType:"json",
+            success:function (data) {
+                if(!checkResultIsOk(data)){
+                    _this.find("span").html("保存");
+                    if (undefined != thisk.failureFunc) {
+                        thisk.failureFunc(data);
+                    }
+                    LET.openEvt = true;
+                    return;
+                }
+                LET.openEvt = true;
+                if(thisk.successFunc != null){
+                    _this.find("span").html("提交保存");
+                    thisk.successFunc();
+                }else{
+                    _this.find("span").html("保存成功");
+                    lBox.closeWin(function(){
+                        if(null != viyGrid){viyGrid.reload.call(viyGrid);}
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                m.close(function(){
+                    lBox.alert({content:"保存时出现异常！",success:function(){
+                            LET.openEvt = true;
+                        }});
+                })
+            }
+        });
+        return false;
+    }
+</script>
+</div>

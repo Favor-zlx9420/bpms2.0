@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>新注册用户</title>
+    <#include  "../../layout/css-js.html" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0.rc2/echarts.min.js"></script>
+</head>
+<body>
+<form id="commQueryForm" class="msg-form" name="com_form_action" action="${viewModel.dataGridAction}">
+    <input type="hidden" id="deltag" name="entity.deltag" />
+    <div class="s_top_Pannel s-top-btn-box msg-top">
+        <#include  "../../layout/ordinary-search-btn.html" />
+    </div>
+</form>
+<div style="width:40%;float:left;">
+    <div class="s_top_Pannel s-top-btn-box">
+        <div class="simp-state">
+            <span>今日总注册人数：</span><label id="lateRegisters" class="number-0"></label>
+        </div>
+        <div class="simp-state" style="float:right;">
+            <a onclick="top.loadTab('cid_52','${viewModel.listAction}?e.reateDate.ge='+LE.formateDateBymilTime(new Date().getTime()),'<i class=\'icon-bars\'></i>会员列表')">更多>></a>
+        </div>
+    </div>
+    <div id="commGrid" class="viy-ui-table com-con-info msg-table"></div>
+</div>
+<div class="grid-sp-line"></div>
+<div id="chartGrid" class="chart-grid" style="width:59.4%;float:right;">
+    <div class="s_top_Pannel s-top-btn-box">
+        <div class="simp-state">
+            <span>本月注册<span class='number-0'>/</span>充值趋势图</span><i class="icon icon-bar-chart"></i>
+        </div>
+        <div class="simp-state" style="float:right;">
+            <a>更多>></a>
+        </div>
+    </div>
+    <div id="container"></div>
+</div>
+<script>
+    ifwin.width=1250;
+    param.selected = false;
+    param.pager = false;
+    param.theads=[
+        {
+            tableHeader:"会员ID",
+            rowWidth:150,
+            fieldName:"id"
+        },
+        {
+            tableHeader:"会员登录名称",
+            rowWidth:0,
+            fieldName:"userName"
+        },
+        {
+            tableHeader:"类型",
+            rowWidth:75,
+            fieldName:"type",
+            visibleTemplate:"bindUserType"
+        },
+        {
+            tableHeader:"注册时间",
+            rowWidth:160,
+            fieldName:"createDate"
+        }
+    ];
+    $(function(){
+       $("#lateRegisters").html(param.pageInfo.recordCount);
+
+        $("#chartGrid").height(function(){
+            return $(document.body).height()-$("#commQueryForm").visibleHeight();
+        });
+        $("#container").height(function(){
+            return $(this).parent().height() - $(this).siblings(".s-top-btn-box").visibleHeight();
+        });
+        $(".msg-table").on("click",".list-row",function(){
+            var index = $(this).index();
+            top.lBox.newWin2("会员详情","${viewModel.viewAction}?id="+viyGrid.p.dataList[index].id,ifwin.width,ifwin.height);
+        });
+       //echarts
+        loadCharts();
+
+    });
+    function loadCharts(){
+
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        app.title = '当月注册用户/充值额';
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data:['注册数(个)','充值额(￥)']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ["1号","2号","3号","4号","5号","6号","7号","8号","9号","10号",
+                        "11号","12号","13号","14号","15号","16号","17号","18号","19号","20号",
+                        "21号","22号","23号","24号","25号","26号","27号","28号","29号","30号"
+                          ],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '注册数(个)',
+                    min: 0,
+                    max: 300,
+                    interval: 30,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: '充值额(个)',
+                    min: 0,
+                    max: 100000,
+                    interval: 10000,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name:'注册数(个)',
+                    type:'bar',
+                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                },
+                {
+                    name:'充值额(￥)',
+                    type:'line',
+                    yAxisIndex: 1,
+                    data:[1040, 60000, 71222.0, 21233.2, 21215.6, 7346.7, 13325.6, 16442.2, 23532.6, 24320.0, 2346.4, 35235.3]
+                }
+            ]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+</script>
+</body>

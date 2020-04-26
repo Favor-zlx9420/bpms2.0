@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.store.mapper.DirectStoreUserMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.store.module.entity.TbDirectStoreUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="visible" property="visible" jdbcType="BIT" />
+    <result column="recommend" property="recommend" jdbcType="BIT" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+    <result column="nickName" property="nickname" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="auto_replay" property="autoReplay" jdbcType="VARCHAR" />
+    <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR" />
+    <result column="certificate1_url" property="certificate1Url" jdbcType="VARCHAR" />
+    <result column="certificate2_url" property="certificate2Url" jdbcType="VARCHAR" />
+    <result column="certificate3_url" property="certificate3Url" jdbcType="VARCHAR" />
+    <result column="certificate4_url" property="certificate4Url" jdbcType="VARCHAR" />
+    <result column="certificate5_url" property="certificate5Url" jdbcType="VARCHAR" />
+    <result column="application_code_url" property="applicationCodeUrl" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.store.module.view.TvDirectStoreUser" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.store.module.view.TvDirectStoreUser" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`type`, e.`user_id`, e.`visible`, 
+    e.`recommend`, e.`sort`, e.`party_id`, e.`nickName`, e.`position`, e.`phone`, e.`remark`, 
+    e.`auto_replay`, e.`head_portrait`, e.`certificate1_url`, e.`certificate2_url`, e.`certificate3_url`, 
+    e.`certificate4_url`, e.`certificate5_url`, e.`application_code_url`, e.`state`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_direct_store_user e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.store.module.query.TsDirectStoreUser" >
+    select count(1) as recordCount from tb_direct_store_user e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.store.module.query.TsDirectStoreUser" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,144 @@
+
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+</style>
+<div class="box-search">
+    <div>评论时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>真实姓名：<input placeholder="请输入真实姓名" type="text" value='' class="input textSearch w189" name="mb.realName.like" /></div>
+</div>
+<div class="box-search">
+    <div>　手机号：<input placeholder="请输入手机号" type="text" value='' class="input textSearch w180" name="mb.phone.like" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>审核状态：
+        <select class="selSearch no-render w194" name="e.auditResult.in"
+        >
+            <option value="">全部</option>
+            <option value="1">审核通过</option>
+            <option value="-1">审核被拒</option>
+            <option value="0">待审核</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>评论类型：<select class="selSearch no-render w194" name="e.type.in">
+            <option value="">全部</option>
+            <option value="2">产品</option>
+            <option value="3">路演</option>
+            <option value="0">公司</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>评论内容：<input placeholder="请输入评论内容" type="text" value='' class="input textSearch w180" name="e.content.like" /></div>
+</div>
+<script>
+    ifwin.width = 800;
+    ifwin.height = 600;
+    ifwin.showView = false;
+    param.pageInfo.sortField="e.id";
+    function showEditInfo(tr, v, i) {
+        var html = "";
+
+        if(tr["auditResult"] == Consts.CustomerAuditState.待审核 || tr["auditResult"] == Consts.CustomerAuditState.再次提交){
+            html +="<a class=\"viyui-btn viyui-btn-xs list-audit\" data-id='"+tr["id"]+"'>审核</a>";
+        }else{
+             html += "<a class='btn-list-view' style='margin-right:5px;' data-id='" + tr["id"] + "'>查看详情</a>";
+        }
+        <#if hasDelPermission!false >
+            html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+        </#if>
+        return html;
+    }
+    function bindUserType(tr,v,i){
+            return "--";
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function bindTargetTypeFunc(tr,v,i){
+        return findNameByValueFromConsts(Consts.CommentType,tr["type"]);
+    }
+    function bindCommentUserFunc(tr,v,i){
+        return tr["commentUserName"]+"/"+tr["realName"];
+    }
+    function bindAuditStateFunc(tr,v,i){
+        var html="";
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.CustomerAuditState,tr["auditResult"])+"</div>";
+        return html;
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function() {
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        $(viyGrid.selector).on("click",".list-audit",function(){
+            var _this = $(this);
+            lBox.newWin("审核","${auditAction}?id="+_this.attr("data-id"), ifwin.width, ifwin.height, true);
+        });
+    });
+    function _audit(title,result,visible,id,memo){
+        lBox.confirm({
+            title:"确定将记录"+title+"吗？",
+            content:"将记录"+title+"[警告，操作成功将不能回滚]",
+            btnConfirmFunc:function(){
+                var w = lBox.wait({content:"操作中..."});
+                $.ajax({
+                    url: "${auditAction}",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        entity: {
+                            id: id,
+                            visible:visible,
+                            auditResult: result
+                        },
+                        rejectReason:memo
+                    }),
+                    dataType: "json",
+                    success: function (data) {
+                        w.close(function () {
+                            if (!checkResultIsOk(data)) {
+                                return;
+                            }
+                            lBox.ok({
+                                delay: 2000, title: "操作通知", content: data.message, success: function () {
+                                    lBox.closeWin();
+                                    viyGrid.reload.call(viyGrid);
+                                }
+                            });
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        w.close(function () {
+                            lBox.alert({
+                                content: "保存时出现异常！", success: function () {
+                                    LET.openEvt = true;
+                                }
+                            });
+                        })
+                    }
+                });
+            }
+        });
+    }
+</script>

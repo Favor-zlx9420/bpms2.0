@@ -1,0 +1,233 @@
+<div class="favorite hide" id="btnFavorite"><i class="icon icon-heart"></i></div>
+
+<#if hasDelPermission!false>
+<div id="delDiv" class="viyui-btn viyui-btn-m viyui-danger hide"><i class="icon-trash"></i>删除</div>
+<div id="recycleDiv" class="viyui-btn viyui-btn-m viyui-color-purple hide"><i class='icon-hdd'></i>回收站</div>
+</#if>
+<#if hasAddPermission!false>
+<div id="btnAdd" class="viyui-btn viyui-btn-m"><i class="icon icon-plus"></i>新增</div>
+</#if>
+<div id="btnResetQuery" class="viyui-btn viyui-btn-m btn-reset right hide"><i class="icon-undo"></i>重置</div>
+<div id="btnSubmitQuery" class="viyui-btn viyui-btn-m btn-query right"><i class="icon-search"></i>查询</div>
+<div id="btnSetConditionState" class="viyui-btn viyui-btn-sm viyui-btn-updown hide"><i class="icon-chevron-up"></i>
+</div>
+<script>
+    var viyGrid;
+    var param = {
+        form: "#commQueryForm",
+        theads:${theads},
+        pageInfo: {
+            sortField: "e.id",
+            sortDistanct: "desc"
+        },
+        queryParams:{},
+        success: function (data) {
+            //参数校验设置
+            LET.intCheckFormTip("#commGrid");
+        }
+    }
+    var ifwin = {
+        width: 1000,
+        height: 600,
+        listViewText: "查看",
+        listEditText: "操作",
+        btnAddText: "新增",
+        listViewWidth: 70,
+        listEditWidth:110,
+        showView:true
+    };
+
+    function showDetailInfo(tr, v, i) {
+        return "<div class=\"viyui-btn viyui-btn-xs btn-list-view\" data-id=\"" + v + "\"><i class=\"icon-file-text-o\"></i>" + ifwin.listViewText + "</div>";
+    }
+
+    function showEditInfo(tr, v, i) {
+        var html = "<a class=\"btn-list-alter\" data-id=\"" + v + "\">" + ifwin.listEditText + "</a>";
+        <#if hasDelPermission!false >
+            html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+        </#if>
+        return html;
+    }
+
+    var preLoadData = null;
+    function listEdit(entity){
+        lBox.newWin(ifwin.listEditText, "${viewModel.editAction}?id=" + entity.id, ifwin.width, ifwin.height, true);
+    }
+    $(function () {
+        var deltagElement = $("#overwite-deltag");
+        if (deltagElement.length == 0) {
+            $("#deltag").val(Consts.Deltag["正常"]);
+        } else {
+            $("#deltag").val(deltagElement.val());
+        }
+        //参数校验设置
+        <#if hasEditPermission!false >
+            param.theads.push({
+                tableHeader: ifwin.listEditText,
+                sortable: false,
+                rowWidth: ifwin.listEditWidth,
+                align: "center",
+                fieldName: "id",
+                fixed: "right",
+                visibleTemplate: showEditInfo
+            });
+        </#if>
+        <#if hasViewPermission!false >
+                if(ifwin.showView){
+                    param.theads.push({
+                        tableHeader: ifwin.listViewText,
+                        sortable: false,
+                        rowWidth: ifwin.listViewWidth,
+                        align: "center",
+                        fieldName: "id",
+                        fixed: "right",
+                        visibleTemplate: showDetailInfo
+                    });
+                }
+        </#if>
+        //高度自适应
+        $(".viy-ui-table").css("height", function () {
+            return $(document.body).height() - $(this).prev().visibleHeight() - 5;
+        });
+        viyGrid = $("#commGrid").dataGrid(param);
+        LET.render([{element: "form", selector: viyGrid.p.form}]);
+        LET.intCheckFormTip("#commQueryForm");
+        if (preLoadData != null) {
+            preLoadData();
+        }
+        viyGrid.reload();
+        $("#delDiv").click(function () {
+            var _this = $(this);
+            var items = viyGrid.getSelecteds();
+            if (items.length == 0) {
+                lBox.alert({content: "未选择任何项"});
+                return;
+            }
+            var ids = $(items).map(function () {
+                return this.id
+            }).get().join(",");
+            var title, deltag, content;
+            if (_this.hasClass("recycle-btn")) {
+                title = "恢复选中项";
+                content = "确定将这些选中项进行恢复吗？";
+                deltag = Consts.Deltag["正常"];
+            } else {
+                title = "删除选中项";
+                content = "确定将这些选中项进行删除吗？";
+                deltag = Consts.Deltag["已删除"];
+            }
+            var f = {
+                ids: ids,
+                "deltag": deltag
+            };
+            lBox.confirm({
+                title: title,
+                content: content,
+                btnConfirmFunc: function () {
+                    var m = lBox.wait({content: "正在操作，请稍后...", isLock: false});
+                    $.post("${viewModel.delOrRecAction}", f, function (data) {
+                        m.immeClose(function () {
+                            if (checkResultIsOk(data)) {
+                                lBox.ok({
+                                    delay: 500, content: "操作成功！", success: function () {
+                                        viyGrid.reload.call(viyGrid);
+                                    }
+                                });
+                            }
+                        });
+                    }, "json");
+                }
+            });
+        });
+        $("#recycleDiv").click(function () {
+            var _this = $(this);
+            if (!_this.hasClass("recycle-btn")) {
+                _this.addClass("recycle-btn").html("<i class='icon-reply'></i>常规项");
+                _this.siblings("#delDiv").addClass("recycle-btn").removeClass("viyui-danger").html("<i class='icon-history'></i>还原");
+                $(viyGrid.p.form).children("#deltag").val(Consts.Deltag["已删除"]);
+            } else {
+                _this.removeClass("recycle-btn").html("<i class='icon-hdd'></i>回收站");
+                _this.siblings("#delDiv").removeClass("recycle-btn").addClass("viyui-danger").html("<i class='icon-trash'></i>删除");
+                $(viyGrid.p.form).children("#deltag").val(Consts.Deltag["正常"]);
+            }
+            viyGrid.reload();
+        });
+        $("#btnAdd").html("<i class=\"icon icon-plus\"></i>" + ifwin.btnAddText).click(function () {
+            lBox.newWin(ifwin.btnAddText, "${viewModel.addAction}", ifwin.width, ifwin.height, true);
+        });
+        $("#btnSubmitQuery").click(function () {
+            viyGrid.reload({pageInfo: {page: 1}});
+        });
+        $("#btnResetQuery").click(function () {
+            $(viyGrid.p.form).find("input,select").each(function (i, v) {
+                if ($(this).prop("id") != "deltag") {
+                    $(v).val("");
+                }
+            });
+        });
+        $("#btnSetConditionState").click(function () {
+            var i = $(this).children("i");
+            i.toggleClass("icon-chevron-up icon-chevron-down");
+            $(this).parent().siblings(".search-content").slideToggle();
+        });
+        $("#btnFavorite").click(function () {
+            var favLinks = $.parseJSON(localStorage.getItem("fav-link"));
+            if (LE.isEmpty(favLinks)) {
+                favLinks = {};
+            }
+            $(this).toggleClass("selected");
+            var loc = location.href;
+            var n = $(parent.document).find("#main_content_box .viyui-tab-title li.current").clone(false);
+            var viyId = n.attr("data-viyui-id");
+            if ($(this).hasClass("selected")) {//收藏
+                favLinks[viyId] = {
+                    name: n.text(),
+                    url: loc
+                };
+            } else {//取消收藏
+                delete favLinks[viyId];
+            }
+            localStorage.setItem("fav-link", JSON.stringify(favLinks));
+            parent.bindFavLink();
+        });
+        //list action
+        $(viyGrid.selector).on("click", ".btn-list-alter,.btn-list-view,.btn-list-del", function () {
+            var _this = $(this);
+            var id = $(_this).attr("data-id");
+            if (_this.is(".btn-list-alter")) {
+                var index = $(this).closest("tr").index();
+                listEdit.call(_this,{id:id},viyGrid.p.dataList[index]);
+            } else if (_this.is(".btn-list-view")) {
+                lBox.newWin(ifwin.listViewText, "${viewModel.viewAction}?id=" + id, ifwin.width, ifwin.height, true);
+            } else if (_this.is(".btn-list-del")) {
+                lBox.confirm({
+                    title: "删除操作",
+                    content: "是否删除此项",
+                    btnConfirmFunc: function () {
+                        $.post("${viewModel.delOrRecAction}", {
+                            ids: id,
+                            "deltag": true
+                        }, function (data) {
+                            viyGrid.reload.call(viyGrid);
+                        }, "json");
+                    }
+                });
+            }
+    });
+    //回车查询
+    $(viyGrid.p.form).on("keyup", "input,select", function (e) {
+        if (e.keyCode == 13) {
+            viyGrid.reload({pageInfo: {page: 1}});
+        }
+    }).on("blur", "input,select", function () {
+        //viyGrid.reload({pageInfo: {page: 1}});
+    });
+
+    $(document).keydown(function (e) {
+        if (e.which === 27) {
+            lBox.closeWin();
+        }
+    });
+    })
+    ;
+</script>

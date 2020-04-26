@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>${viewModel.title!""}</title>
+    <#include  "../../layout/css-js.html" />
+</head>
+<body>
+<form autocomplete="off" class="comm-alter-form viy-form" name="comm-alter-form" action="${viewModel.basePath}config">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        登录失败几次后无法继续登录
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="DAY_ADMIN_TRY_LOGIN_COUNT" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        日志保存时长
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_LOG_SAVE" />秒
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        登录默认保存时长
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADMIN_TOKEN" />秒
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户名最短长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_NAME_MIN_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户名最长长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_NAME_MAX_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户密码最短长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_PWD_MIN_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户密码最长长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_PWD_MAX_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        还剩几天密码过期提醒
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_PWD_EXP_REMID_DAY" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        修改密码后还剩多少天过期
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="ADM_PWD_EDIT_EXP_DAY" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        session有效时长
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="SESSION_CACHE_PERIOD" />秒
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/config-alter-btn.html" />
+</form>
+</body>
+</html>

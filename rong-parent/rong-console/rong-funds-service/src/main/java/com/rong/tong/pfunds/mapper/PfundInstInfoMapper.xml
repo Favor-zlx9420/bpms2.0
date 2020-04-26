@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundInstInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundInstInfo" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="RECORD_DATE" property="recordDate" jdbcType="DATE" />
+    <result column="REG_CD" property="regCd" jdbcType="VARCHAR" />
+    <result column="LEGAL_REP" property="legalRep" jdbcType="VARCHAR" />
+    <result column="IS_QUALIFIED" property="isQualified" jdbcType="TINYINT" />
+    <result column="QUALIFY_WAY" property="qualifyWay" jdbcType="VARCHAR" />
+    <result column="EMP_NUM" property="empNum" jdbcType="INTEGER" />
+    <result column="MAIN_FUND_TYPE" property="mainFundType" jdbcType="VARCHAR" />
+    <result column="PRIVATE_IND_SCALE" property="privateIndScale" jdbcType="VARCHAR" />
+    <result column="PRIVATE_CON_SCALE" property="privateConScale" jdbcType="VARCHAR" />
+    <result column="PE_SCALE" property="peScale" jdbcType="VARCHAR" />
+    <result column="VC_SCALE" property="vcScale" jdbcType="VARCHAR" />
+    <result column="OTHER_SCALE" property="otherScale" jdbcType="VARCHAR" />
+    <result column="IS_FUND_MANA" property="isFundMana" jdbcType="BIGINT" />
+    <result column="PAA_SCALE" property="paaScale" jdbcType="VARCHAR" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.pfunds.module.entity.TbPfundInstInfo" extends="BaseResultMap" >
+    <result column="PROFILE" property="profile" jdbcType="LONGVARCHAR" />
+    <result column="IDEA_STRATEGY" property="ideaStrategy" jdbcType="LONGVARCHAR" />
+    <result column="KEY_PERSON" property="keyPerson" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstInfo" extends="ListResultMap" >
+    <result column="PROFILE" property="profile" jdbcType="LONGVARCHAR" />
+    <result column="IDEA_STRATEGY" property="ideaStrategy" jdbcType="LONGVARCHAR" />
+    <result column="KEY_PERSON" property="keyPerson" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <!-- 通用查询映射结果 -->
+  <resultMap id="TvSearchPfundInstInfoResultMap" type="com.rong.tong.pfunds.module.view.TvSearchPfundInstInfo">
+    <result column="no" property="no" />
+    <result column="PARTY_ID" property="partyId" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="LEGAL_REP" property="keyPerson" />
+    <result column="NUM_ALL" property="numAll" />
+    <result column="NUM_DURA" property="numDura" />
+    <result column="RECORD_DATE" property="recordDate" />
+    <result column="total_return" property="totalReturn" />
+    <result column="SECURITY_ID" property="securityId" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="SEC_FULL_NAME" property="secFullName" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PARTY_ID`, e.`UPDATE_TIME`, e.`TMSTAMP`, e.`RECORD_DATE`, e.`REG_CD`, 
+    e.`LEGAL_REP`, e.`IS_QUALIFIED`, e.`QUALIFY_WAY`, e.`EMP_NUM`, e.`MAIN_FUND_TYPE`, 
+    e.`PRIVATE_IND_SCALE`, e.`PRIVATE_CON_SCALE`, e.`PE_SCALE`, e.`VC_SCALE`, e.`OTHER_SCALE`, 
+    e.`IS_FUND_MANA`, e.`PAA_SCALE`, e.`RECORD_STATUS`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`PROFILE`, e.`IDEA_STRATEGY`, e.`KEY_PERSON`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_inst_info e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstInfo" >
+    select count(1) as recordCount from `tong-rong`.pfund_inst_info e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) from `tong-rong`.pfund_inst_info a
+    join `rong-manage`.tb_private_funds_current_company_ranking b on a.PARTY_ID = b.PARTY_ID
+	where (b.PARTY_FULL_NAME like #{key} OR b.PARTY_SHORT_NAME like #{key})
+  </select>
+  <!--查询方法-->
+  <select id="selectSearchPfundInstInfoList" resultMap="TvSearchPfundInstInfoResultMap">
+    SELECT
+    @rowno:=@rowno+1 as no
+    ,r.* from
+    (select a.PARTY_ID
+      ,b.PARTY_SHORT_NAME
+      ,b.PARTY_FULL_NAME
+      ,a.LEGAL_REP
+      ,DATE_FORMAT(a.RECORD_DATE,'%Y-%m-%d') RECORD_DATE
+      ,b.NUM_ALL
+      ,b.SECURITY_ID
+      ,b.SEC_SHORT_NAME
+      ,b.SEC_FULL_NAME
+      ,concat(truncate(b.RETURN_RATE_EST,2),'%') total_return
+      from
+      `tong-rong`.pfund_inst_info a,
+      `rong-manage`.tb_private_funds_current_company_ranking b
+      where a.PARTY_ID = b.PARTY_ID
+      AND (b.PARTY_FULL_NAME like #{key} OR b.PARTY_SHORT_NAME like #{key})
+      <if test="orderBy != null">
+        ORDER BY ${orderBy}
+      </if>
+      limit #{limitStart},#{limitEnd}
+    ) r,(select @rowno:=#{limitStart}) t
+  </select>
+
+  <select id="getTotalReturn" resultMap="TvSearchPfundInstInfoResultMap">
+    SELECT
+    concat(truncate(avg(b.RETURN_ACCUM),2),'%') AS total_return
+    FROM
+    `tong-rong`.pfund a
+    JOIN `tong-rong`.pfund_nav_return b ON a.SECURITY_ID = b.SECURITY_ID
+    WHERE a.INVEST_CONSULTANT = #{partyId}
+  </select>
+</mapper>

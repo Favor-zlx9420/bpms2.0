@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>消息列表</title>
+    <#include  "../../layout/css-js.html" />
+</head>
+<body>
+<form id="commQueryForm" class="msg-form" name="com_form_action" action="${viewModel.dataGridAction}">
+    <input type="hidden" name="entity.deltag" />
+    <input type="hidden" name="entity.state" id="state" />
+    <div class="s_top_Pannel s-top-btn-box msg-top">
+        <#include  "../../layout/ordinary-search-btn.html" />
+    </div>
+    <div class="s_top_Pannel s-top-btn-box">
+        <div class="simp-state">
+            <#list MsgStateDesc as msg>
+            <div class="viyui-btn viyui-btn-sm msg-state-btn-${msg.getValue()}" data-state="${msg.getValue()}"><i class="icon-envelope"></i><span>${msg.getDesc()}</span></div>
+            </#list>
+            <div class="viyui-btn viyui-btn-sm msg-state-btn--1" data-state=""><i class="icon-envelope-alt"></i><span>全部</span></div>
+        </div>
+    </div>
+</form>
+<div id="commGrid" class="viy-ui-table com-con-info msg-table"></div>
+<script>
+    autoLoadBg = false;
+    param.selected = false;
+    param.theads=[
+        {
+            fieldShowName:"id",
+            sortable:false,
+            rowWidth:70,
+            fieldProperName:"id",
+            fieldName:"e.id"
+        },
+        {
+            fieldShowName:"类型",
+            sortable:true,
+            rowWidth:120,
+            fieldProperName:"typeName",
+            fieldName:"e.type_id"
+        },
+        {
+            fieldShowName:"标题",
+            sortable:false,
+            rowWidth:0,
+            fieldProperName:"title",
+            fieldName:"e.title"
+        },
+        {
+            fieldShowName:"状态",
+            sortable:true,
+            rowWidth:70,
+            fieldProperName:"stateDesc",
+            fieldName:"e.state",
+            visibleTemplate:stateDescFunc,
+            rowClassValue:"state"
+        },
+        {
+            fieldShowName:"产生时间",
+            sortable:false,
+            rowWidth:160,
+            fieldProperName:"createDate",
+            fieldName:"e.create_date"
+        }
+    ];
+    var queryEntity=${queryEntity};
+    $(function(){
+        //绑定查询项目
+        LET.dataBindByName("#commQueryForm",queryEntity);
+       //点击列表进行显示详情以及更新为已读。
+        $(".msg-table").on("click",".list-row",function(){
+            var index = $(this).index();
+            if($(this).hasClass("state-0")){
+                $(this).removeClass("state-0").addClass("state-1");
+            }
+           top.lBox.newWin2("消息详情","${viewModel.viewAction}?entity.id="+viyGrid.p.dataList[index].id,700,600);
+        });
+        $("#commQueryForm .simp-state .viyui-btn").click(function(){
+            var state = $(this).attr("data-state");
+            $("#commQueryForm").find("#state").val(state);
+            viyGrid.reload();
+        });
+    });
+</script>
+</body>

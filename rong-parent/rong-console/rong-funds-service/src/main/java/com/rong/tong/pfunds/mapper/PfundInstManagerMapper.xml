@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundInstManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundInstManager" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="PERSON_ID" property="personId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="DATE" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="BACKGROUND" property="background" jdbcType="VARCHAR" />
+    <result column="IS_MANA" property="isMana" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.pfunds.module.entity.TbPfundInstManager" extends="BaseResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstManager" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstManager" extends="ListResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PARTY_ID`, e.`PERSON_ID`, e.`NAME`, e.`POSITION`, e.`BEGIN_DATE`, e.`END_DATE`, 
+    e.`UPDATE_TIME`, e.`TMSTAMP`, e.`BACKGROUND`, e.`IS_MANA`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`BACKGROUND_DESC`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_inst_manager e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstManager" >
+    select count(1) as recordCount from `tong-rong`.pfund_inst_manager e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstManager" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

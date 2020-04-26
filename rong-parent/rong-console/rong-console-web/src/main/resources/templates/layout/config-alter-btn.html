@@ -1,0 +1,115 @@
+<div class="comm-item-box comm-item-btn-box">
+    <div class="comm-item-title">
+        <div></div>
+    </div>
+    <div class="comm-item-content">
+        <div>
+            <div class="viyui-btn viyui-btn-sm btn-submit"><i class="icon-save"></i><span>保存</span></div>
+        </div>
+    </div>
+</div>
+<script>
+    function autoHeight(){
+        $(".comm-outer-box").css("max-height",function(){
+            var totalHeight = $(document.body).height();
+            var extHeight = 0;
+            var index = $(this).index();
+            $(this).parent().children().each(function(){
+                if($(this).index() != index){
+                    extHeight += $(this).visibleHeight();
+                }
+            });
+            return totalHeight - extHeight;
+        });
+    }
+    var dictionaries = ${dictionaries};
+    $(function(){
+        LET.checkEditItem(".comm-alter-form");
+        for(var x in dictionaries){
+            var d = dictionaries[x];
+            $(".comm-alter-form input[name='"+d.key+"']").val(d["value"]).attr("data-tip",d["description"]).attr("data-old-value",d["value"]);
+        }
+        LET.intCheckFormTip(".tab-content-box");
+
+        $(".comm-alter-form .btn-submit").click(function(){
+            var _this = $(this);
+            var thisk={
+                form : _this.closest("form"),
+                otherCheck:function(){return true;},
+                successFunc:null,
+                failureFunc:null,
+                otherPostParams:[]
+            };
+            if (!LET.openEvt || !LET.checkForm(thisk.form) || !thisk.otherCheck(thisk)) {
+                return false;
+            }
+            var filterFunc = function(element){
+                if(true){
+                    return jQuery(element).is(".had-edit") || jQuery(element).is(":checkbox");
+                }
+                var ov = jQuery(element).attr("data-old-value");
+                var cv = jQuery(element).val();
+                var fc = LE.getFuncByName(jQuery(element).attr("data-post-fmt-func"));
+                if(null != fc){
+                    cv = fc(cv,this)+"";
+                }
+                return ov != cv;
+            }
+            var oriPostData = $(thisk.form).serializeArrayOfEditFmt(filterFunc).concat(thisk.otherPostParams);
+            if(oriPostData.length == 0){
+                lBox.alert({content:"没有配置要修改"});
+                return false;
+            }
+            _this.find("span").html("提交中...");
+            var m = lBox.wait({content:"正在操作，请稍等···"});
+            LET.openEvt = false;
+            var postData={};
+            for(var x in oriPostData){
+                postData["dictionaries["+x+"].key"] = oriPostData[x].name;
+                postData["dictionaries["+x+"].value"] = oriPostData[x].value;
+            }
+            $.ajax({
+                url : thisk.form.attr("action"),
+                type:"post",
+                data:postData,
+                dataType:"json",
+                success:function (data) {
+                    m.close(function(){
+                        if(!checkResultIsOk(data)){
+                            _this.find("span").html("保存");
+                            if (undefined != thisk.failureFunc) {
+                                thisk.failureFunc(data);
+                            }
+                            LET.openEvt = true;
+                            return;
+                        }
+                        LET.openEvt = true;
+                        if(thisk.successFunc != null){
+                            _this.find("span").html("提交保存");
+                            thisk.successFunc();
+                        }else{
+                            _this.find("span").html("保存成功");
+                            var msg = data["message"];
+                            if(null == msg){
+                                msg = "操作没毛病.";
+                            }
+                            lBox.ok({delay:500,content:msg,success:function(){
+                                lBox.closeWin(function(){
+                                    if(null != viyGrid){viyGrid.reload.call(viyGrid);}
+                                });
+                            }});
+                        }
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    m.close(function(){
+                        lBox.alert({content:"保存时出现异常！",success:function(){
+                            LET.openEvt = true;
+                        }});
+                    })
+                }
+            });
+            return false;
+        });
+    });
+</script>

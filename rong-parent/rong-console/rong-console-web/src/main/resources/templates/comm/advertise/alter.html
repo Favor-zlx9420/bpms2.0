@@ -1,0 +1,134 @@
+<script type="text/javascript">
+var alterBindParam = {
+    afterBindFunc:function(entity){
+        if(entity.id > 0){
+            $("#picSrcShow").attr("src",entity.imgSamUrl);
+        }
+    }
+}
+//图片
+//默认是ad
+Dictionary.img_upload_type = "advertise";
+Dictionary.img_upload_dir = "file";
+Dictionary.img_is_resize = "0";
+function setPic(type){
+    current_imgBox=$(this).siblings(".pic-view");
+    lBox.newWin('设置图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+}
+//添加图片
+function addImg(src){
+    $(current_imgBox).siblings("input").val(src);
+    $("img",current_imgBox).attr("src",src);
+}
+function setFile(type){
+    current_fileBox = $(this).parent();
+    lBox.newWin('设置附件','/comm/imagesams/file?r='+LE.ranStr(),700,400);
+}
+//添加附件
+function addFile(sam){
+    $("input",current_fileBox).val(sam.lmtSrc).attr("title",sam.name).addClass("had-edit");
+}
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择类型</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <select name="entity.type"
+                                id="type"
+                                class="validator no-render"
+                                data-rules="required"
+                                data-enumber="Consts.AdvertiseType"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>广告位置</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <select name="entity.position"
+                                id="position"
+                                class="validator no-render"
+                                data-rules="required"
+                                data-enumber="Consts.AdvertisePosition"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box hide">
+                <div class="comm-item-title"><div>关联信息ID</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^[0-9]*$"
+                                type="text" class="input validator" value="0" name="entity.newsId" id="newsId" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>标题</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,255}$"
+                                data-tip="长度1-255,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.title" id="title" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>文件描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.content" id="content" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>缩略图片</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div class="pic-view"><img id="picSrcShow" src="" /></div>
+                        <div class="viyui-btn viyui-btn-sm btn-select-img" data-fc="function(){setPic.call(this);}">设置图片</div>
+                        <input type="hidden" id="imgSamUrl" name="entity.imgSamUrl" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>文件选择</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left img_sam_file">
+                        <input type="input" value=""
+                               class="input validator"
+                               readonly="readonly"
+                               name="entity.fileUrl" id="fileUrl" />
+                        <div class="viyui-btn viyui-btn-xs btn-select-file" data-fc="function(){setFile.call(this);}">设置文件</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>对应连接</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^\S{0,255}$"
+                                data-tip="请别忘记加http:// 长度0-255,[a-zA-Z0-9_-]"
+                                type="text" class="input validator" name="entity.link" id="link" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

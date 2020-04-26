@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.RaisedFundCurrentNavMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbRaisedFundCurrentNav" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="nav" property="nav" jdbcType="DECIMAL" />
+    <result column="accum_nav" property="accumNav" jdbcType="DECIMAL" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+    <result column="adj_nav" property="adjNav" jdbcType="DECIMAL" />
+    <result column="return_rate" property="returnRate" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvRaisedFundCurrentNav" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvRaisedFundCurrentNav" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`security_id`, e.`end_date`, e.`nav`, e.`accum_nav`, e.`person_id`, 
+    e.`party_id`,e.`adj_nav`,e.`return_rate`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_raised_fund_current_nav e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsRaisedFundCurrentNav" >
+    select count(1) as recordCount from tb_raised_fund_current_nav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsRaisedFundCurrentNav" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetNavTemp">
+    truncate table `rong-manage`.tb_raised_fund_current_nav_temp;
+    insert into `rong-manage`.tb_raised_fund_current_nav_temp
+    (security_id
+		,nav
+		,accum_nav
+		,adj_nav
+		,return_rate
+		,end_date
+    ,person_id,party_id,create_date)
+    select e.security_id
+		,e.nav
+    ,e.accum_nav
+    ,(select ADJ_NAV from `tong-rong`.fund_adj_nav where SECURITY_ID=g.SECURITY_ID and end_date=g.end_date limit 1)
+    ,(select return_rate from `tong-rong`.fund_adj_nav where SECURITY_ID=g.SECURITY_ID and end_date=g.end_date limit 1)
+    ,e.end_date
+    ,(select PERSON_ID from `tong-rong`.fund_manager_new where SECURITY_ID=e.SECURITY_ID limit 1)
+    ,(select MANAGEMENT_COMPANY from `tong-rong`.fund_class a,`tong-rong`.fund b where a.SECURITY_ID=e.SECURITY_ID and a.FUND_ID=b.FUND_ID)
+	  ,now()
+    from `tong-rong`.fund_nav e,
+    (select max(end_date) end_date,SECURITY_ID from `tong-rong`.fund_nav group by SECURITY_ID)g
+    where e.SECURITY_ID=g.SECURITY_ID and e.END_DATE=g.end_date
+  </update>
+
+  <select id="resetNavTempCount" resultType="java.lang.Integer">
+    select count(1) from `rong-manage`.tb_raised_fund_current_nav_temp
+  </select>
+
+  <update id="resetNav">
+    truncate table `rong-manage`.tb_raised_fund_current_nav;
+    insert into `rong-manage`.tb_raised_fund_current_nav
+    select * from `rong-manage`.tb_raised_fund_current_nav_temp
+  </update>
+</mapper>

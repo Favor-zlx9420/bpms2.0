@@ -1,0 +1,360 @@
+<script>
+    var $pwd;
+    var pwRegex;
+    var companyUserinfoSelector = "#companyUserinfoBox";
+    var personalUserinfoSelector = "#personalUserinfoBox";
+    var submitOpt = {
+        wrap  :function(req){
+            var v=$("#showPassword").val();
+            if(v.length > 0){
+                req.entity.password = v;
+            }
+        }
+    };
+        var alterBindParam = {
+        afterBindFunc: function (entity) {
+            $pwd = $("#showPassword");
+            //绑定企业用户信息
+            var companyUserinfo = entity["companyUserinfo"];
+            if(null != companyUserinfo){
+                LET.dataBind(companyUserinfoSelector,companyUserinfo);
+            }
+            //绑定个人用户信息
+            var personalUserinfo = entity["personalUserinfo"];
+            if(null != personalUserinfo){
+                LET.dataBind(personalUserinfoSelector,personalUserinfo);
+            }
+        },
+        afterRenderFunc:function(entity){
+            $('#birthDate').datetimepicker({
+                onShow: function (ct) {this.setOptions({maxDateTime: new Date()})},
+                format:'Y-m-d',
+                timepicker:false
+            });
+            if(entity.id > 0){
+                pwRegex = $pwd.attr("data-regex");
+                $pwd.attr("data-extra-rules","checkEditPwd").removeAttr("data-rules").removeAttr("data-regex");
+                $("#headPortraitShow").attr("src",entity.headPortrait);
+            }
+            //显示或隐藏更过选项
+            $("#setMoreProperties").click(function(){
+                var controlItem = personalUserinfoSelector;
+                $(".mem-more-info").hide();
+                if($(this).hasClass("expand")){
+                    $(this).removeClass("expand").find("i").removeClass("icon-minus").addClass("icon-plus");
+                    $(controlItem).hide();;
+                }else{
+                    $(this).addClass("expand").find("i").removeClass("icon-plus").addClass("icon-minus");
+                    $(controlItem).show();
+                }
+            });
+            $("#memTypeSelector input").on("click",function() {
+                if($("#setMoreProperties").hasClass("expand")){
+                    $(".mem-more-info").hide();
+                    var controlItem = personalUserinfoSelector;
+                    $(controlItem).show();
+                }
+            });
+        }
+    }
+    //图片
+    function setPic(){
+        current_imgBox=$(this).siblings(".pic-view");
+        lBox.newWin('设置图片','/comm/imagesams/img?r='+LE.ranStr(),700,330);
+    }
+    //添加图片
+    function addImg(src){
+        $(current_imgBox).siblings("input").val(src);
+        $("img",current_imgBox).attr("src",src);
+    }
+    function checkEditPwd(){
+        var v = $pwd.val();
+        if(v.length > 0 && !(new RegExp(pwRegex).test(v))){
+            return $pwd.attr("data-tip");
+        }
+        return ResultStatus.ok;
+    }
+    function checkName(){
+        //检查会员名／邮箱/手机号码
+        var name=$("#name").val();
+        var phone=$("#phone").val();
+        var email=$("#email").val();
+//    if(LE.isPhone(name) && phone.length > 0 && name != phone){
+//        return "登录名为手机号但是跟用户手机号不一致！";
+//    }
+        if(LE.isEmail(name) && email.length > 0 && name != email){
+            return "登录名为Email但是跟用户Email不一致！";
+        }
+        return ResultStatus.ok;
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <input type="hidden" name="entity.id" id="id" value="0" />
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员登录名
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="required"
+                               data-extra-rules="checkName"
+                               data-regex="^\S{${attr.memNameMinLen},${attr.memNameMaxLen}}$"
+                               data-tip="会员登录名,不可重复,[${attr.memNameMinLen}-${attr.memNameMaxLen}]"
+                               class="input validator" name="entity.userName" id="userName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        登录密码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="required"
+                               data-regex="^\S{${attr.memPwdMinLen},${attr.memPwdMaxLen}}$"
+                               data-tip="输入登录密码,长度[${attr.memPwdMinLen}-${attr.memPwdMaxLen}],修改时为空表示不修改"
+                               class="input validator" id="showPassword" style="ime-mode:disabled;" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        手机号码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="phone"
+                               data-tip="登录用户的手机号码"
+                               class="input validator" name="entity.phone" id="phone" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        备注
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.description" id="description" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        头像图片
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div class="pic-view"><img id="headPortraitShow" src="" /></div>
+                        <div class="viyui-btn viyui-btn-sm btn-select-img" data-fc="function(){setPic.call(this);}">设置图片</div>
+                        <input type="hidden" value="" name="entity.headPortrait" id="headPortrait" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        用户类型
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <select name="entity.type"
+                                id="type"
+                                class="validator no-render"
+                                data-rules="required"
+                                data-enumber="Consts.MemType"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box hide">
+                <div class="comm-item-title">
+                    <div>
+                        用户等级
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="hidden" id="level" name="entity.level" value="0" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div></div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="setMoreProperties" class="viyui-btn viyui-btn-sm" style="margin:5px 0;"><i class="icon icon-plus"></i>显示更多填写项</div>
+                    </div>
+                </div>
+            </div>
+            <div id="personalUserinfoBox" class="mem-more-info" style="display:none;">
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            真实姓名
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-tip="会员真实姓名"
+                                   class="input validator" name="entity.realName" data-bind-id="realName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            证件类型
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left le-form-element">
+                            <#list IdTypeDesc as td>
+                                <label class="viyui-radio"><input data-bind-id="idType" name="entity.idType" type="radio" value="${td.getValue()}" title="${td.toString()}" />${td.toString()}</label>
+                            </#list>
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            证件号码
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-regex="^\S{0,63}$"
+                                   data-tip="证件号码,0-63"
+                                   class="input validator" name="entity.idNo" data-bind-id="idNo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            电话号码
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-rules="call"
+                                   data-tip="会员电话号码"
+                                   class="input validator" name="entity.call" data-bind-id="call" />
+                        </div>
+                    </div>
+                </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>职位</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-tip="用户职位"
+                               class="input validator" name="entity.position" data-bind-id="position" />
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="companyUserinfoBox" class="mem-more-info" style="display:none;">
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            企业名称
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-regex="^\S{0,127}$"
+                                   data-tip="企业名称"
+                                   class="input validator" name="companyUserinfo.companyName" id="companyName" data-bind-id="companyName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box hide">
+                    <div class="comm-item-title">
+                        <div>
+                            国家
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="hidden" value="中国" name="companyUserinfo.country" data-bind-id="country" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            详细地址
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-regex="^\S{0,127}$"
+                                   data-tip="长度0-127"
+                                   class="input validator" name="companyUserinfo.address" data-bind-id="address" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            电话号码
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-rules="call"
+                                   data-tip="会员电话号码"
+                                   class="input validator" name="companyUserinfo.call" data-bind-id="call" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>
+                            邮编
+                        </div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-rules="nonnegtive_int"
+                                   data-tip="邮编"
+                                   class="input validator" name="companyUserinfo.postCode" data-bind-id="postCode" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

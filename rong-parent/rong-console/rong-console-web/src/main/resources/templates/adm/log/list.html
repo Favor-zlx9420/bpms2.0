@@ -1,0 +1,46 @@
+<div class="boxSearch searchLong">
+    <div>状态：</div>
+    <div>
+        <select id="selStateSearch" class="selSearch no-render" name="e.state.in" multiple="multiple" size="5"
+                data-enumber="Consts.LogState"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>操作用户：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.admUserName.like" /></div>
+    <div>操作uri：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.uri.like" /></div>
+</div>
+<div class="boxSearch searchLong">
+    <div>操作栏目ID：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.columnId.eq" /></div>
+    <div>操作ip：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.ip.like" /></div>
+</div>
+<div class="boxSearch">
+    <div>操作时间：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.time.gt" id="beginLogTime" value=''/>
+        <br />
+        至
+        <br />
+        <input type="text" class="timeSearch" name="e.time.lt" id="endLogTime" value=''/>
+    </div>
+</div>
+<script>
+    function logStateFunc(tr,v,i){
+        var desc = findNameByValueFromConsts(Consts.LogState,v);
+        return stateDescFunc(tr,desc,i);
+    }
+    $(function(){
+        $('#beginLogTime').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endLogTime').getDateValue()})}
+        });
+        $('#endLogTime').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginLogTime').getDateValue()})}
+        });
+    });
+</script>

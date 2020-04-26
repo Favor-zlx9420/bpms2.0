@@ -1,0 +1,35 @@
+
+<form id="categoryForm" autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <input type="hidden" name="entity.deltag" id="deltag" />
+    <input type="hidden" name="entity.parentId" value="9" />
+    <input type="hidden" name="entity.state" value="1" />
+    <input type="hidden" name="entity.typeId" value="435180606834343936" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>栏目名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,64}$"
+                                data-tip="长度1-64"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                type="text" class="input validator" name="entity.description" id="description" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

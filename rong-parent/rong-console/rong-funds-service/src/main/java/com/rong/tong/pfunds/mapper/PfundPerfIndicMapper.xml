@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundPerfIndicMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundPerfIndic" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="WINDOW" property="window" jdbcType="INTEGER" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" jdbcType="DECIMAL" />
+    <result column="ANNUAL_TOTAL_RISK" property="annualTotalRisk" jdbcType="DECIMAL" />
+    <result column="ANNUAL_ACTIVE_RETURN" property="annualActiveReturn" jdbcType="DECIMAL" />
+    <result column="ANNUAL_ACTIVE_RISK" property="annualActiveRisk" jdbcType="DECIMAL" />
+    <result column="DEANNUAL_ACTIVE_RETURN" property="deannualActiveReturn" jdbcType="DECIMAL" />
+    <result column="DEANNUAL_ACTIVE_RISK" property="deannualActiveRisk" jdbcType="DECIMAL" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" jdbcType="DECIMAL" />
+    <result column="DOWNSIDE_RISK" property="downsideRisk" jdbcType="DECIMAL" />
+    <result column="IR" property="ir" jdbcType="DECIMAL" />
+    <result column="SHARPE_RATIO" property="sharpeRatio" jdbcType="DECIMAL" />
+    <result column="MAX_DD_REC_DAYS" property="maxDdRecDays" jdbcType="INTEGER" />
+    <result column="CORR_EQUITY" property="corrEquity" jdbcType="DECIMAL" />
+    <result column="CORR_BOND" property="corrBond" jdbcType="DECIMAL" />
+    <result column="CORR_FUTURE" property="corrFuture" jdbcType="DECIMAL" />
+    <result column="MAX_CONT_RISE_DAYS" property="maxContRiseDays" jdbcType="INTEGER" />
+    <result column="MAX_CONT_DECL_DAYS" property="maxContDeclDays" jdbcType="INTEGER" />
+    <result column="MAX_CONT_RISE_RATE" property="maxContRiseRate" jdbcType="DECIMAL" />
+    <result column="MAX_CONT_DECL_RATE" property="maxContDeclRate" jdbcType="DECIMAL" />
+    <result column="MAX_D_RISING_RATE" property="maxDRisingRate" jdbcType="DECIMAL" />
+    <result column="MAX_D_DECLINE_RATE" property="maxDDeclineRate" jdbcType="DECIMAL" />
+    <result column="MAX_RISE_BEG_DATE" property="maxRiseBegDate" jdbcType="DATE" />
+    <result column="MAX_RISE_END_DATE" property="maxRiseEndDate" jdbcType="DATE" />
+    <result column="MAX_DECL_BEG_DATE" property="maxDeclBegDate" jdbcType="DATE" />
+    <result column="MAX_DECL_END_DATE" property="maxDeclEndDate" jdbcType="DATE" />
+    <result column="LOSS_DAYS_RATE" property="lossDaysRate" jdbcType="DECIMAL" />
+    <result column="PROFIT_DAYS_RATE" property="profitDaysRate" jdbcType="DECIMAL" />
+    <result column="HURST" property="hurst" jdbcType="DECIMAL" />
+    <result column="STUTZER" property="stutzer" jdbcType="DECIMAL" />
+    <result column="TREYNOR_RATIO" property="treynorRatio" jdbcType="DECIMAL" />
+    <result column="SORTINO_RATIO" property="sortinoRatio" jdbcType="DECIMAL" />
+    <result column="REALIZED_ALPHA" property="realizedAlpha" jdbcType="DECIMAL" />
+    <result column="REALIZED_BETA" property="realizedBeta" jdbcType="DECIMAL" />
+    <result column="RESIDUAL_RISK" property="residualRisk" jdbcType="DECIMAL" />
+    <result column="M_SQUARE" property="mSquare" jdbcType="DECIMAL" />
+    <result column="ADJ_SHARP_RATIO" property="adjSharpRatio" jdbcType="DECIMAL" />
+    <result column="VAR_950" property="var950" jdbcType="DECIMAL" />
+    <result column="ER_VAR_950" property="erVar950" jdbcType="DECIMAL" />
+    <result column="CVAR_950" property="cvar950" jdbcType="DECIMAL" />
+    <result column="CSR_950" property="csr950" jdbcType="DECIMAL" />
+    <result column="VAR_975" property="var975" jdbcType="DECIMAL" />
+    <result column="ER_VAR_975" property="erVar975" jdbcType="DECIMAL" />
+    <result column="CVAR_975" property="cvar975" jdbcType="DECIMAL" />
+    <result column="CSR_975" property="csr975" jdbcType="DECIMAL" />
+    <result column="VAR_990" property="var990" jdbcType="DECIMAL" />
+    <result column="ER_VAR_990" property="erVar990" jdbcType="DECIMAL" />
+    <result column="CVAR_990" property="cvar990" jdbcType="DECIMAL" />
+    <result column="CSR_990" property="csr990" jdbcType="DECIMAL" />
+    <result column="SKEWNESS" property="skewness" jdbcType="DECIMAL" />
+    <result column="KURTOSIS" property="kurtosis" jdbcType="DECIMAL" />
+    <result column="JENSENS_ALPHA" property="jensensAlpha" jdbcType="DECIMAL" />
+    <result column="CALMAR_RATIO" property="calmarRatio" jdbcType="DECIMAL" />
+    <result column="STEARLING_RATIO" property="stearlingRatio" jdbcType="DECIMAL" />
+    <result column="BURKE_RATIO" property="burkeRatio" jdbcType="DECIMAL" />
+    <result column="OMEGA_RATIO" property="omegaRatio" jdbcType="DECIMAL" />
+    <result column="KAPPA_3_RATIO" property="kappa3Ratio" jdbcType="DECIMAL" />
+    <result column="MAR_RATIO" property="marRatio" jdbcType="DECIMAL" />
+    <result column="RAR" property="rar" jdbcType="DECIMAL" />
+    <result column="R_CUBED" property="rCubed" jdbcType="DECIMAL" />
+    <result column="TRACKING_ERROR" property="trackingError" jdbcType="DECIMAL" />
+    <result column="R_SQUARE" property="rSquare" jdbcType="DECIMAL" />
+    <result column="UP_CAPTURE_RETURN" property="upCaptureReturn" jdbcType="DECIMAL" />
+    <result column="UP_CAPTURE_RATE" property="upCaptureRate" jdbcType="DECIMAL" />
+    <result column="DOWN_CAPTURE_RETURN" property="downCaptureReturn" jdbcType="DECIMAL" />
+    <result column="DOWN_CAPTURE_RATE" property="downCaptureRate" jdbcType="DECIMAL" />
+    <result column="SEC_MDD" property="secMdd" jdbcType="DECIMAL" />
+    <result column="SEC_MDD_PERIODS" property="secMddPeriods" jdbcType="INTEGER" />
+    <result column="SEC_MDD_RECOVERY" property="secMddRecovery" jdbcType="INTEGER" />
+    <result column="THIRD_MDD" property="thirdMdd" jdbcType="DECIMAL" />
+    <result column="THIRD_MDD_PERIODS" property="thirdMddPeriods" jdbcType="INTEGER" />
+    <result column="THIRD_MDD_RECOVERY" property="thirdMddRecovery" jdbcType="INTEGER" />
+    <result column="WEEK_AUTO_CORR" property="weekAutoCorr" jdbcType="DECIMAL" />
+    <result column="BULL_BETA" property="bullBeta" jdbcType="DECIMAL" />
+    <result column="BEAR_BETA" property="bearBeta" jdbcType="DECIMAL" />
+    <result column="TIMING_T_M" property="timingTM" jdbcType="DECIMAL" />
+    <result column="SELECTION_T_M" property="selectionTM" jdbcType="DECIMAL" />
+    <result column="TIMING_C_L" property="timingCL" jdbcType="DECIMAL" />
+    <result column="SELECTION_C_L" property="selectionCL" jdbcType="DECIMAL" />
+    <result column="TIMING_H_M" property="timingHM" jdbcType="DECIMAL" />
+    <result column="SELECTION_H_M" property="selectionHM" jdbcType="DECIMAL" />
+    <result column="ALPHA_COEF" property="alphaCoef" jdbcType="DECIMAL" />
+    <result column="IS_NAV_QUALIFIED" property="isNavQualified" jdbcType="TINYINT" />
+    <result column="D_MAX_DD_REC_PERIODS" property="dMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="D_MAX_CONT_RISE_RATE" property="dMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="D_MAX_CONT_RISE_PERIODS" property="dMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="D_MAX_PERIOD_RISE_RATE" property="dMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="D_MAX_RISE_BEG_DATE" property="dMaxRiseBegDate" jdbcType="DATE" />
+    <result column="D_MAX_RISE_END_DATE" property="dMaxRiseEndDate" jdbcType="DATE" />
+    <result column="D_MAX_CONT_DECL_RATE" property="dMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="D_MAX_CONT_DECL_PERIODS" property="dMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="D_MAX_PERIOD_DECL_RATE" property="dMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="D_MAX_DECL_BEG_DATE" property="dMaxDeclBegDate" jdbcType="DATE" />
+    <result column="D_MAX_DECL_END_DATE" property="dMaxDeclEndDate" jdbcType="DATE" />
+    <result column="D_PROF_PERIODS_RATE" property="dProfPeriodsRate" jdbcType="DECIMAL" />
+    <result column="D_LOSS_PERIODS_RATE" property="dLossPeriodsRate" jdbcType="DECIMAL" />
+    <result column="W_MAX_DD_REC_PERIODS" property="wMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="W_MAX_CONT_RISE_RATE" property="wMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="W_MAX_CONT_RISE_PERIODS" property="wMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="W_MAX_PERIOD_RISE_RATE" property="wMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="W_MAX_RISE_BEG_DATE" property="wMaxRiseBegDate" jdbcType="DATE" />
+    <result column="W_MAX_RISE_END_DATE" property="wMaxRiseEndDate" jdbcType="DATE" />
+    <result column="W_MAX_CONT_DECL_RATE" property="wMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="W_MAX_CONT_DECL_PERIODS" property="wMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="W_MAX_PERIOD_DECL_RATE" property="wMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="W_MAX_DECL_BEG_DATE" property="wMaxDeclBegDate" jdbcType="DATE" />
+    <result column="W_MAX_DECL_END_DATE" property="wMaxDeclEndDate" jdbcType="DATE" />
+    <result column="W_PROF_PERIODS_RATE" property="wProfPeriodsRate" jdbcType="DECIMAL" />
+    <result column="W_LOSS_PERIODS_RATE" property="wLossPeriodsRate" jdbcType="DECIMAL" />
+    <result column="M_MAX_DD_REC_PERIODS" property="mMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="M_MAX_CONT_RISE_RATE" property="mMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="M_MAX_CONT_RISE_PERIODS" property="mMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="M_MAX_PERIOD_RISE_RATE" property="mMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="M_MAX_RISE_BEG_DATE" property="mMaxRiseBegDate" jdbcType="DATE" />
+    <result column="M_MAX_RISE_END_DATE" property="mMaxRiseEndDate" jdbcType="DATE" />
+    <result column="M_MAX_CONT_DECL_RATE" property="mMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="M_MAX_CONT_DECL_PERIODS" property="mMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="M_MAX_PERIOD_DECL_RATE" property="mMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="M_MAX_DECL_BEG_DATE" property="mMaxDeclBegDate" jdbcType="DATE" />
+    <result column="M_MAX_DECL_END_DATE" property="mMaxDeclEndDate" jdbcType="DATE" />
+    <result column="M_PROF_PERIODS_RATE" property="mProfPeriodsRate" jdbcType="DECIMAL" />
+    <result column="M_LOSS_PERIODS_RATE" property="mLossPeriodsRate" jdbcType="DECIMAL" />
+    <result column="Q_MAX_DD_REC_PERIODS" property="qMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="Q_MAX_CONT_RISE_RATE" property="qMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="Q_MAX_CONT_RISE_PERIODS" property="qMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="Q_MAX_PERIOD_RISE_RATE" property="qMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="Q_MAX_RISE_BEG_DATE" property="qMaxRiseBegDate" jdbcType="DATE" />
+    <result column="Q_MAX_RISE_END_DATE" property="qMaxRiseEndDate" jdbcType="DATE" />
+    <result column="Q_MAX_CONT_DECL_RATE" property="qMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="Q_MAX_CONT_DECL_PERIODS" property="qMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="Q_MAX_PERIOD_DECL_RATE" property="qMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="Q_MAX_DECL_BEG_DATE" property="qMaxDeclBegDate" jdbcType="DATE" />
+    <result column="Q_MAX_DECL_END_DATE" property="qMaxDeclEndDate" jdbcType="DATE" />
+    <result column="Q_PROF_PERIODS_RATE" property="qProfPeriodsRate" jdbcType="DECIMAL" />
+    <result column="Q_LOSS_PERIODS_RATE" property="qLossPeriodsRate" jdbcType="DECIMAL" />
+    <result column="S_MAX_DD_REC_PERIODS" property="sMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="S_MAX_CONT_RISE_RATE" property="sMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="S_MAX_CONT_RISE_PERIODS" property="sMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="S_MAX_PERIOD_RISE_RATE" property="sMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="S_MAX_RISE_BEG_DATE" property="sMaxRiseBegDate" jdbcType="DATE" />
+    <result column="S_MAX_RISE_END_DATE" property="sMaxRiseEndDate" jdbcType="DATE" />
+    <result column="S_MAX_CONT_DECL_RATE" property="sMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="S_MAX_CONT_DECL_PERIODS" property="sMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="S_MAX_PERIOD_DECL_RATE" property="sMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="S_MAX_DECL_BEG_DATE" property="sMaxDeclBegDate" jdbcType="DATE" />
+    <result column="S_MAX_DECL_END_DATE" property="sMaxDeclEndDate" jdbcType="DATE" />
+    <result column="S_PROF_PERIODS_RATE" property="sProfPeriodsRate" jdbcType="DECIMAL" />
+    <result column="S_LOSS_PERIODS_RATE" property="sLossPeriodsRate" jdbcType="DECIMAL" />
+    <result column="Y_MAX_DD_REC_PERIODS" property="yMaxDdRecPeriods" jdbcType="INTEGER" />
+    <result column="Y_MAX_CONT_RISE_RATE" property="yMaxContRiseRate" jdbcType="DECIMAL" />
+    <result column="Y_MAX_CONT_RISE_PERIODS" property="yMaxContRisePeriods" jdbcType="INTEGER" />
+    <result column="Y_MAX_PERIOD_RISE_RATE" property="yMaxPeriodRiseRate" jdbcType="DECIMAL" />
+    <result column="Y_MAX_RISE_BEG_DATE" property="yMaxRiseBegDate" jdbcType="DATE" />
+    <result column="Y_MAX_RISE_END_DATE" property="yMaxRiseEndDate" jdbcType="DATE" />
+    <result column="Y_MAX_CONT_DECL_RATE" property="yMaxContDeclRate" jdbcType="DECIMAL" />
+    <result column="Y_MAX_CONT_DECL_PERIODS" property="yMaxContDeclPeriods" jdbcType="INTEGER" />
+    <result column="Y_MAX_PERIOD_DECL_RATE" property="yMaxPeriodDeclRate" jdbcType="DECIMAL" />
+    <result column="Y_PROF_PERIODY_RATE" property="yProfPeriodyRate" jdbcType="DECIMAL" />
+    <result column="Y_LOSY_PERIODY_RATE" property="yLosyPeriodyRate" jdbcType="DECIMAL" />
+    <result column="QA_ACTIVE_FLG" property="qaActiveFlg" jdbcType="TINYINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="ETL_CRC" property="etlCrc" jdbcType="BIGINT" />
+    <result column="QA_RULE_CHK_FLG" property="qaRuleChkFlg" jdbcType="TINYINT" />
+    <result column="QA_MANUAL_FLG" property="qaManualFlg" jdbcType="TINYINT" />
+    <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+    <result column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundPerfIndic" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundPerfIndic" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`WINDOW`, e.`END_DATE`, e.`ANNUAL_TOTAL_RETURN`, e.`ANNUAL_TOTAL_RISK`, 
+    e.`ANNUAL_ACTIVE_RETURN`, e.`ANNUAL_ACTIVE_RISK`, e.`DEANNUAL_ACTIVE_RETURN`, e.`DEANNUAL_ACTIVE_RISK`, 
+    e.`MAX_DRAWDOWN`, e.`DOWNSIDE_RISK`, e.`IR`, e.`SHARPE_RATIO`, e.`MAX_DD_REC_DAYS`, 
+    e.`CORR_EQUITY`, e.`CORR_BOND`, e.`CORR_FUTURE`, e.`MAX_CONT_RISE_DAYS`, e.`MAX_CONT_DECL_DAYS`, 
+    e.`MAX_CONT_RISE_RATE`, e.`MAX_CONT_DECL_RATE`, e.`MAX_D_RISING_RATE`, e.`MAX_D_DECLINE_RATE`, 
+    e.`MAX_RISE_BEG_DATE`, e.`MAX_RISE_END_DATE`, e.`MAX_DECL_BEG_DATE`, e.`MAX_DECL_END_DATE`, 
+    e.`LOSS_DAYS_RATE`, e.`PROFIT_DAYS_RATE`, e.`HURST`, e.`STUTZER`, e.`TREYNOR_RATIO`, 
+    e.`SORTINO_RATIO`, e.`REALIZED_ALPHA`, e.`REALIZED_BETA`, e.`RESIDUAL_RISK`, e.`M_SQUARE`, 
+    e.`ADJ_SHARP_RATIO`, e.`VAR_950`, e.`ER_VAR_950`, e.`CVAR_950`, e.`CSR_950`, e.`VAR_975`, 
+    e.`ER_VAR_975`, e.`CVAR_975`, e.`CSR_975`, e.`VAR_990`, e.`ER_VAR_990`, e.`CVAR_990`, 
+    e.`CSR_990`, e.`SKEWNESS`, e.`KURTOSIS`, e.`JENSENS_ALPHA`, e.`CALMAR_RATIO`, e.`STEARLING_RATIO`, 
+    e.`BURKE_RATIO`, e.`OMEGA_RATIO`, e.`KAPPA_3_RATIO`, e.`MAR_RATIO`, e.`RAR`, e.`R_CUBED`, 
+    e.`TRACKING_ERROR`, e.`R_SQUARE`, e.`UP_CAPTURE_RETURN`, e.`UP_CAPTURE_RATE`, e.`DOWN_CAPTURE_RETURN`, 
+    e.`DOWN_CAPTURE_RATE`, e.`SEC_MDD`, e.`SEC_MDD_PERIODS`, e.`SEC_MDD_RECOVERY`, e.`THIRD_MDD`, 
+    e.`THIRD_MDD_PERIODS`, e.`THIRD_MDD_RECOVERY`, e.`WEEK_AUTO_CORR`, e.`BULL_BETA`, 
+    e.`BEAR_BETA`, e.`TIMING_T_M`, e.`SELECTION_T_M`, e.`TIMING_C_L`, e.`SELECTION_C_L`, 
+    e.`TIMING_H_M`, e.`SELECTION_H_M`, e.`ALPHA_COEF`, e.`IS_NAV_QUALIFIED`, e.`D_MAX_DD_REC_PERIODS`, 
+    e.`D_MAX_CONT_RISE_RATE`, e.`D_MAX_CONT_RISE_PERIODS`, e.`D_MAX_PERIOD_RISE_RATE`, 
+    e.`D_MAX_RISE_BEG_DATE`, e.`D_MAX_RISE_END_DATE`, e.`D_MAX_CONT_DECL_RATE`, e.`D_MAX_CONT_DECL_PERIODS`, 
+    e.`D_MAX_PERIOD_DECL_RATE`, e.`D_MAX_DECL_BEG_DATE`, e.`D_MAX_DECL_END_DATE`, e.`D_PROF_PERIODS_RATE`, 
+    e.`D_LOSS_PERIODS_RATE`, e.`W_MAX_DD_REC_PERIODS`, e.`W_MAX_CONT_RISE_RATE`, e.`W_MAX_CONT_RISE_PERIODS`, 
+    e.`W_MAX_PERIOD_RISE_RATE`, e.`W_MAX_RISE_BEG_DATE`, e.`W_MAX_RISE_END_DATE`, e.`W_MAX_CONT_DECL_RATE`, 
+    e.`W_MAX_CONT_DECL_PERIODS`, e.`W_MAX_PERIOD_DECL_RATE`, e.`W_MAX_DECL_BEG_DATE`, 
+    e.`W_MAX_DECL_END_DATE`, e.`W_PROF_PERIODS_RATE`, e.`W_LOSS_PERIODS_RATE`, e.`M_MAX_DD_REC_PERIODS`, 
+    e.`M_MAX_CONT_RISE_RATE`, e.`M_MAX_CONT_RISE_PERIODS`, e.`M_MAX_PERIOD_RISE_RATE`, 
+    e.`M_MAX_RISE_BEG_DATE`, e.`M_MAX_RISE_END_DATE`, e.`M_MAX_CONT_DECL_RATE`, e.`M_MAX_CONT_DECL_PERIODS`, 
+    e.`M_MAX_PERIOD_DECL_RATE`, e.`M_MAX_DECL_BEG_DATE`, e.`M_MAX_DECL_END_DATE`, e.`M_PROF_PERIODS_RATE`, 
+    e.`M_LOSS_PERIODS_RATE`, e.`Q_MAX_DD_REC_PERIODS`, e.`Q_MAX_CONT_RISE_RATE`, e.`Q_MAX_CONT_RISE_PERIODS`, 
+    e.`Q_MAX_PERIOD_RISE_RATE`, e.`Q_MAX_RISE_BEG_DATE`, e.`Q_MAX_RISE_END_DATE`, e.`Q_MAX_CONT_DECL_RATE`, 
+    e.`Q_MAX_CONT_DECL_PERIODS`, e.`Q_MAX_PERIOD_DECL_RATE`, e.`Q_MAX_DECL_BEG_DATE`, 
+    e.`Q_MAX_DECL_END_DATE`, e.`Q_PROF_PERIODS_RATE`, e.`Q_LOSS_PERIODS_RATE`, e.`S_MAX_DD_REC_PERIODS`, 
+    e.`S_MAX_CONT_RISE_RATE`, e.`S_MAX_CONT_RISE_PERIODS`, e.`S_MAX_PERIOD_RISE_RATE`, 
+    e.`S_MAX_RISE_BEG_DATE`, e.`S_MAX_RISE_END_DATE`, e.`S_MAX_CONT_DECL_RATE`, e.`S_MAX_CONT_DECL_PERIODS`, 
+    e.`S_MAX_PERIOD_DECL_RATE`, e.`S_MAX_DECL_BEG_DATE`, e.`S_MAX_DECL_END_DATE`, e.`S_PROF_PERIODS_RATE`, 
+    e.`S_LOSS_PERIODS_RATE`, e.`Y_MAX_DD_REC_PERIODS`, e.`Y_MAX_CONT_RISE_RATE`, e.`Y_MAX_CONT_RISE_PERIODS`, 
+    e.`Y_MAX_PERIOD_RISE_RATE`, e.`Y_MAX_RISE_BEG_DATE`, e.`Y_MAX_RISE_END_DATE`, e.`Y_MAX_CONT_DECL_RATE`, 
+    e.`Y_MAX_CONT_DECL_PERIODS`, e.`Y_MAX_PERIOD_DECL_RATE`, e.`Y_PROF_PERIODY_RATE`, 
+    e.`Y_LOSY_PERIODY_RATE`, e.`QA_ACTIVE_FLG`, e.`CREATE_TIME`, e.`UPDATE_TIME`, e.`TMSTAMP`, 
+    e.`ETL_CRC`, e.`QA_RULE_CHK_FLG`, e.`QA_MANUAL_FLG`, e.`CREATE_BY`, e.`UPDATE_BY`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_perf_indic e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundPerfIndic" >
+    select count(1) as recordCount from `tong-rong`.pfund_perf_indic e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundPerfIndic" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

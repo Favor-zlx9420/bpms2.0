@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.admin.mapper.AdmColumnMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.admin.module.entity.TbAdmColumn" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url_link" property="urlLink" jdbcType="VARCHAR" />
+    <result column="is_btn" property="isBtn" jdbcType="TINYINT" />
+    <result column="right_urls" property="rightUrls" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="visible" property="visible" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.admin.module.view.TvAdmColumn" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.admin.module.view.TvAdmColumn" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`parent_id`, 
+    e.`name`, e.`url_link`, e.`is_btn`, e.`right_urls`, e.`icon`, e.`visible`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_column e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.admin.module.query.TsAdmColumn" >
+    select count(1) as recordCount from tb_adm_column e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.admin.module.query.TsAdmColumn" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

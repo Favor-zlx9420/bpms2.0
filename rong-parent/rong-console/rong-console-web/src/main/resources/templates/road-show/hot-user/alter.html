@@ -1,0 +1,23 @@
+
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.visible" id="visible" value="true" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box" id="userInfoBox">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>嘉宾(主讲)</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,255}$"
+                                data-tip="长度1-255"
+                                type="text" class="input validator" name="entity.presenter" id="presenter" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

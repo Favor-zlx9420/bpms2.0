@@ -1,0 +1,56 @@
+<script type="text/javascript">
+    var viyTree;
+    submitOpt = {
+        wrap:function(req){
+            req.entity.permissionStr = viyTree.getCheckedValue();
+        }
+    };
+    var alterBindParam = {
+        afterCheckFormFunc:function(entity){
+            viyTree = new ViyTree({
+                data:${tree},
+                boxSelector:"#permissionTreeBox",
+                checkEvent:true
+            });
+        }
+    }
+</script>
+<form id="baseAlterForm" autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>角色名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                type="text"
+                                data-rules="required"
+                                data-regex="^\S{2,127}$"
+                                data-tip="输入角色名称,不可重复,长度2-127"
+                                class="input validator" id="name" name="entity.name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea maxlength="255" name="entity.description" id="description" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>权限设置</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="permissionTreeBox"></div>
+                        <input type="hidden" id="permissionStr" name="entity.permissionStr" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

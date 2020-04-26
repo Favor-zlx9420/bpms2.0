@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.cms.mapper.CmsNewsMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.cms.module.entity.TbCmsNews" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="cate_id" property="cateId" jdbcType="BIGINT" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="come_from" property="comeFrom" jdbcType="VARCHAR" />
+    <result column="commentable" property="commentable" jdbcType="TINYINT" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="top" property="top" jdbcType="TINYINT" />
+    <result column="page_title" property="pageTitle" jdbcType="VARCHAR" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="page_description" property="pageDescription" jdbcType="VARCHAR" />
+    <result column="published" property="published" jdbcType="INTEGER" />
+    <result column="label_ids" property="labelIds" jdbcType="VARCHAR" />
+    <result column="pic_list" property="picList" jdbcType="VARCHAR" />
+    <result column="file_list" property="fileList" jdbcType="VARCHAR" />
+    <result column="related_link" property="relatedLink" jdbcType="VARCHAR" />
+    <result column="displaydate" property="displaydate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.cms.module.entity.TbCmsNews" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.cms.module.view.TvCmsNews" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.cms.module.view.TvCmsNews" extends="ListResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`cate_id`, 
+    e.`type_id`, e.`title`, e.`sub_title`, e.`description`, e.`author`, e.`come_from`, 
+    e.`commentable`, e.`hits`, e.`top`, e.`page_title`, e.`keyword`, e.`page_description`, 
+    e.`published`, e.`label_ids`, e.`pic_list`, e.`file_list`, e.`related_link`, e.`displaydate`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`content`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_cms_news e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.cms.module.query.TsCmsNews" >
+    select count(1) as recordCount from tb_cms_news e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.cms.module.query.TsCmsNews" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+
+  <select id="selectCmsNewsInfoList" resultType="com.rong.cms.module.entity.TbCmsNews">
+        SELECT a.* FROM ifund.tb_cms_news AS a, (SELECT b.cate_id, MAX(b.create_date) AS create_date FROM ifund.tb_cms_news AS b GROUP BY b.cate_id) AS c WHERE a.cate_id = c.cate_id AND a.create_date = c.create_date
+  </select>
+</mapper>

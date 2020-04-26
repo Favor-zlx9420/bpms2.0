@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.MdPeopleMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbMdPeople" >
+    <result column="PERSON_ID" property="personId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="GENDER" property="gender" jdbcType="CHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="EDUCATION" property="education" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.pfunds.module.entity.TbMdPeople" extends="BaseResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvMdPeople" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvMdPeople" extends="ListResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`PERSON_ID`, e.`NAME`, e.`GENDER`, e.`BIRTHDAY`, e.`UPDATE_TIME`, e.`TMSTAMP`, 
+    e.`EDUCATION`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`BACKGROUND_DESC`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.md_people e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsMdPeople" >
+    select count(1) as recordCount from `tong-rong`.md_people e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsMdPeople" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  
+  <select id="getListByPfundSecurityId" resultMap="ListResultMap">
+    select
+    e.`PERSON_ID`, e.`NAME`
+    from `tong-rong`.md_people e,(SELECT PERSON_ID,SECURITY_ID FROM `tong-rong`.pfund_manager WHERE IS_INCUMBENT = 1 GROUP BY PERSON_ID,SECURITY_ID) a
+    where a.PERSON_ID = e.PERSON_ID
+    and a.SECURITY_ID = #{securityId}
+  </select>
+
+  <select id="getListByFundSecurityId" resultMap="ListResultMap">
+    select
+    e.`PERSON_ID`, e.`NAME`
+    from `tong-rong`.md_people e,(SELECT PERSON_ID,SECURITY_ID FROM `tong-rong`.fund_manager_new WHERE IS_INCUMBENT = 1 GROUP BY PERSON_ID,SECURITY_ID) a
+    where a.PERSON_ID = e.PERSON_ID
+    and a.SECURITY_ID = #{securityId}
+  </select>
+</mapper>

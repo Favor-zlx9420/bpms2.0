@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.product.mapper.PrivatePlacementMapper">
+    <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfund">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT"/>
+        <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE"/>
+        <result column="PF_STYLE" property="pfStyle" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="INVEST_STRATEGY" property="investStrategy" jdbcType="VARCHAR"/>
+        <result column="INVEST_STRATEGY_CHILD" property="investStrategyChild" jdbcType="VARCHAR"/>
+        <result column="DURATION" property="duration" jdbcType="INTEGER"/>
+        <result column="OPEN_DATE_DESC" property="openDateDesc" jdbcType="VARCHAR"/>
+        <result column="INVEST_CONSULTANT" property="investConsultant" jdbcType="VARCHAR"/>
+        <result column="CUSTODIAN" property="custodian" jdbcType="VARCHAR"/>
+        <result column="ISSUE_PLATFORM" property="issuePlatform" jdbcType="VARCHAR"/>
+        <result column="TRADING_BROKER" property="tradingBroker" jdbcType="VARCHAR"/>
+        <result column="SUBSCRIPTION_START_POINT" property="subscriptionStartPoint" jdbcType="INTEGER"/>
+        <result column="SCALE_INITIAL" property="scaleInitial" jdbcType="BIGINT"/>
+        <result column="ISSUE_FEE" property="issueFee" jdbcType="DECIMAL"/>
+        <result column="REDEEM_FEE" property="redeemFee" jdbcType="DECIMAL"/>
+        <result column="MANAGEMENT_FEE" property="managementFee" jdbcType="DECIMAL"/>
+        <result column="PERFORMANECE_RETURN" property="performaneceReturn" jdbcType="DECIMAL"/>
+        <result column="RECORD_CD" property="recordCd" jdbcType="VARCHAR"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT"/>
+        <result column="RECORD_DATE" property="recordDate" jdbcType="DATE"/>
+        <result column="END_DATE" property="endDate" jdbcType="DATE"/>
+        <result column="NAV_FREQ" property="navFreq" jdbcType="VARCHAR"/>
+        <result column="CLOSING_DURA_DESC" property="closingDuraDesc" jdbcType="VARCHAR"/>
+        <result column="ISSUE_LOC" property="issueLoc" jdbcType="VARCHAR"/>
+        <result column="RECORD_STATUS" property="recordStatus" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="TvProductManagermentResultMap" type="com.rong.product.module.view.TvProductManagerment">
+        <!--        证券内部编码-->
+        <result column="SECURITY_ID" property="securityId"/>
+        <!--        产品名称-->
+        <result column="SEC_SHORT_NAME" property="productName"/>
+        <!--        近一年年化收益-->
+        <result column="return_of_latest_year" property="annualizedReturns"/>
+        <!--        起投金额-->
+        <result column="SUBSCRIPTION_START_POINT" property="initialDeliveryAmount"/>
+        <!--        存续期限-->
+        <result column="DURATION" property="term"/>
+        <!--        审核状态-->
+        <result column="RECORD_STATUS" property="auditStatus"/>
+        <!--        最新净值-->
+        <result column="nav" property="theLatestNetValue"/>
+        <!--        基金经理-->
+        <result column="NAME" property="fundManager"/>
+        <!--        基金经理ID-->
+        <result column="person_id" property="fundManagerId"/>
+        <!--        最新净值日期-->
+        <result column="end_date" property="theLatestNetValueDate"/>
+        <!--        累计净值-->
+        <result column="accum_nav" property="theCumulativeNetValue"/>
+        <!--        日涨幅-->
+        <result column="DAILYINCREASESDEGREES" property="dailyIncreasesDegrees"/>
+    </resultMap>
+
+    <sql id="Base_Overall_Colum">
+        tpfcpr.SECURITY_ID AS SECURITY_ID,
+        tpfcpr.SEC_SHORT_NAME AS SEC_SHORT_NAME,
+        tpfcn.nav AS nav,
+        tpfcn.accum_nav AS accum_nav,
+        tpfcn.person_id AS person_id,
+        DATE_FORMAT( tpfcn.end_date, '%Y-%m-%d' ) AS end_date,
+        tmp.`NAME` AS NAME,
+        CONCAT( TRUNCATE ( tpfcp.return_of_latest_year * 100, 2 ), '%' ) AS return_of_latest_year,
+        trpf.DURATION AS DURATION,
+        CONCAT( trpf.SUBSCRIPTION_START_POINT, '万' ) AS SUBSCRIPTION_START_POINT
+    </sql>
+    <select id="count" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        `rong-manage`.tb_private_funds_current_pfund_ranking tpfcpr
+        LEFT JOIN `rong-manage`.tb_private_funds_current_nav tpfcn ON tpfcpr.SECURITY_ID = tpfcn.SECURITY_ID
+        LEFT JOIN `tong-rong`.md_people tmp ON tpfcn.person_id = tmp.PERSON_ID
+        LEFT JOIN `rong-manage`.tb_private_funds_current_perf tpfcp ON tpfcpr.SECURITY_ID = tpfcp.security_id
+        LEFT JOIN `tong-rong`.pfund trpf ON trpf.SECURITY_ID = tpfcp.security_id
+        LEFT JOIN `rong-manage`.tb_user_pro_fav tupf ON tupf.security_id = tpfcp.security_id AND tupf.deltag = false
+        where tupf.user_id = ${userId} ORDER BY tpfcn.end_date DESC;
+    </select>
+    <select id="findPrivatePlacementDetailsData" resultMap="TvProductManagermentResultMap">
+        SELECT
+        <include refid="Base_Overall_Colum"/>
+        FROM
+        `rong-manage`.tb_private_funds_current_pfund_ranking tpfcpr
+        LEFT JOIN `rong-manage`.tb_private_funds_current_nav tpfcn ON tpfcpr.SECURITY_ID = tpfcn.SECURITY_ID
+        LEFT JOIN `tong-rong`.md_people tmp ON tpfcn.person_id = tmp.PERSON_ID
+        LEFT JOIN `rong-manage`.tb_private_funds_current_perf tpfcp ON tpfcpr.SECURITY_ID = tpfcp.security_id
+        LEFT JOIN `tong-rong`.pfund trpf ON trpf.SECURITY_ID = tpfcp.security_id
+        LEFT JOIN `rong-manage`.tb_user_pro_fav tupf ON tupf.security_id = tpfcp.security_id AND tupf.deltag = false
+        WHERE tupf.user_id = ${userId} ORDER BY tpfcn.end_date DESC
+        LIMIT ${pageNum},${pageSize}
+    </select>
+    <select id="fundEnquiryStrategy" resultType="java.lang.String">
+        select sc.VALUE_NAME_CN from
+        `rong-manage`.tb_private_funds_current_pfund_ranking tpfcpr
+    LEFT JOIN `tong-rong`.pfund pf ON tpfcpr.SECURITY_ID = pf.SECURITY_ID
+	LEFT JOIN `tong-rong`.sys_code sc ON pf.INVEST_STRATEGY = sc.VALUE_NUM_CD AND sc.CODE_TYPE_ID = ${strategyCode}
+	WHERE tpfcpr.SECURITY_ID = ${securityId};
+    </select>
+    <insert id="insertPrivateFundsCurrentPfundRanking">
+        INSERT INTO `rong-manage`.`tb_private_funds_current_pfund_ranking` ( `ID`, `SECURITY_ID`, `SEC_SHORT_NAME` )
+VALUES
+	( NULL, ${securityId}, ${productName} );
+    </insert>
+    <delete id="deletePrivateFundsCurrentPfundRanking">
+        DELETE FROM `rong-manage`.tb_private_funds_current_pfund_ranking WHERE SECURITY_ID = ${securityId};
+    </delete>
+</mapper>

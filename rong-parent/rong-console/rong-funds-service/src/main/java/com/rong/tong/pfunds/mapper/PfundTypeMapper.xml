@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundType" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="INTEGER" />
+    <result column="CODE_TYPE_ID" property="codeTypeId" jdbcType="BIGINT" />
+    <result column="VALUE_NUM_CD" property="valueNumCd" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundType" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundType" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`CODE_TYPE_ID`, e.`VALUE_NUM_CD`, e.`UPDATE_TIME`, e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_type e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundType" >
+    select count(1) as recordCount from `tong-rong`.pfund_type e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundType" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

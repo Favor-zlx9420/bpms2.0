@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>融总管后台登录</title>
+    <#include  "layout/css-js.html" />
+    <link rel="stylesheet" type="text/css" href="/contents/scripts/uploader/webuploader.css">
+    <script type="text/javascript" src="/contents/scripts/uploader/webuploader.js"></script>
+    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+    <style type="text/css">
+        .fade-bg div{opacity: 1 !important;blur(6px);filter:blur(3px);}
+        .large-header{position: absolute;}
+    </style>
+</head>
+<body>
+<div id="large-header" class="large-header">
+    <canvas id="demo-canvas"></canvas>
+</div>
+<div class="fade-box fade-bg" data-filter="blur(6px)">
+    <div class="current"><img src="/contents/images/admin/bg_99.jpg" /></div>
+    <!--<div class="current"><img src="/contents/images/admin/bg_11.jpg" /></div>-->
+    <!--<div><img src="/contents/images/admin/bg_12.jpg"/></div>-->
+    <!--<div><img src="/contents/images/admin/bg_5.jpg"/></div>-->
+    <!--<div><img src="/contents/images/admin/bg_7.jpg"/></div>-->
+</div>
+<div id="login_box">
+    <div id="admin_head"><img src="/contents/images/admin/admin_head.jpg" /></div>
+    <div id="login_main">
+        <div class="gener-inp-box">
+            <input class="gener_inp" :minLen="admNameMinLen" :maxlength="admNameMaxLen" placeholder="输入用户名" type="text" autocomplete="false" />
+        </div>
+        <div class="gener-inp-box">
+            <input autocomplate="off" :minLen="admPwdMinLen" :maxlength="admPwdMaxLen" class="gener_inp txtPwd" placeholder="输入密码" type="password" autocomplete="false" />
+        </div>
+        <div id="log_checked" title="公共场合登录慎用" class="login-btn-box">
+            <div id="choseIsRemember">
+                记住用户名
+                <select id="storeTime">
+                    <option value="1">1小时</option>
+                    <option value="3">3小时</option>
+                    <option value="12">12小时</option>
+                    <option value="24">1天</option>
+                    <option value="72">3天</option>
+                    <option value="168">1周</option>
+                </select>
+            </div>
+            <div class="login-submit-box">
+                <div id="btnSubmit" type="button" class="viyui-btn viyui-btn-sm" value="">立即登录</div>
+            </div>
+        </div>
+    </div>
+    <div id="find_pwd">
+        <div>
+            忘记用户名/密码？请联系404045664@qq.com
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    var attr = ${attr};
+    function checkLogStr() {//提交检测事件
+        var n = LE.trim($user_name.val(), null);
+        var p = $password.val();
+        var minLen = parseInt($user_name.attr("minLen")), maxLen = parseInt($user_name.attr("maxlength"));
+        if (n.length < minLen || n.length > maxLen || !LE.isMemberName(n, false)) {
+            setTopTip($user_name, "输入错误", "字母或者下划线开头的字母、数字、下划线组合[" + minLen + "-" + maxLen + "位]！", 400,"up");
+            $user_name.focus();
+            return false;
+        }
+        minLen = parseInt($password.attr("minLen")), maxLen = parseInt($password.attr("maxlength"));
+        if (p.length < minLen || n.length > maxLen) {
+            setTopTip($password, "输入错误", "字母、数字、下划线组合[" + minLen + "-" + maxLen + "]！", 220);
+            $password.focus();
+            return false;
+        }
+        p = $.md5(p);
+
+        var bf = function(res) {
+            var param = {
+                userName: n,
+                password: p,
+                storeTime: $("#storeTime").val()
+            };
+            if ("dev" != "${env}") {
+                if (res.ret != 0) {
+                    lBox.alert({content: "验证码校验失败！"});
+                    return;
+                } else {
+                    param["token"] = res.randstr;
+                    param["ticket"] = res.ticket;
+                }
+            }
+            var wait = lBox.wait({content: "正在登录，请稍后..."});
+            $.post("/login", param, function (data) {
+                var _bf = null;
+                if (data.code == ResultStatus.ok) {
+                    _bf = function () {
+                        top.location.href = "/?" + LE.ranStr();
+                    }
+                } else {
+                    _bf = function () {
+                        setTopTip($user_name, "输入错误", data.message, 400);
+                    }
+                }
+                ;
+                wait.close(_bf);
+            },"json");
+        };
+        if("dev" != "${env}"){
+            var captcha1 = new TencentCaptcha('${txTCaptchaAppId}',bf);
+            captcha1.show(); // 显示验证码
+        }else{
+            bf(null);
+        }
+        return true;
+    }
+    var $user_name,$password,$verify;
+    var passwordValue = "";
+    $(document).ready(function () {
+
+        //$(".fade-bg").fadeBg();
+
+        $("#login_box").css("margin-top",function(){
+            return (parseInt($(document.body).height())-parseInt($(this).height()))/2+"px";
+        });
+        $("#imgcode").click(function () {
+            $(this).attr("src", "/sys/verifycode?" + LE.ranStr());
+        });
+        var inps = $(".gener_inp");
+        $user_name = inps.eq(0);
+        $password = inps.eq(1);
+        $verify = inps.eq(2);
+        $("#imgcode").trigger("click");
+        $user_name.focus();
+        $user_name.val("");
+        $password.val("");
+        $("#btnSubmit").click(checkLogStr);
+        document.onkeydown = function(e){
+            var ev = document.all ? window.event : e;
+            if(ev.keyCode==13) {
+                checkLogStr();
+            }
+        }
+        $("#find_pwd").hover(function(){
+            setTopTip("#find_pwd","找回密码指导","将您的账号、手机以及其他联系方式发送至404045664@qq.com，等待管理员与您联系并重置您的密码。",250,'down');
+        });
+        // $password.on("keyup",function(e){
+        //     var kc = e.keyCode;
+        //     if(kc == "8"){
+        //         passwordValue = "";
+        //         $(this).val("");
+        //         return;
+        //     }
+        //     var ov = $(this).val();
+        //     var sv = ov.replace(/\*/g,'');
+        //     passwordValue += sv;
+        //     $(this).val(function(){
+        //         var mk = "";
+        //         for(var i = 0;i<ov.length;++i){
+        //             mk +="*";
+        //         }
+        //         return mk;
+        //     });
+        // }).on("mousedown",function(e){
+        //     e.preventDefault();
+        //     $(this).focus();
+        // }).on("keydown",function(e){
+        //     //阻止全选事件
+        //     if(e.ctrlKey && e.keyCode == 65){
+        //         return false;
+        //     }
+        // });
+
+    });
+    new Vue({
+        el : '#login_box',
+        data : attr
+    });
+</script>
+<script>
+    (function() {
+
+        var width, height, largeHeader, canvas, ctx, circles, target, animateHeader = true;
+
+        // Main
+        initHeader();
+        //addListeners();
+
+        function initHeader() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            target = {x: 0, y: height};
+
+            largeHeader = document.getElementById('large-header');
+            largeHeader.style.height = height+'px';
+
+            canvas = document.getElementById('demo-canvas');
+            canvas.width = width;
+            canvas.height = height;
+            ctx = canvas.getContext('2d');
+
+            // create particles
+            circles = [];
+            for(var x = 0; x < width*0.5; x++) {
+                var c = new Circle();
+                circles.push(c);
+            }
+            animate();
+        }
+
+        // Event handling
+        function addListeners() {
+            window.addEventListener('scroll', scrollCheck);
+            window.addEventListener('resize', resize);
+        }
+
+        function scrollCheck() {
+            if(document.body.scrollTop > height) animateHeader = false;
+            else animateHeader = true;
+        }
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            largeHeader.style.height = height+'px';
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        function animate() {
+            if(animateHeader) {
+                ctx.clearRect(0,0,width,height);
+                for(var i in circles) {
+                    circles[i].draw();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Canvas manipulation
+        function Circle() {
+            var _this = this;
+
+            // constructor
+            (function() {
+                _this.pos = {};
+                init();
+                //console.log(_this);
+            })();
+
+            function init() {
+                _this.pos.x = Math.random()*width;
+                _this.pos.y = height+Math.random()*100;
+                _this.alpha = 0.1+Math.random()*0.3;
+                _this.scale = 0.1+Math.random()*0.3;
+                _this.velocity = Math.random();
+            }
+
+            this.draw = function() {
+                if(_this.alpha <= 0) {
+                    init();
+                }
+                _this.pos.y -= _this.velocity;
+                _this.alpha -= 0.0005;
+                ctx.beginPath();
+                ctx.arc(_this.pos.x, _this.pos.y, _this.scale*10, 0, 2 * Math.PI, false);
+                ctx.fillStyle = 'rgba(255,255,255,'+ _this.alpha+')';
+                ctx.fill();
+            };
+        }
+
+    })();
+</script>
+</html>

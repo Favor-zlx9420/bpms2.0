@@ -1,0 +1,65 @@
+<script type="text/javascript">
+    var viewParam = {
+        otherFunc:function(entity){
+            new ViyTree({
+                data:${tree},
+                boxSelector:"#permissionTreeBox",
+                checkEvent:false
+            });
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>所属角色</div></div>
+                <div class="comm-item-content"><div class="f-left" id="roleName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>后台用户登录名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="userName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>昵称</div></div>
+                <div class="comm-item-content"><div class="f-left" id="nickName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>真实姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="realName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>身份证号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="idNumber"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>email</div></div>
+                <div class="comm-item-content"><div class="f-left" id="email"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="phone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>使用状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="state" data-bind-function="commStateFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>最后登录时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="lastLoginDate" data-bind-function="dateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>密码过期时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="passwordExpiration" data-bind-function="dateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>拥有权限</div></div>
+                <div class="comm-item-content">
+                    <div id="permissionTreeBox"></div>
+                    <input type="hidden" id="permissionStr" name="permissionStr" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

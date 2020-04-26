@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundNavMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundNav" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="DATE" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="NAV" property="nav" jdbcType="DECIMAL" />
+    <result column="ACCUM_NAV" property="accumNav" jdbcType="DECIMAL" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="ADJ_NAV" property="adjNav" jdbcType="DECIMAL" />
+    <result column="NAV_UNIT" property="navUnit" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE" property="returnRate" jdbcType="DECIMAL" />
+    <result column="ADJ_RETURN_RATE" property="adjReturnRate" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundNav" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundNav" extends="ListResultMap" />
+  <resultMap id="TvHisNavMap" type="com.rong.tong.pfunds.module.view.TvHisNav">
+    <result column="END_DATE" property="endDate" />
+    <result column="NAV" property="nav" />
+    <result column="ADJ_NAV" property="adjNav" />
+    <result column="ACCUM_NAV" property="accumNav" />
+    <result column="RETURN_RATE" property="returnRate" />
+    <result column="DIVIDEND" property="dividend" />
+    <result column="SPLIT" property="split" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`PUBLISH_DATE`, e.`END_DATE`, e.`NAV`, e.`ACCUM_NAV`, 
+    e.`UPDATE_TIME`, e.`TMSTAMP`, e.`ADJ_NAV`, e.`NAV_UNIT`, e.`RETURN_RATE`, e.`ADJ_RETURN_RATE`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_nav e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundNav" >
+    select count(1) as recordCount from `tong-rong`.pfund_nav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundNav" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="accumNavTrendOfManager" resultMap="TvHisNavMap">
+    SELECT
+    e.END_DATE
+    ,avg(e.NAV) NAV
+    ,avg(e.ADJ_NAV) ADJ_NAV
+    ,avg(e.ACCUM_NAV) ACCUM_NAV
+    ,concat(truncate(avg(e.RETURN_RATE) *100,2),'%') as RETURN_RATE
+    FROM
+    `tong-rong`.pfund_nav e left join
+    `tong-rong`.pfund_manager m on m.SECURITY_ID=e.SECURITY_ID
+    WHERE m.PERSON_ID = #{personId}
+    <if test="startDate != null">
+      AND e.END_DATE >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND e.END_DATE &lt;= #{endDate}
+    </if>
+    group by e.END_DATE
+    ORDER BY e.END_DATE DESC
+  </select>
+  <select id="accumNavTrendOfOrg" resultMap="TvHisNavMap">
+    SELECT
+    e.END_DATE
+    ,avg(e.NAV) NAV
+    ,avg(e.ADJ_NAV) ADJ_NAV
+    ,avg(e.ACCUM_NAV) ACCUM_NAV
+    ,concat(truncate(avg(e.RETURN_RATE) *100,2),'%') as RETURN_RATE
+    FROM
+    `tong-rong`.pfund_nav e
+    left join `tong-rong`.pfund f on f.SECURITY_ID=e.SECURITY_ID
+    WHERE f.INVEST_CONSULTANT = #{partyId}
+    <if test="startDate != null">
+      AND e.END_DATE >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND e.END_DATE &lt;= #{endDate}
+    </if>
+    group by e.END_DATE
+    ORDER BY e.END_DATE DESC
+  </select>
+</mapper>

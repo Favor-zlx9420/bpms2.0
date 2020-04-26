@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.user.mapper.UserPeopleFavMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.user.module.entity.TbUserPeopleFav" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="fav_user_id" property="favUserId" jdbcType="BIGINT" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.user.module.view.TvUserPeopleFav" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.user.module.view.TvUserPeopleFav" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`user_id`, e.`fav_user_id`,e.`person_id`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.userId != null">
+        and e.user_id = #{entity.userId}
+      </if>
+      <if test="entity.deltag != null">
+        and e.deltag = #{entity.deltag}
+      </if>
+      <if test="entity.favUserId != null">
+        and e.fav_user_id = #{entity.favUserId}
+      </if>
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_people_fav e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.user.module.query.TsUserPeopleFav" >
+    select count(1) as recordCount from tb_user_people_fav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.user.module.query.TsUserPeopleFav" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="selectPriManagerFav" resultType="com.rong.user.module.view.TvUserPeopleFav" parameterType="com.rong.user.module.query.TsUserPeopleFav">
+    -- 我的收藏，基金经理
+    select
+
+    e.id,e.user_id userId,e.fav_user_id favUserId
+    ,p.person_id personId
+    ,mp.name name,mp.EDUCATION education,mp.BACKGROUND_DESC backgroundDesc
+    ,pmy.year workYear
+    ,(select count(DISTINCT security_id) from `tong-rong`.pfund_manager where person_id = p.person_id) fundCounts
+    ,(select GROUP_CONCAT(distinct PARTY_FULL_NAME separator '、') from `tong-rong`.pfund_resume where person_id=p.person_id and IS_INCUMBENT = '1') as companyNames
+    ,(select GROUP_CONCAT(distinct POSITION separator '、') from `tong-rong`.pfund_resume where person_id=p.person_id and IS_INCUMBENT = '1') as companyPosts
+    ,(select GROUP_CONCAT(distinct SEC_SHORT_NAME) from `tong-rong`.md_security imi,`tong-rong`.pfund_manager_rep ipmr where ipmr.person_id=p.person_id and imi.security_id = ipmr.security_id)as repPro
+
+    -- ,(select avg(RETURN_ACCUM) from tb_private_funds_current_income ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) returnAccum
+    -- ,(select avg(RETURN_A) from tb_private_funds_current_income ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) returnA
+    -- ,(select avg(NAV) from tb_private_funds_current_nav ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) nav
+
+    -- ,(select avg(ACCUM_NAV) from tb_private_funds_current_nav ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) accumNav
+
+    from tb_user_people_fav e,tb_people_manage p
+    left join `tong-rong`.md_people mp on mp.person_id = p.person_id
+    left join `tong-rong`.pfund_mana_year pmy on pmy.person_id = p.person_id
+    where e.fav_user_id = p.user_id
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

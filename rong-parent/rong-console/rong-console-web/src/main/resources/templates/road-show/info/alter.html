@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>添加路演</title>
+    <#include  "../../layout/css-js.html" />
+    <script charset="utf-8" type="text/javascript" src="/contents/scripts/kindeditor/kindeditor.js" ></script>
+    <link rel="stylesheet" href="/contents/scripts/kindeditor/themes/default/default.css" />
+    <style type="text/css">
+        #tableEditorDivBox div{float:none;}/*----------防止编辑器样式问题---- --- ----*/
+        .short-input{width:84px !important;}
+        #alter-form .alter-btm-btn-box .viyui-btn{float:left;margin-left:20%;}
+        #alter-form .btn-cancel{float: right !important;margin-right: 46% !important;}
+        .btn-select-img{left:303px;top:119px;}
+        .pic-view{height:150px;}
+        .pic-view img{width:300px;}
+    </style>
+    <script>
+        alterBindParam = {
+            afterBindFunc:function(entity){
+                if(entity.id > 0){
+                    $("#videoSource").attr("src",entity["videoUrl"]);
+                    $("#secondColumn",top.document).html("路演列表>路演编辑");
+                    $("#picSrcShow").attr("src",entity["coverImageUrl"]);
+                    var du = parseInt(entity.showDuration);
+                    $("#showDurationHour").val(parseInt(du/3600));
+                    $("#showDurationMinute").val(parseInt((du%3600)/60));
+                    $("#showDurationSecond").val(parseInt((du%3600)%60));
+                }else{
+                    $("#secondColumn",top.document).html("路演列表>路演添加");
+                }
+                $('#showDate').datetimepicker({});
+                //编辑器
+                KindEditor.loadScript('/contents/scripts/kindeditor/kindeditor.js?sm', function() {
+                    _editor=KindEditor.create('#detail',{
+                        uploadJson : Dictionary.img_upload_path,
+                        post_origin : true,
+                        allowFileManager : false,
+                        resizeType:0});
+                });
+                repeater("#simpleItemHtml","#labelList",${labels},false);
+                repeater("#simpleItemHtml","#cateList",${cates},false);
+                $("#cateList a").each(function(){
+                    if(LE.in_str(entity.cateId,$(this).attr("data-val"),",")){
+                        $(this).addClass("selected");
+                    }
+                });
+                $("#labelList a").each(function(){
+                    if(LE.in_str(entity.labelId,$(this).attr("data-val"),",")){
+                        $(this).addClass("selected");
+                    }
+                });
+            }
+        }
+
+        var submitOpt = {
+            wrap: function (req) {
+                req.entity.detail = _editor.html();
+                req.entity.labelId = $("#labelList a.selected").attr("data-val");
+                req.entity.cateId = $("#cateList a.selected").attr("data-val");
+                req.entity.showDuration = parseInt($("#showDurationHour").val()) * 3600
+                    + parseInt($("#showDurationMinute").val()) * 60
+                    + parseInt($("#showDurationSecond").val());
+                return true;
+            },
+            successFunc:function(){
+                location.href = "/road-show/info/list";
+            }
+        };
+        function toggleClick(){
+            $(this).addClass("selected").siblings().removeClass("selected");
+        }
+        //图片
+        function setPic(){
+            current_imgBox=$(this).siblings(".pic-view");
+            lBox.newWin2('设置banner图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+        }
+        //添加图片
+        function addImg(src){
+            $(current_imgBox).siblings("input").val(src);
+            $("img",current_imgBox).attr("src",src);
+        }
+        function setFile(type){
+            current_fileBox = $(this).parent();
+            lBox.newWin('设置附件','/comm/imagesams/file?r='+LE.ranStr(),700,400);
+        }
+        //添加附件
+        function addFile(sam){
+            $("input",current_fileBox).val(sam.lmtSrc).attr("title",sam.name).addClass("had-edit");
+        }
+        var current_video_box = null;
+        function setVideo(){
+            current_video_box = $(this).parent();
+            lBox.newWin('上传视频','/comm/imagesams/video?r='+LE.ranStr(),700,400);
+        }
+        function addVideo(fileUrl){
+            $("input",current_video_box).val(fileUrl).addClass("had-edit");
+            $("#videoSource").attr("src",fileUrl);
+        }
+        $(function(){
+           $("#commonAlterBox .btn-cancel").click(function(){
+               location.href = "/road-show/info/list";
+           });
+        });
+    </script>
+</head>
+<body>
+<form autocomplete="off" id="alter-form" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演标题</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                name="entity.title" id="title" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>主讲人</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        	<input
+                                    data-rules="required"
+                                    class="input validator"
+                                    name="entity.presenter" id="presenter" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>主讲人介绍</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        	<textarea
+                                    data-rules="required"
+                                    class="input validator textarea had-edit"
+                                    name="entity.presenterIntroduce" id="presenterIntroduce" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演时间</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-tip="路演时间"
+                               data-rules="required"
+                               data-bind-function="dateTimeFunc"
+                               class="input validator" name="entity.showDate" id="showDate" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演时长</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="required,integer"
+                               class="input validator short-input" id="showDurationHour" />
+                        时
+                        <input type="text"
+                               data-rules="required,integer"
+                               class="input validator short-input" id="showDurationMinute" />
+                        分
+                        <input type="text"
+                               data-rules="required,integer"
+                               class="input validator short-input" id="showDurationSecond" />
+                        秒
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>是否置顶</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.top" id="top"
+                               data-text="是|否"
+                               data-value="true|false"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>是否显示</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.state" id="state"
+                               data-text="是|否"
+                               data-value="1|0"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>分类</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="cateList" class="page_pri_div selected-box">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>标签</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="labelList" class="page_pri_div selected-box">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="tableEditorDivBox" style="width:840px;">
+                            <textarea id="detail" class="input textarea" style ="width:840px; height:700px; visibility:hidden;"></textarea>
+                        </div>
+                        <div class="editor-height-alter-box">
+                            <div class="editor-height-alter add" title="增加编辑器高度" data-fc="function(){LET.addEditHeight(_editor,'#hidEditHeight',100,940);}">&nbsp;</div>
+                            <div class="editor-height-alter sub" title="降低编辑器高度" data-fc="function(){LET.addEditHeight(_editor,'#hidEditHeight',-100,940);}">&nbsp;</div>
+                            <input type="hidden" id="hidEditHeight" value="700" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>封面图</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div class="pic-view"><img id="picSrcShow" src="" /></div>
+                        <div class="viyui-btn viyui-btn-sm btn-select-img" data-fc="function(){setPic.call(this);}">上传图片</div>
+                        <input type="hidden" id="coverImageUrl" name="entity.coverImageUrl" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>文档</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left img_sam_file">
+                        <input type="input" value=""
+                               class="input validator"
+                               readonly="readonly"
+                               name="entity.docUrl" id="docUrl" />
+                        <div class="viyui-btn viyui-btn-xs btn-select-file" data-fc="function(){setFile.call(this);}">上传文档</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演视频</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left img_sam_file">
+                        <input type="input" value=""
+                               class="input validator"
+                               readonly="readonly"
+                               name="entity.videoUrl" id="videoUrl" />
+                        <div class="viyui-btn viyui-btn-xs btn-select-file" data-fc="function(){setVideo.call(this);}">上传视频</div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>视频预览</div></div>
+                <div class="comm-item-content"><div class="f-left">
+                    <video id="videoSource" width="320" height="240" controls="controls">
+                        <source />
+                        Your browser does not support the video tag.
+                    </video>
+                </div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>
+
+</body>
+<script id="simpleItemHtml" type="text/html">
+    <a data-val='{id}' data-fc="toggleClick">{name}<i class="icon-zui"></i></a>
+</script>
+</html>

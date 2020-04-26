@@ -1,0 +1,111 @@
+<script>
+    var alterBindParam = {
+        afterBindFunc:function(entity){
+            if(entity.id > 0){
+                $("#picSrcShow").attr("src",entity.picUrl);
+            }
+        }
+    }
+    //图片
+    //默认是ad
+    Dictionary.img_upload_type = "available-bank";
+    Dictionary.img_upload_dir = "img";
+    Dictionary.img_is_resize = "0";
+    function setPic(type){
+        current_imgBox=$(this).siblings(".pic-view");
+        lBox.newWin('设置图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+    }
+    //添加图片
+    function addImg(src){
+        $(current_imgBox).siblings("input").val(src);
+        $("img",current_imgBox).attr("src",src);
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>银行名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,64}$"
+                                data-tip="长度1-64,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>银行简称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,64}$"
+                                data-tip="长度1-64,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.shortName" id="shortName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>银行编码</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,15}$"
+                                data-tip="长度1-15,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.code" id="code" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>卡号类型</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element">
+                        <#list BankCardTypeDesc as td>
+                            <label class="viyui-radio"><input data-bind-id="type" name="entity.type" type="radio" value="${td.getValue()}" />${td.toString()}</label>
+                        </#list>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>支持平台</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <select id="platform" name="entity.platform"
+                                class="validator no-render"
+                                data-rules="required"
+                                data-enumber="Consts.Platform"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>图片地址</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div class="pic-view"><img id="picSrcShow" src="" /></div>
+                        <div class="viyui-btn viyui-btn-sm btn-select-img" data-fc="function(){setPic.call(this);}">设置图片</div>
+                        <input type="hidden" id="picUrl" name="entity.picUrl" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>备注</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.memo" id="memo" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

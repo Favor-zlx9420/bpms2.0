@@ -1,0 +1,81 @@
+
+<script type="text/javascript">
+    var viewParam = {
+        beforeBindFunc:function(entity){
+            $("#auditBtnBox").children().eq(0).attr("data-result",1);
+            $("#auditBtnBox .audit-btn").removeClass("hide").click(function () {
+                var _this = $(this);
+                var thisk={
+                    form : _this.closest("form"),
+                };
+                if (!LET.checkForm(thisk.form)) {
+                    return false;
+                }
+                var result = _this.attr("data-result");
+                var memo = $("#replyMessage").val();
+                var title = _this.find("span").text();
+                var id = entity.id;
+                var visible = $("#visible").val();
+                _audit(title, result,visible, id,memo);
+            }).insertAfter(".ifrcom-btm-btn-box .btn-cancel");
+            $(".ifrcom-btm-btn-box .btn-cancel").text("取消");
+        },
+        otherFunc:function (entity) {
+            LET.renderForm({selector:"#auditForm"});
+        }
+    }
+</script>
+<form id="auditForm" autocomplete="off" class="comm-view-form comm-iframe-form viy-form" name="comm-alter-form" action="${auditAction}">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="investorUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号</div></div>
+                <div class="comm-item-content"><div class="f-left" id="investorUserPhone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户类型</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>聊天时长</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>预约类型</div></div>
+                <div class="comm-item-content"><div class="f-left" id="type" data-bind-function="bindTypeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>预约对象</div></div>
+                <div class="comm-item-content"><div class="f-left" id="content">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>接待人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="customerUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>处理状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="auditResult" data-bind-function="bindAuditResultFunc">></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>发起时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>处理内容</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea placeholder="处理内容" name="replyMessage" id="replyMessage" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+    <div id="auditBtnBox">
+        <div class="viyui-btn viyui-btn-sm hide audit-btn"><i class="icon-check"></i><span>处理</span></div>
+    </div>
+</form>

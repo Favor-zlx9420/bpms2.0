@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.user.mapper.UserProFavMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.user.module.entity.TbUserProFav" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.user.module.view.TvUserProFav" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.user.module.view.TvUserProFav" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`user_id`, e.`security_id`,e.`type`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.userId != null">
+        and e.user_id = #{entity.userId}
+      </if>
+      <if test="entity.type != null">
+        and e.type = #{entity.type}
+      </if>
+      <if test="entity.deltag != null">
+        and e.deltag = #{entity.deltag}
+      </if>
+      <if test="entity.securityId != null">
+        and e.security_id = #{entity.securityId}
+      </if>
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_pro_fav e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.user.module.query.TsUserProFav" >
+    select count(1) as recordCount from tb_user_pro_fav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.user.module.query.TsUserProFav" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+
+  <select id="selectPriFundsFav" resultType="com.rong.user.module.view.TvUserProFav" parameterType="com.rong.user.module.query.TsUserProFav">
+    -- 我的收藏，私募
+    select
+
+    e.id,e.user_id userId,e.type type,e.security_id securityId
+    ,ms.SEC_SHORT_NAME secShortName
+    ,ms.SEC_FULL_NAME secFullName
+    ,(select VALUE_NAME_CN from `tong-rong`.sys_code WHERE CODE_TYPE_ID =40032 and VALUE_NO=pf.INVEST_STRATEGY) as investStrategy
+    ,(select RETURN_ACCUM from `tong-rong`.pfund_nav_return where security_id=e.security_id order by id desc limit 1) returnAccum
+
+    ,(select RETURN_A from `tong-rong`.pfund_nav_return where security_id=e.security_id order by id desc limit 1) returnA
+
+    ,(select ANNUAL_TOTAL_RETURN from `tong-rong`.pfund_perf_indic where security_id=e.security_id and WINDOW=1 order by id desc limit 1) last1MonReturnA
+
+    ,(select NAV from `tong-rong`.pfund_nav where security_id=e.security_id order by id desc limit 1) nav
+
+    ,(select ACCUM_NAV from `tong-rong`.pfund_nav where security_id=e.security_id order by id desc limit 1) accumNav
+
+    ,(select END_DATE from `tong-rong`.pfund_nav where security_id=e.security_id order by id desc limit 1) navDate
+
+    from tb_user_pro_fav e
+    left join `tong-rong`.md_security ms on ms.security_id = e.security_id
+    left join `tong-rong`.pfund pf on pf.security_id = e.security_id
+    where 1=1
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+
+</mapper>

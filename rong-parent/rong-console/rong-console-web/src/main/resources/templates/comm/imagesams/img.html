@@ -1,0 +1,420 @@
+<style type="text/css">
+    .com_form_action_apic,.com_con_info_ifr{height:100%;overflow:hidden;}
+    #pic_tabContent{height:78%;overflow-y:auto;}
+
+	div#imgSelectBoxDiv{margin:5px 0;}
+    .select-img select{display:inline;}
+    .img-show-box{overflow:hidden;position:relative;height:100px;}
+    .img-show-box img{height:100%;}
+    #imgInfo td div{float:none;}
+    #multiImgBox img{width:50px;}
+    .progress-bar-box{width: 100px;
+        display: inline-block;
+        height: 15px;
+        margin-bottom: -3px;
+        border: 1px solid #908d8d;
+        margin-right: 5px;}
+    .progress-bar-box .progress-bar{
+        width: 0%;
+        background: #908d8d;
+        height: 100%;
+    }
+    .multi-img-show-box{width:100%;}
+</style>
+<form id="com_form_action_apic" autocomplete="off" class="select-img com_form_action_apic" method="post" name="com_form_action_apic" enctype="multipart/form-data" action="javascript:return false;">
+     <div id="com_con_info_pic" class="com_con_info_ifr">
+        <div class="tab-panel-box tab-panel-box-pic" data-control="#pic_tabContent">
+            <div class="tab" data-val="0">上传一张图片</div>
+            <div class="tab hide multi" data-val="1">多图上传</div>
+            <div class="tab" data-val="2">选择网络图片</div>
+            <div class="tab" data-val="3">从图库选择</div>
+        </div>
+        <div style="clear:both;padding-bottom:1px;"></div>
+        <div id="pic_tabContent" class="tab-contentbox">
+            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                <tbody>
+                    <tr>
+                        <th width="150px"><div style="height:30px;line-height:30px;">图片说明：</div></th>
+                        <td>
+                            <div style="font-size:14px;font-weight:bold;">无</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">图片选择：</div></th>
+                        <td>
+                            <div>
+                                <div class="viyui-btn viyui-btn-sm" data-fc="selectimage">浏览本地图片</div>
+                                <div>
+                                    <input type="file" onchange="preuploadImgShow(this.files[0],'#imgUpTempShowBox img',showMoreInfo)" id="imgFile" name="imgFile" style="display:none;" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">图片预览：</div></th>
+                        <td>
+                            <div class="img-show-box" id="imgUpTempShowBox"><img src="" /></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">标签选择：</div></th>
+                        <td>
+                             <div id="imgLabelList" class="page_pri_div selected-box"></div>
+                             <input type="hidden" value="" name="labelIds" id="labelIds" />
+                        </td>
+                    </tr>
+                    <tr class="hide" id="imgInfo">
+                        <th width="150px"><div style="height:24px;line-height:26px;">图片信息：</div></th>
+                        <td>
+                            <div>文件名：<span id="upload__fileName"></span></div>
+                            <div>文件大小：<span id="upload__fileSize"></span></div>
+                            <div>文件类型：<span id="upload__fileType"></span></div>
+                            <input type="hidden" name="name" id="upload__name" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box hide multi" cellpadding="0" cellspacing="2">
+                <tbody>
+                <tr>
+                    <th width="90px"><div style="height:30px;line-height:30px;">图片说明：</div></th>
+                    <td>
+                        <div style="font-size:14px;font-weight:bold;">一次性可以选择多张图片进行上传哟</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">图片选择：</div></th>
+                    <td>
+                        <div>
+                            <div class="viyui-btn viyui-btn-sm" onclick="$('#multiFile').trigger('click');">浏览本地图片</div>
+                            <div class="viyui-btn viyui-btn-sm" style="margin-left:10px;" onclick="bitUpload()">点击上传</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">图片信息：</div></th>
+                    <td style="padding:0;">
+                        <div class="multi-img-show-box">
+                            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                                <thead>
+                                    <th width="100px">图片预览</th>
+                                    <th width="180px">图片名称</th>
+                                    <th width="100px">图片大小</th>
+                                    <th>上传进度</th>
+                                    <th>操作</th>
+                                </thead>
+                                <tbody id="multiImgBox"></tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">标签选择：</div></th>
+                    <td>
+                        <div id="imgLabelMultiList" class="page_pri_div selected-box"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box" style="display:none;" cellpadding="0" cellspacing="2">
+                <tbody>
+                    <tr>
+                        <th width="150px"><div style="height:30px;line-height:30px;">链接说明：</div></th>
+                        <td>
+                            <div style="font-size:14px;font-weight:bold;">在下框输入一张网络图片地址，如：<br />http://s0.hao123img.com/index/images/search_logo/web.png</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">设置：</div></th>
+                        <td>
+                            <div><input value="http://" type="text" id="input_pic_link" style="width:480px;" name="input_pic_link" class="input validator" /></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box other" style="display:none;"  cellpadding="0" cellspacing="2">
+            <tbody>
+                <tr>
+                    <th width="150px"><div style="height:30px;line-height:30px;">图片说明：</div></th>
+                    <td>
+                        <div style="font-size:14px;font-weight:bold;">可以从已上传的图片中选择图片，<br />可以根据标签搜索不同分类图片</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div style="height:30px;line-height:30px;">选择标签：</div></th>
+                    <td>
+                        <div style="">
+                        <select id="selPicTag" onchange="getImgList()">
+                            <option value="">所有上传图片</option>
+                        </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div style="height:24px;line-height:26px;">选择图片：</div></th>
+                    <td>
+                        <div id="imgSelectBoxDiv" class="img-list-box"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div id="imgPageBox"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+         <div class="alter-btm-btn-box">
+             <div class="viyui-btn viyui-btn-sm btn-cancel" onclick="lBox.closeWin()">取消</div>
+             <div class="viyui-btn viyui-btn-sm btn-submit" onclick="img_upload()">保存</div>
+         </div>
+    </div>
+</form>
+<form id="multiForm" method="post" name="multiForm" enctype="multipart/form-data" action="javascript:return false;">
+    <input type="file" onchange="preLoadMultiImg(this)" id="multiFile" multiple="multiple" name="imgFile" style="display:none;" />
+    <input type="hidden" value="" name="labelIds" id="labelMultiIds" />
+</form>
+<script id="imgLabelItemHtml" type="text/html">
+	<a data-val='{id}' data-fc="function(){$(this).toggleClass('selected');}">{name}<i class="icon-zui"></i></a>
+</script>
+<script id="selImgLabelItemHtml" type="text/html">
+	<option value="{id}">{name}</option>
+</script>
+<script id="imgItemHtml" type="text/html">
+	<div class="img-list"><img src="{lmtSrc}" data-fc="setPicSelected" /><i class="icon-zui"></i></div>
+</script>
+<script type="text/javascript">
+    var tmpMultiImgs=null,uploadImgs=null;
+    tmpMultiImgs=[];
+    uploadImgs=[];
+
+    if (typeof img_upload != "function") {
+        function img_upload() {
+            var it = $(".tab-panel-box-pic .tab.current").attr("data-val");
+            if (it == "0") {
+            	uploadimage();
+            } else if (it == "1") {//多图上传
+                if(uploadImgs.length == 0){
+                    lBox.alert({content:"未选择图片！"});
+                    return;
+                }
+                addMultiImg(uploadImgs);
+                lBox.closeWin();
+            } else if (it == "2") {//网址
+                addImg(LE.$("input_pic_link").value);//这个在父窗口定义
+                lBox.closeWin();
+            } else {//图库选择
+                var v = $("#imgSelectBoxDiv div.selected img").attr("src");
+                if (v == undefined || v.length == 0) {
+               		lBox.alert({content:"未选择图片！"});
+               		return;
+                }
+               	addImg(v);
+                lBox.closeWin();
+            }
+        }
+        function showMoreInfo(file,evt){
+            if(null != file){
+                $("#imgInfo").removeClass("hide");
+                $("#upload__fileName").html(file.name);
+                $("#upload__name").val(file.name);
+                var fileSize = 0;
+                if (file.size > 1024 * 1024) {
+                    fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+                }else {
+                    fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+                }
+                $("#upload__fileSize").html(fileSize);
+                $("#upload__fileType").html(file.type);
+            }
+        }
+        function selectimage(){
+        	$("#imgFile").click();
+        }
+        function uploadimage(){
+        	var v=$("#imgFile").val();
+        	if(v.length == 0){
+        		lBox.alert({content:'没有找到图片！'});
+        		return;
+        	}
+        	$("#labelIds").val(function(){
+        		return $("#imgLabelList .selected").map(function(){return $(this).attr("data-val");}).get().join(",");
+        	});
+        	var upload_path = Dictionary.img_upload_path;
+        	if(upload_path.indexOf("?") == -1){
+        		upload_path += "?";
+        	}
+        	upload_path +="&type=" + Dictionary.img_upload_type;
+        	upload_path +="&resize=" + Dictionary.img_is_resize;
+        	upload_path +="&lbIds=" + $("#labelIds").val();
+            var m = lBox.wait({content:"正在操作，请稍后..."});
+        	var options = {
+					url: upload_path,
+                    type:"post",
+                    dataType:"json",
+					success: function(data){
+					    m.close(function(){
+                            if(checkResultIsOk(data)){
+                                addImg(data.content.lmtSrc,data.content.name);
+                                lBox.closeWin();
+                            }
+                        });
+					}
+			};
+			$("#com_form_action_apic").ajaxSubmit(options);
+        }
+        function removeImt(index){
+            var tmp = [];
+            for(var i = 0;i<tmpMultiImgs.length;++i){
+                if(index != tmpMultiImgs[i].index){
+                    tmp.push(tmpMultiImgs[i]);
+                }
+            }
+            $("#multiImgBox .b_item_"+index).remove();
+            tmpMultiImgs = tmp;
+            document.getElementById("multiFile").value = "";
+        }
+        function bitUpload(){
+            var multiFile = $("#multiFile");
+            var trs = $("#multiImgBox tr");
+            if(trs.length == 0){
+                lBox.alert({content:'没有找到图片！'});
+                return;
+            }
+            if(trs.filter(".had-load").length == trs.length){
+                lBox.alert({content:'已经上传完毕，无需再传了哟！'});
+                return;
+            }
+            $("#labelMultiIds").val(function(){
+                return $("#imgLabelMultiList .selected").map(function(){return $(this).attr("data-val");}).get().join(",");
+            });
+            var upload_path = Dictionary.img_upload_path;
+            if(upload_path.indexOf("?") == -1){
+                upload_path += "?";
+            }
+            upload_path +="&type=" + Dictionary.img_upload_type;
+            upload_path +="&resize=" + Dictionary.img_is_resize;
+            upload_path +="&lbIds=" + $("#labelMultiIds").val();
+            var m = lBox.wait({content:"正在操作，请稍后..."});
+            var oks = 0,totals=0;
+            for(var i = 0;i<tmpMultiImgs.length;++i){
+                uploadSingleFile(upload_path,{
+                    name:tmpMultiImgs[i].file.name,
+                    file:tmpMultiImgs[i].file,
+                    index:tmpMultiImgs[i].index
+                },onprogress,function(data,it){
+                    ++totals;
+                    if(checkResultIsOk(data)){
+                        $("#multiImgBox .b_item_"+it.index).addClass("had-load");
+                        ++oks;
+                        uploadImgs.push(data.content);
+                    }
+                });
+            }
+            var ck = setInterval(function(){
+                if(totals == tmpMultiImgs.length){
+                    m.close(function(){
+                       lBox.ok({content:"上传成功了哟.成功数["+oks+"]"});
+                    });
+                    clearInterval(ck);
+                }
+            });
+        }
+        function onprogress(fileItem,evt){
+            //console.log(evt.loaded);  //已经上传大小情况
+            var loaded = evt.loaded;
+            var tot = evt.total;
+            var per = Math.floor(10000*loaded/tot)/100;  //已经上传的百分比
+            var box = $("#multiImgBox .b_item_"+fileItem.index);
+            $(box).find(".progress-html").html(per+"%");
+            $(box).find(".progress-bar").css("width",per+"%");
+        }
+        function preLoadMultiImg(_this){
+            var files = _this.files;
+            var maxSize = ${maxSize?string("###")}*1024;
+            $("#multiImgBox").html("");
+            tmpMultiImgs=[];
+            for(var i=0;i<files.length;++i){
+                var file = files[i];
+                var sam = getFileSizeSam(file,maxSize);
+                if(sam == 0){
+                    lBox.alert({content:"图片大小为0了哟."});
+                    continue;
+                }
+                if(file.size > maxSize){
+                    lBox.alert({content:"限制上传图片大小为["+sam.maxSizeFmt+sam.suffix+"]了哟"});
+                    continue;
+                }
+                var tr = $("<tr class='b_item_"+i+"'></tr>");
+                //图片预览
+                var td = $("<td width='90px'><div><img alt='"+file.name+"' /></div></td>");
+                var isImg = preuploadImgShow(file,td.find("img"));
+                if(!isImg){
+                    continue;
+                }
+                tmpMultiImgs.push({
+                    file:file,
+                    index:i
+                });
+                tr.append(td);
+                //名称
+                tr.append("<td width='220px'><div>"+file.name+"</div></td>");
+                //大小
+                tr.append("<td width='120px'><div>"+sam.fileSize+sam.suffix+"</div></td>");
+                //进度
+                tr.append("<td><div><div class='progress-bar-box'><div class='progress-bar'></div></div><span class=\"progress-html\">0%</span></div></td>");
+                //操作
+                tr.append("<td width='130px'><div class=\"viyui-btn viyui-btn-sm viyui-danger remv-img-btn\" onclick=\"removeImt("+i+");\"><i class=\"icon-trash\"></i>移除该图</div></td>");
+                $("#multiImgBox").append(tr);
+            }
+            return;
+        }
+        function getImgList(param){
+        	var tsImageSams={
+        		"pageInfo.pageSize":5,
+        		"pageInfo.pageIndex" : 1,
+        		"entity.sysType" :Consts.SysType.图片信息,
+        		"selLabelId":$("#selPicTag").val()
+        	};
+        	$.extend(tsImageSams,param);
+        	$.get("/comm/imagesams/simlist",tsImageSams,function(res){
+        		//绑定
+                //console.info(res.pageInfo);
+        		$("#imgSelectBoxDiv").html("");
+        		var pageBox = $("#imgPageBox");
+        		var pi = res.content.pageInfo;
+        		pi.renderType = 1;
+        		pageBox.html(ViyGrid.page(pi));
+        		if(!pageBox.is("[data-evented]")){
+        		    pageBox.attr("data-evented",true);
+        		    ViyGrid.pageEvent(pageBox,{
+        		        pageSize:tsImageSams["pageInfo.pageSize"],
+                        page:tsImageSams["pageInfo.pageIndex"]
+                    },function(pageInfo){
+                        getImgList({
+                            "pageInfo.pageSize":pageInfo.pageSize,
+                            "pageInfo.pageIndex" : pageInfo.pageIndex
+                        });
+                    },getImgList);
+                }
+        		repeater("#imgItemHtml","#imgSelectBoxDiv",res.content.list,true);
+        	},"json");
+        }
+        function setPicSelected(){
+        	$(this).parent().addClass("selected").siblings().removeClass("selected");
+        }
+    }
+ $(function(){
+ 	//绑定图片标签列表
+     var imgLabelList='${(RequestParameters["imgLabelList"])!""}';
+	repeater("#imgLabelItemHtml","#imgLabelList,#imgLabelMultiList",imgLabelList,false);
+	repeater("#selImgLabelItemHtml","#selPicTag",imgLabelList,true);
+	if('${multi!""}' == "1"){
+        $(".multi").removeClass("hide");
+     };
+ 	new LET.Tab(".tab-panel-box-pic");
+ 	getImgList();
+
+ });
+</script>

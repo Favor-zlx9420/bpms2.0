@@ -1,0 +1,38 @@
+
+<div class="box-search">
+    <div>上传时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>搜索：<input placeholder="请输入分类名称" type="text" value='' class="input textSearch w189" name="e.name.like" /></div>
+</div>
+<div class="clear"></div>
+<script>
+    param.pageInfo.sortField = "e.createDate";
+    param.pageInfo.sortDistanct = "DESC";
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function () {
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})
+            }
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})
+            }
+        });
+    });
+</script>

@@ -1,0 +1,63 @@
+
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.visible.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否推荐：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.recommend.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>机构简称：</div>
+    <div><input type="text" value='' class="input textSearch" name="mi.partyShortName.like" /></div>
+    <div>机构全名：</div>
+    <div><input type="text" value='' class="input textSearch" name="mi.partyFullName.like" /></div>
+</div>
+<script>
+    ifwin.btnAddText = "私募机构入驻";
+    ifwin.width = 850;
+    ifwin.height = 600;
+    param.pageInfo.sortField="e.id";
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["id"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    function bindUserNameFunc(tr,v,i){
+        return tr["userName"]+"/"+tr["realName"];
+    }
+    function bindViewCustomerUser(tr,v,i){
+        return "<div>总客服数：<span>"+tr["customerUserCount"]+"</span></div>"
+            +"<div>未审核数：<span>"+tr["unAuditCustomerUserCount"]+"</span></div>"
+            +"<div class=\"viyui-btn viyui-btn-xs\" onclick=\"viewCustomerList('"+tr["partyId"]+"','"+tr["partyShortName"]+"');\">查看</div>"
+            ;
+    }
+    function viewCustomerList(id,name){
+        lBox.iframe("机构["+name+"]客服列表","/store/customer/list?type=0&partyId="+id, 1100, 550, true);
+    }
+</script>

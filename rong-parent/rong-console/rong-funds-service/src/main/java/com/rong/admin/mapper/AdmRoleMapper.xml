@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.admin.mapper.AdmRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.admin.module.entity.TbAdmRole" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.admin.module.entity.TbAdmRole" extends="BaseResultMap" >
+    <result column="permission_str" property="permissionStr" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.admin.module.view.TvAdmRole" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.admin.module.view.TvAdmRole" extends="ListResultMap" >
+    <result column="permission_str" property="permissionStr" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`name`, e.`description`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`permission_str`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_role e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.admin.module.query.TsAdmRole" >
+    select count(1) as recordCount from tb_adm_role e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.admin.module.query.TsAdmRole" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

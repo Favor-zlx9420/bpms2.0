@@ -1,0 +1,88 @@
+<style type="text/css">
+    .selected-box a {
+        margin-top: 5px;
+    }
+</style>
+<script>
+    var submitOpt = {
+        wrap: function (req) {
+            req.labelIds = $("#labelList .selected").map(function () {return $(this).attr("data-val");}).get();
+        }
+    };
+    var alterBindParam = {
+        beforeBindFunc:function(entity){
+            var labelList = ${labelList};
+            repeater("#specItemHtml","#labelList",labelList);
+            if(null != entity.labels){
+                entity.labelIds = entity.labels.map(function(x){return x.labelId;}).join(",");
+                if(entity.labels.length > 0){
+                    $("#labelReason").val(entity.labels[0].labelReason);
+                    $("#labelVar0").val(entity.labels[0].labelVar0);
+                    $("#labelVar1").val(entity.labels[0].labelVar1);
+                }
+                $("#labelList a").each(function(){
+                    if(LE.in_str(entity.labelIds,$(this).attr("data-val"),",")){
+                        $(this).addClass("selected");
+                    }
+                });
+            }
+        },
+        afterBindFunc: function (entity) {
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.visible" id="visible" value="true" />
+    <input type="hidden" name="entity.recommend" id="recommend" value="false" />
+    <input type="hidden" name="entity.securityId" id="securityId" />
+    <input type="hidden" name="entity.type" id="type" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>产品信息</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="secFullName"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>选择标签</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="labelList" class="page_pri_div selected-box">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>推荐理由</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="labelReason" id="labelReason" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签0</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="labelVar0" id="labelVar0" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签1</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="labelVar1" id="labelVar1" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>
+<script id="specItemHtml" type="text/html">
+    <a data-val='{id}' data-fc="function(){$(this).toggleClass('selected');}">{name}<i class="icon-zui"></i></a>
+</script>
+

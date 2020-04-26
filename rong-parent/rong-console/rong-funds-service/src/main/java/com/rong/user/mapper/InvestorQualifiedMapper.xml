@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.user.mapper.InvestorQualifiedMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.user.module.entity.TbInvestorQualified" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="investor_type" property="investorType" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="expected" property="expected" jdbcType="VARCHAR" />
+    <result column="vc_experience" property="vcExperience" jdbcType="VARCHAR" />
+    <result column="investment_period" property="investmentPeriod" jdbcType="VARCHAR" />
+    <result column="falling_limit" property="fallingLimit" jdbcType="VARCHAR" />
+    <result column="understanding_investments" property="understandingInvestments" jdbcType="VARCHAR" />
+    <result column="monetary_assets_income" property="monetaryAssetsIncome" jdbcType="VARCHAR" />
+    <result column="investment_ratio" property="investmentRatio" jdbcType="VARCHAR" />
+    <result column="income_growth" property="incomeGrowth" jdbcType="VARCHAR" />
+    <result column="treat_investment_losses" property="treatInvestmentLosses" jdbcType="VARCHAR" />
+    <result column="other0" property="other0" jdbcType="VARCHAR" />
+    <result column="other1" property="other1" jdbcType="VARCHAR" />
+    <result column="other2" property="other2" jdbcType="VARCHAR" />
+    <result column="other3" property="other3" jdbcType="VARCHAR" />
+    <result column="other4" property="other4" jdbcType="VARCHAR" />
+    <result column="other5" property="other5" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="qualified_result" property="qualifiedResult" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.user.module.view.TvInvestorQualified" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.user.module.view.TvInvestorQualified" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`user_id`, e.`investor_type`, 
+    e.`purpose`, e.`expected`, e.`investment_period`, e.`falling_limit`, e.`understanding_investments`, 
+    e.`monetary_assets_income`, e.`investment_ratio`, e.`income_growth`, e.`other0`, 
+    e.`other1`, e.`other2`, e.`other3`, e.`other4`, e.`other5`, e.`score`,e.`treat_investment_losses`,e.`state`,
+    e.`qualified_result`,e.`vc_experience`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_investor_qualified e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.user.module.query.TsInvestorQualified" >
+    select count(1) as recordCount from tb_investor_qualified e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.user.module.query.TsInvestorQualified" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

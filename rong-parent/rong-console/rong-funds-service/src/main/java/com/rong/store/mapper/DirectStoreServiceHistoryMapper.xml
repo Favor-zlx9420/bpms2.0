@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.store.mapper.DirectStoreServiceHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.store.module.entity.TbDirectStoreServiceHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="customer_user_id" property="customerUserId" jdbcType="BIGINT" />
+    <result column="investor_user_id" property="investorUserId" jdbcType="BIGINT" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="audit_result" property="auditResult" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.store.module.view.TvDirectStoreServiceHistory" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.store.module.view.TvDirectStoreServiceHistory" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`customer_user_id`, e.`investor_user_id`, 
+    e.`party_id`, e.`content`, e.`audit_result`, e.`score`, e.`comment`, e.`link_url`, 
+    e.`pic_url`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_direct_store_service_history e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.store.module.query.TsDirectStoreServiceHistory" >
+    select count(1) as recordCount from tb_direct_store_service_history e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.store.module.query.TsDirectStoreServiceHistory" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

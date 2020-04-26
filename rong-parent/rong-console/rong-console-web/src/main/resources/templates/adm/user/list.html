@@ -1,0 +1,80 @@
+<div class="boxSearch">
+    <div>使用状态：</div>
+    <div>
+        <select id="selStateSearch" class="selSearch no-render" name="e.state.in" multiple="multiple" size="5"
+                data-enumber="Consts.State"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>选择分组：</div>
+    <div>
+        <select id="selGroupSearch"
+                data-load='{"url":"/adm/role/dataGrid?&entity.state=1&pageInfo.pageSize=200","defaultItem":{"id":"","name":"全部"}}'
+                class="selSearch no-render" name="e.roleId.in" multiple="multiple" size="5">
+        </select>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>创建时间：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.createDate.ge" id="beginCreateDate" value=''/>
+        <br />
+        至
+        <br />
+        <input type="text" class="timeSearch" name="e.createDate.le" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>最后登录时间：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.lastLoginDate.ge" id="beginLastLoginDate" value=''/>
+        <br />
+        至
+        <br />
+        <input type="text" class="timeSearch" name="e.lastLoginDate.le" id="endLastLoginDate" value=''/>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>登录名：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.userName.like" />
+        <br />
+    </div>
+    <div>手机：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.phone.like" />
+        <br />
+    </div>
+</div>
+<div class="boxSearch">
+    <div>email：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.email.like" />
+        <br />
+    </div>
+    <div>真实姓名：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.realName.like" />
+        <br />
+    </div>
+</div>
+<script>
+    ifwin.showView = false;
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        $('#beginLastLoginDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endLastLoginDate').getDateValue()})}
+        });
+        $('#endLastLoginDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginLastLoginDate').getDateValue()})}
+        });
+    });
+</script>

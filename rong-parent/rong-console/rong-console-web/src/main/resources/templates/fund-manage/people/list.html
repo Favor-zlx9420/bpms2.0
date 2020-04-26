@@ -1,0 +1,76 @@
+
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="visibleSelector"
+        >
+
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否推荐：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="recommendSelector"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否热搜：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="hotSearchSelector"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>基金经理名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.name.like" /></div>
+    <div>人物id：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.personId.eq" /></div>
+</div>
+<input type="hidden" id="overwite-deltag" value="" />
+<script>
+    param.pageInfo.sortField="e.personId";
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindLocalUserFunc(tr,v,i){
+        if(v != null){
+            return getColorWrap(colorType["commState_1"],"已关联");
+        }
+        return "<div class=\"viyui-btn viyui-btn-xs\" onclick=\"bindUser('"+tr["personId"]+"');\">点击关联</div>";
+    }
+    function bindHotSearchFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["personId"],"hotSearch",v);
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["personId"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["personId"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                personId:id
+            }
+        }
+        param[item] = value;
+        editParam(param);
+    }
+    function bindUser(id){
+        lBox.newWin("关联系统用户","${bindUserAction}?personId="+id, ifwin.width, ifwin.height, true);
+    }
+</script>

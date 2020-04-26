@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.member.mapper.UserAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.member.module.entity.TbUserAccount" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="freeze_amount" property="freezeAmount" jdbcType="DECIMAL" />
+    <result column="available_amount" property="availableAmount" jdbcType="DECIMAL" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.member.module.view.TvUserAccount" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.member.module.view.TvUserAccount" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`user_id`, e.`freeze_amount`,
+    e.`available_amount`, e.`version`, e.`type`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_user_account e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.member.module.query.TsUserAccount" >
+    select count(1) as recordCount from tb_user_account e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.member.module.query.TsUserAccount" >
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="updateAccountWithPessimistic" parameterType="com.rong.member.module.request.TqUserAccount">
+    update tb_user_account
+    <set >
+      <if test="entity.updateDate != null" >
+        update_date = #{entity.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="freezeOperaType != null">
+        <if test="freezeOperaType == 0">
+          freeze_amount = freeze_amount + #{operaAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="freezeOperaType == 1">
+          freeze_amount = freeze_amount - #{operaAmount,jdbcType=DECIMAL},
+        </if>
+      </if>
+      <if test="availableOperaType != null">
+        <if test="availableOperaType == 0">
+          available_amount = available_amount + #{operaAmount,jdbcType=DECIMAL},
+        </if>
+        <if test="availableOperaType == 1">
+          available_amount = available_amount - #{operaAmount,jdbcType=DECIMAL},
+        </if>
+      </if>
+      version = version + 1,
+    </set>
+    where id=#{entity.id}
+  </update>
+</mapper>

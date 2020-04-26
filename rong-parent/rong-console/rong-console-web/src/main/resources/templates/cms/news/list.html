@@ -1,0 +1,86 @@
+<div class="box-search">
+    <div>发表时间：<input placeholder="开始时间" type="text" class="timeSearch w85" name="e.displaydate.ge" id="beginDisplaydate" value=''/>
+        ~
+        <input placeholder="结束时间" type="text" class="timeSearch w85" name="e.displaydate.le" id="endDisplaydate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搜索：<input placeholder="请输入资讯标题、发表人" type="text" value='' class="input textSearch w189" name="keyword" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>文章类型：<select id="selTypeSearch" class="selSearch no-render w194" name="e.cateId.in"
+                data-load='{"url":"/cms/category/dataGrid?&e.parentId.eq=9&e.state.eq=1&e.deltag.eq=0&pageInfo.pageSize=200","defaultItem":{"id":"","name":"全部"}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>是否置顶：<select class="selSearch no-render w194" name="e.top.in"
+        >
+            <option value="">全部</option>
+            <option value="true">是</option>
+            <option value="false">否</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>状态：
+        <select class="selSearch no-render w194" name="e.state.in">
+            <option value="">全部</option>
+            <option value="1">显示</option>
+            <option value="0">隐藏</option>
+        </select>
+    </div>
+</div>
+<script type="text/javascript">
+    ifwin.listEditText = "编辑";
+    param.pageInfo.sortField = "e.id";
+    param.pageInfo.sortDistanct = "desc";
+    //初始化信息重写
+    ifwin.width = 1200;
+    ifwin.height = 700;
+    //初始化信息完毕
+    function listEdit(entity){
+        window.location.href = "${viewModel.editAction}?id=" + entity.id;
+    }
+    $(document).ready(function () {
+        $("#btnAdd").unbind("click").click(function () {
+            window.location.href = "${viewModel.addAction}";
+        });
+        $('#beginDisplaydate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endDisplaydate').getDateValue()})
+            }
+        });
+        $('#endDisplaydate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginDisplaydate').getDateValue()})
+            }
+        });
+    });
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    function bindImgShow(tr,v,i){
+        var html="";
+        html += "<img src='"+tr["picList"]+"' width='50px' height='25px'>";
+        return html;
+    }
+    function showChoiceness(tr,v,i){
+        return "--";
+    }
+    function bindTopFunc(tr,v,i){
+        return v == true ? "是":"否";
+    }
+    function bindNewsStateFunc(tr,v,i){
+        return v == "1" ? "已显示" : "隐藏";
+    }
+</script>

@@ -1,0 +1,70 @@
+
+<style type="text/css">
+    .f-left, .comm-item-content .help-tip{float:none !important;margin:0 auto;}
+</style>
+<div class="boxSearch">
+    <div>发表时间：
+        <input type="text" class="timeSearch" name="e.effectiveTime.ge" id="beginDisplaydate" value=''/>
+        ～
+        <input type="text" class="timeSearch" name="e.effectiveTime.le" id="endDisplaydate" value=''/>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否可见：
+        <select class="selSearch no-render w194" name="e.visible.in"
+        >
+            <option value="">全部</option>
+            <option value="true">是</option>
+            <option value="false">否</option>
+        </select>
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>新闻标题：<input type="text" value='' class="input textSearch" name="e.newsTitle.like" /></div>
+</div>
+<div class="boxSearch searchLong">
+    <div>新闻来源：<input type="text" value='' class="input textSearch" name="e.newsOriginSource.like" /></div>
+</div>
+<input type="hidden" id="overwite-deltag" value="" />
+<script>
+    param.pageInfo.sortField = "e.effectiveTime";
+    param.pageInfo.sortDistanct = "DESC";;
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindHotSearchFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["newsId"],"hotSearch",v);
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["newsId"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["newsId"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                newsId:id
+            }
+        }
+        param[item] = value;
+        editParam(param);
+    }
+    function bindSortInput(tr,v,i){
+        return _bindSortInput(tr,v,i,tr["newsId"]);
+    }
+    $(document).ready(function () {
+        $('#beginDisplaydate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endDisplaydate').getDateValue()})
+            }
+        });
+        $('#endDisplaydate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginDisplaydate').getDateValue()})
+            }
+        });
+    });
+</script>

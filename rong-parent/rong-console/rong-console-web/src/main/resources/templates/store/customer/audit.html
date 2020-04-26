@@ -1,0 +1,159 @@
+<style type="text/css">
+    #dynItemBox select {
+        display: inline;
+    }
+    .pic-box img{height:80px;}
+</style>
+<script type="text/javascript">
+    var viewParam = {
+        beforeBindFunc:function(entity){
+            $("#auditBtnBox").children().eq(0).attr("data-result",Consts.CustomerAuditState.未通过审核).next().attr("data-result",Consts.CustomerAuditState.通过审核);
+            $("#auditBtnBox .audit-btn").removeClass("hide").click(function () {
+                var _this = $(this);
+                var thisk={
+                    form : _this.closest("form"),
+                };
+                if (!LET.checkForm(thisk.form)) {
+                    return false;
+                }
+                var result = _this.attr("data-result");
+                var title = _this.find("span").text();
+                var id = entity.id;
+                var memo = $("#memo").val();
+                _audit(title, result, id,memo);
+            }).insertAfter(".ifrcom-btm-btn-box .btn-cancel");
+        },
+        otherFunc: function (entity) {
+            LET.dataBind(".store-user-box",entity);
+            $("#headPortraitOfStore").attr("src",entity["headPortrait"]);
+            $("#certificate1UrlOfStore").attr("src",entity["certificate1Url"]);
+            $("#certificate2UrlOfStore").attr("src",entity["certificate2Url"]);
+            $("#certificate3UrlOfStore").attr("src",entity["certificate3Url"]);
+            $("#certificate4UrlOfStore").attr("src",entity["certificate4Url"]);
+            $("#certificate5UrlOfStore").attr("src",entity["certificate5Url"]);
+            $("#applicationCodeUrlOfStore").attr("src",entity["applicationCodeUrl"]);
+            var user = ${user};
+            LET.dataBind(".mem-user-box",user);
+            $("#headPortraitOfMem").attr("src",user["headPortrait"]);
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form" name="comm-alter-form" action="${auditAction}">
+    <div class="comm-outer-box">
+        <input type="hidden" value="0" name="entity.id" id="id"/>
+        <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+            <tbody>
+            <tr class="">
+                <th width="150px">
+                    <div>信息：</div>
+                </th>
+                <td width="250px">
+                    <div>直营店客服信息</div>
+                </td>
+                <td>
+                    <div>会员信息</div>
+                </td>
+            </tr>
+            <tr class="">
+                <th width="150px">
+                    <div>用户id：</div>
+                </th>
+                <td colspan="2" class="store-user-box">
+                    <div id="userId"></div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <div>昵称</div>
+                </th>
+                <td class="store-user-box"><div data-bind-id="nickname"></div></td>
+                <td class="mem-user-box"><div data-bind-id="nickName"></div></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>职位</div>
+                </th>
+                <td class="store-user-box"><div data-bind-id="position"></div></td>
+                <td class="mem-user-box"><div data-bind-id="position"></div></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>手机号</div>
+                </th>
+                <td class="store-user-box"><div data-bind-id="phone"></div></td>
+                <td class="mem-user-box"><div data-bind-id="phone"></div></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>介绍信息</div>
+                </th>
+                <td class="store-user-box"><div data-bind-id="remark"></div></td>
+                <td class="mem-user-box"><div data-bind-id="description"></div></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>自动回复信息</div>
+                </th>
+                <td class="store-user-box"><div data-bind-id="autoReplay"></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>头像地址</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="headPortraitOfStore" /></div></td>
+                <td class="mem-user-box"><div class="pic-box"><img id="headPortraitOfMem" /></div></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>从业资格证书1</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="certificate1UrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>从业资格证书2</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="certificate2UrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>从业资格证书3</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="certificate3UrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>从业资格证书4</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="certificate4UrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>从业资格证书5</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="certificate5UrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            <tr>
+                <th>
+                    <div>小程序二维码图片地址</div>
+                </th>
+                <td class="store-user-box"><div class="pic-box"><img id="applicationCodeUrlOfStore" /></div></td>
+                <td class="mem-user-box"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+    <#if hasAuditPermission!false>
+    <div id="auditBtnBox">
+        <div class="viyui-btn viyui-btn-sm viyui-danger hide audit-btn"><i class="icon-ban-circle"></i><span>驳回申请</span></div>
+        <div class="viyui-btn viyui-btn-sm hide audit-btn"><i class="icon-check"></i><span>通过申请</span></div>
+    </div>
+    </#if>
+</form>

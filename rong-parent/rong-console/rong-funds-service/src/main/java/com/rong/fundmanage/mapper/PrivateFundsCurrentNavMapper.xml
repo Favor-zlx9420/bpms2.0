@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.PrivateFundsCurrentNavMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbPrivateFundsCurrentNav" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="nav" property="nav" jdbcType="DECIMAL" />
+    <result column="accum_nav" property="accumNav" jdbcType="DECIMAL" />
+    <result column="adj_nav" property="adjNav" jdbcType="DECIMAL" />
+    <result column="return_rate" property="returnRate" jdbcType="DECIMAL" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentNav" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentNav" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`security_id`, e.`nav`, e.`accum_nav`, e.`end_date`,e.`adj_nav`,e.`return_rate`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_private_funds_current_nav e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentNav" >
+    select count(1) as recordCount from tb_private_funds_current_nav e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentNav" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetNavTemp">
+    truncate table `rong-manage`.tb_private_funds_current_nav_temp;
+    insert into `rong-manage`.tb_private_funds_current_nav_temp
+    (security_id,nav,accum_nav,end_date,
+    adj_nav,return_rate,
+    person_id,party_id)
+    select e.security_id,nav,accum_nav,e.end_date,
+    adj_nav,return_rate
+    ,(select PERSON_ID from `tong-rong`.pfund_manager where SECURITY_ID=e.SECURITY_ID AND IS_INCUMBENT = 1 limit 1)
+    ,(select INVEST_CONSULTANT from `tong-rong`.pfund where SECURITY_ID=e.SECURITY_ID)
+    from `tong-rong`.pfund_nav e
+    ,(SELECT security_id,max(end_date) end_date from `tong-rong`.pfund_nav group by security_id) f
+    WHERE e.security_id = f.security_id AND e.end_date = f.end_date
+  </update>
+
+  <select id="resetNavTempCount" resultType="java.lang.Integer">
+    select count(1) from `rong-manage`.tb_private_funds_current_nav_temp
+  </select>
+
+  <update id="resetNav">
+    truncate table `rong-manage`.tb_private_funds_current_nav;
+    insert into `rong-manage`.tb_private_funds_current_nav
+    select * from `rong-manage`.tb_private_funds_current_nav_temp
+  </update>
+</mapper>

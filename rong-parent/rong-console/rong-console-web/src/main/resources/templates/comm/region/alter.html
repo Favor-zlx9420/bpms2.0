@@ -1,0 +1,74 @@
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <input type="hidden" name="entity.parentId" id="parentId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>上一级地区</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="parentName"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>地区名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,100}$"
+                                data-tip="长度1-100"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>编码</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^\S{0,100}$"
+                                data-tip="长度0-100"
+                                type="text" class="input validator" name="entity.code" id="code" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>级别</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required,nonnegtive_int"
+                                data-tip="非负整数"
+                                type="text" class="input validator" name="entity.level" id="level" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>拼音</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^[\s\S]{0,100}$"
+                                data-tip="长度0-100"
+                                type="text" class="input validator" name="entity.pinyin" id="pinyin" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>拼音简写</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^[\s\S]{0,10}$"
+                                data-tip="长度0-10"
+                                type="text"
+                                class="input validator" name="entity.shortPinyin" id="shortPinyin" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

@@ -1,0 +1,120 @@
+<style type="text/css">
+    #dynItemBox select {
+        display: inline;
+    }
+    .pic-box img{height:80px;}
+</style>
+<script type="text/javascript">
+    var viewParam = {
+        beforeBindFunc:function(entity){
+            $("#auditBtnBox").children().eq(0).attr("data-result",Consts.CustomerAuditState.未通过审核).next().attr("data-result",Consts.CustomerAuditState.通过审核);
+            $("#auditBtnBox .audit-btn").removeClass("hide").click(function () {
+                var _this = $(this);
+                var thisk={
+                    form : _this.closest("form"),
+                };
+                if (!LET.checkForm(thisk.form)) {
+                    return false;
+                }
+                var result = _this.attr("data-result");
+                var title = _this.find("span").text();
+                var id = entity.id;
+                var memo = $("#rejectReason").val();
+                var visible = $("#visible").val();
+                _audit(title, result,visible, id,memo);
+            }).insertAfter(".ifrcom-btm-btn-box .btn-cancel");
+        },
+        otherFunc:function (entity) {
+            LET.renderForm({selector:"#auditForm"});
+        }
+    }
+</script>
+<form id="auditForm" autocomplete="off" class="comm-view-form comm-iframe-form viy-form" name="comm-alter-form" action="${auditAction}">
+    <div class="comm-outer-box">
+        <input type="hidden" value="0" name="entity.id" id="id"/>
+        <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+            <tbody>
+            <tr class="">
+                <th width="150px">
+                    <div>评论类型：</div>
+                </th>
+                <td>
+                    <div id="type" data-bind-function="bindTargetTypeFunc"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th width="150px">
+                    <div>评论目标：</div>
+                </th>
+                <td>
+                    <div id="targetInfo"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>回复用户：</div>
+                </th>
+                <td colspan="2">
+                    <div id="userId">
+                        <span id="replyUserName"></span>/<span id="realName"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>创建时间：</div>
+                </th>
+                <td colspan="2">
+                    <div id="createDate" data-bind-function="dateTimeFunc"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>是否可见：</div>
+                </th>
+                <td colspan="2">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.visible" id="visible"
+                               data-text="可见|隐藏"
+                               data-value="true|false"
+                        />
+                    </div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>评论内容：</div>
+                </th>
+                <td colspan="2">
+                    <div id="commentContent"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>回复内容：</div>
+                </th>
+                <td colspan="2">
+                    <div id="content"></div>
+                </td>
+            </tr>
+            <tr class="">
+                <th>
+                    <div>拒绝原因：</div>
+                </th>
+                <td colspan="2">
+                    <div>
+                        <textarea name="rejectReason" id="rejectReason" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+    <#if hasAuditPermission!false>
+    <div id="auditBtnBox">
+        <div class="viyui-btn viyui-btn-sm viyui-danger hide audit-btn"><i class="icon-ban-circle"></i><span>驳回申请</span></div>
+        <div class="viyui-btn viyui-btn-sm hide audit-btn"><i class="icon-check"></i><span>通过申请</span></div>
+    </div>
+    </#if>
+</form>

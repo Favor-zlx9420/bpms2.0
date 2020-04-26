@@ -1,0 +1,47 @@
+<div class="boxSearch searchLong">
+    <div>显示状态：</div>
+    <div>
+        <select class="selSearch no-render" name="e.state.in" multiple="multiple" size="5"
+                data-enumber="Consts.State"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>表名：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.tableName.like" /></div>
+    <div>别名：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.tableAlias.like" />
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>表头名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.tableHeader.like" /></div>
+    <div>属性名称：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="e.fieldName.like" />
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>列值模板或者返回值方法：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.visibleTemplate.like" /></div>
+    <div>栏目名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="ac.name.like" /></div>
+</div>
+<script>
+    function binSortable(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"sortable",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+</script>

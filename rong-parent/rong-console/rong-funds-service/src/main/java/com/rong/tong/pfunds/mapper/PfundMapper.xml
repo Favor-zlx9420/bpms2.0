@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfund" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE" />
+    <result column="PF_STYLE" property="pfStyle" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="INVEST_STRATEGY" property="investStrategy" jdbcType="VARCHAR" />
+    <result column="INVEST_STRATEGY_CHILD" property="investStrategyChild" jdbcType="VARCHAR" />
+    <result column="DURATION" property="duration" jdbcType="INTEGER" />
+    <result column="OPEN_DATE_DESC" property="openDateDesc" jdbcType="VARCHAR" />
+    <result column="INVEST_CONSULTANT" property="investConsultant" jdbcType="VARCHAR" />
+    <result column="CUSTODIAN" property="custodian" jdbcType="VARCHAR" />
+    <result column="ISSUE_PLATFORM" property="issuePlatform" jdbcType="VARCHAR" />
+    <result column="TRADING_BROKER" property="tradingBroker" jdbcType="VARCHAR" />
+    <result column="SUBSCRIPTION_START_POINT" property="subscriptionStartPoint" jdbcType="INTEGER" />
+    <result column="SCALE_INITIAL" property="scaleInitial" jdbcType="BIGINT" />
+    <result column="ISSUE_FEE" property="issueFee" jdbcType="DECIMAL" />
+    <result column="REDEEM_FEE" property="redeemFee" jdbcType="DECIMAL" />
+    <result column="MANAGEMENT_FEE" property="managementFee" jdbcType="DECIMAL" />
+    <result column="PERFORMANECE_RETURN" property="performaneceReturn" jdbcType="DECIMAL" />
+    <result column="RECORD_CD" property="recordCd" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="RECORD_DATE" property="recordDate" jdbcType="DATE" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="NAV_FREQ" property="navFreq" jdbcType="VARCHAR" />
+    <result column="CLOSING_DURA_DESC" property="closingDuraDesc" jdbcType="VARCHAR" />
+    <result column="ISSUE_LOC" property="issueLoc" jdbcType="VARCHAR" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfund" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfund" extends="ListResultMap" />
+  <resultMap id="TvSearchPfundInfoResultMap" type="com.rong.tong.pfunds.module.view.TvSearchPfundInfo">
+    <result column="no" property="no" />
+    <result column="SECURITY_ID" property="securityId" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="SEC_FULL_NAME" property="secFullName" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="PARTY_ID" property="partyId" />
+    <result column="ESTABLISH_DATE" property="establishDate" />
+    <result column="NAME" property="userName" />
+    <result column="person_id" property="personId" />
+    <result column="nav" property="nav" />
+    <result column="end_date" property="endDate" />
+    <result column="return_accum" property="accumNav" />
+    <result column="return_of_establish" property="annualTotalReturn" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    <result column="fav" property="fav" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`ESTABLISH_DATE`, e.`PF_STYLE`, e.`STATUS`, e.`INVEST_STRATEGY`, 
+    e.`INVEST_STRATEGY_CHILD`, e.`DURATION`, e.`OPEN_DATE_DESC`, e.`INVEST_CONSULTANT`, 
+    e.`CUSTODIAN`, e.`ISSUE_PLATFORM`, e.`TRADING_BROKER`, e.`SUBSCRIPTION_START_POINT`, 
+    e.`SCALE_INITIAL`, e.`ISSUE_FEE`, e.`REDEEM_FEE`, e.`MANAGEMENT_FEE`, e.`PERFORMANECE_RETURN`, 
+    e.`RECORD_CD`, e.`UPDATE_TIME`, e.`TMSTAMP`, e.`RECORD_DATE`, e.`END_DATE`, e.`NAV_FREQ`, 
+    e.`CLOSING_DURA_DESC`, e.`ISSUE_LOC`, e.`RECORD_STATUS`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfund" >
+    select count(1) as recordCount from `tong-rong`.pfund e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfund" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1)
+    from
+    `rong-manage`.tb_private_funds_current_pfund_ranking a
+    LEFT JOIN `rong-manage`.tb_private_funds_current_nav d ON a.SECURITY_ID = d.SECURITY_ID
+    LEFT JOIN `tong-rong`.md_people e ON e.PERSON_ID = d.PERSON_ID
+    LEFT JOIN `rong-manage`.tb_private_funds_current_income f ON a.SECURITY_ID = f.SECURITY_ID
+    LEFT JOIN `rong-manage`.tb_private_funds_current_perf g ON a.SECURITY_ID = g.SECURITY_ID
+    WHERE (a.SEC_FULL_NAME LIKE #{key} OR a.SEC_SHORT_NAME LIKE #{key})
+  </select>
+  <select id="selectSearchPfundInfoList" resultMap="TvSearchPfundInfoResultMap">
+    SELECT
+    @rowno:=@rowno+1 as no
+    ,r.* from
+    (SELECT a.SECURITY_ID
+      ,a.SEC_SHORT_NAME
+      ,a.SEC_FULL_NAME
+      ,a.PARTY_SHORT_NAME
+      ,a.PARTY_FULL_NAME
+      ,a.PARTY_ID
+      ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+      ,e.`NAME`
+      ,d.person_id
+      ,truncate(d.nav,4) nav
+      ,DATE_FORMAT(d.end_date,'%Y-%m-%d') end_date
+      ,concat(truncate(f.return_accum,2),'%') return_accum
+      ,concat(truncate(g.return_of_establish *100,2),'%') return_of_establish
+      ,concat(truncate(g.max_drawdown_est *100,2),'%') AS MAX_DRAWDOWN
+      ,(CASE WHEN j.id IS NOT NULL THEN TRUE ELSE FALSE END) fav
+      FROM
+      `rong-manage`.tb_private_funds_current_pfund_ranking a
+      LEFT JOIN `rong-manage`.tb_private_funds_current_nav d ON a.SECURITY_ID = d.SECURITY_ID
+      LEFT JOIN `tong-rong`.md_people e ON e.PERSON_ID = d.PERSON_ID
+      LEFT JOIN `rong-manage`.tb_private_funds_current_income f ON a.SECURITY_ID = f.SECURITY_ID
+      LEFT JOIN `rong-manage`.tb_private_funds_current_perf g ON a.SECURITY_ID = g.SECURITY_ID
+      LEFT JOIN `rong-manage`.tb_user_pro_fav j ON a.SECURITY_ID = j.security_id AND deltag = FALSE AND j.user_id = #{userId}
+      WHERE (a.SEC_FULL_NAME LIKE #{key} OR a.SEC_SHORT_NAME LIKE #{key})
+      <if test="orderBy != null">
+        ORDER BY ${orderBy}
+      </if>
+      limit #{limitStart},#{limitEnd}
+    ) r,(select @rowno:=#{limitStart}) t
+  </select>
+  <select id="getNavDetail" resultMap="TvSearchPfundInfoResultMap">
+    SELECT d.SECURITY_ID
+    ,concat(truncate(d.MAX_DRAWDOWN *100,2),'%') AS MAX_DRAWDOWN
+    FROM
+      (SELECT MAX(END_DATE) AS END_DATE FROM `tong-rong`.pfund_perf_indic WHERE SECURITY_ID = #{securityId} AND WINDOW = 8) c
+      JOIN `tong-rong`.pfund_perf_indic d ON c.END_DATE = d.END_DATE AND d.SECURITY_ID = #{securityId} AND d.WINDOW = 8
+  </select>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundManagerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundManagerInfo" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PERSON_ID" property="personId" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="GENDER" property="gender" jdbcType="CHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="VARCHAR" />
+    <result column="NATIONALITY_CD" property="nationalityCd" jdbcType="CHAR" />
+    <result column="CERTIFICATE" property="certificate" jdbcType="VARCHAR" />
+    <result column="PHOTO" property="photo" jdbcType="VARCHAR" />
+    <result column="EDUCATION" property="education" jdbcType="INTEGER" />
+    <result column="PRACTICE_DATE" property="practiceDate" jdbcType="VARCHAR" />
+    <result column="MF_TO_PF" property="mfToPf" jdbcType="TINYINT" />
+    <result column="AWARDS" property="awards" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="GRAD_UNIV" property="gradUniv" jdbcType="VARCHAR" />
+    <result column="MAJOR" property="major" jdbcType="VARCHAR" />
+    <result column="GRAD_UNIV2" property="gradUniv2" jdbcType="VARCHAR" />
+    <result column="MAJOR2" property="major2" jdbcType="VARCHAR" />
+    <result column="POST_GRAD_UNIV1" property="postGradUniv1" jdbcType="VARCHAR" />
+    <result column="POST_GRAD_MAJOR1" property="postGradMajor1" jdbcType="VARCHAR" />
+    <result column="POST_GRAD_UNIV2" property="postGradUniv2" jdbcType="VARCHAR" />
+    <result column="POST_GRAD_MAJOR2" property="postGradMajor2" jdbcType="VARCHAR" />
+    <result column="DR_GRAD_UNIV1" property="drGradUniv1" jdbcType="VARCHAR" />
+    <result column="DR_GRAD_MAJOR1" property="drGradMajor1" jdbcType="VARCHAR" />
+    <result column="DR_GRAD_UNIV2" property="drGradUniv2" jdbcType="VARCHAR" />
+    <result column="DR_GRAD_MAJOR2" property="drGradMajor2" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.fund.module.entity.TbFundManagerInfo" extends="BaseResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundManagerInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundManagerInfo" extends="ListResultMap" >
+    <result column="BACKGROUND_DESC" property="backgroundDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PERSON_ID`, e.`NAME`, e.`GENDER`, e.`BIRTHDAY`, e.`NATIONALITY_CD`, e.`CERTIFICATE`, 
+    e.`PHOTO`, e.`EDUCATION`, e.`PRACTICE_DATE`, e.`MF_TO_PF`, e.`AWARDS`, e.`UPDATE_TIME`, 
+    e.`TMSTAMP`, e.`GRAD_UNIV`, e.`MAJOR`, e.`GRAD_UNIV2`, e.`MAJOR2`, e.`POST_GRAD_UNIV1`, 
+    e.`POST_GRAD_MAJOR1`, e.`POST_GRAD_UNIV2`, e.`POST_GRAD_MAJOR2`, e.`DR_GRAD_UNIV1`, 
+    e.`DR_GRAD_MAJOR1`, e.`DR_GRAD_UNIV2`, e.`DR_GRAD_MAJOR2`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`BACKGROUND_DESC`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_manager_info` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundManagerInfo" >
+    select count(1) as recordCount from `tong-rong`.`fund_manager_info` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundManagerInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

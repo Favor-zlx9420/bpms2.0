@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundClassMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundClass" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="FUND_ID" property="fundId" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="CLASS_NAME" property="className" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL" property="tickerSymbol" jdbcType="VARCHAR" />
+    <result column="EXCHANGE_CD" property="exchangeCd" jdbcType="CHAR" />
+    <result column="CLASS_STATUS" property="classStatus" jdbcType="VARCHAR" />
+    <result column="EXPIRE_DATE" property="expireDate" jdbcType="DATE" />
+    <result column="OPERATION_MODE" property="operationMode" jdbcType="VARCHAR" />
+    <result column="ETF_LOF" property="etfLof" jdbcType="VARCHAR" />
+    <result column="GUAR_RATIO" property="guarRatio" jdbcType="DECIMAL" />
+    <result column="GUAR_PERIOD" property="guarPeriod" jdbcType="DECIMAL" />
+    <result column="IS_GUAR_FUND" property="isGuarFund" jdbcType="TINYINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="IS_CLASS" property="isClass" jdbcType="INTEGER" />
+    <result column="CLEAR_TYPE" property="clearType" jdbcType="INTEGER" />
+    <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE" />
+    <result column="TICKER_SYMBOL_F" property="tickerSymbolF" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL_B" property="tickerSymbolB" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL_SUB" property="tickerSymbolSub" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL_PM" property="tickerSymbolPm" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL_M" property="tickerSymbolM" jdbcType="VARCHAR" />
+    <result column="SEC_SHORT_NAME_EX" property="secShortNameEx" jdbcType="VARCHAR" />
+    <result column="TICKER_SYMBOL_EX" property="tickerSymbolEx" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundClass" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundClass" extends="ListResultMap" />
+
+  <resultMap id="TvSearchPfundInfoResultMap" type="com.rong.tong.pfunds.module.view.TvSearchPfundInfo">
+    <result column="no" property="no" />
+    <result column="SECURITY_ID" property="securityId" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="SEC_FULL_NAME" property="secFullName" />
+    <result column="PARTY_ID" property="partyId" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="INVEST_CONSULTANT" property="partyId" />
+    <result column="ESTABLISH_DATE" property="establishDate" />
+    <result column="NAME" property="userName" />
+    <result column="person_id" property="personId" />
+    <result column="nav" property="nav" />
+    <result column="end_date" property="endDate" />
+    <result column="return_accum" property="accumNav" />
+    <result column="return_of_establish" property="annualTotalReturn" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    <result column="fav" property="fav" />
+  </resultMap>
+
+  <resultMap id="TvProduceSummaryMap" type="com.rong.tong.pfunds.module.view.TvProduceSummary">
+    <result column="SECURITY_ID" property="securityId" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="SEC_FULL_NAME" property="secFullName" />
+    <result column="produceType" property="produceType" />
+    <result column="INVEST_STRATEGY" property="investStrategy" />
+    <result column="STATUS" property="status" />
+    <result column="nav" property="nav" />
+    <result column="END_DATE" property="endDate" />
+    <result column="RETURN_RATE_1Y" property="returnRate1y" />
+    <result column="RETURN_RATE_EST" property="returnRateEst" />
+    <result column="ACCUM_NAV" property="accumNav" />
+    <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    <result column="SHARPE_RATIO" property="sharpeRatio" />
+    <result column="ESTABLISH_DATE" property="establishDate" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="PARTY_ID" property="partyId" />
+    <result column="NAME" property="userName" />
+    <result column="person_id" property="personId" />
+    <result column="RECORD_CD" property="recordCd" />
+    <result column="fav" property="fav" />
+  </resultMap>
+
+  <resultMap id="TvHisNavMap" type="com.rong.tong.pfunds.module.view.TvHisNav">
+    <result column="END_DATE" property="endDate" />
+    <result column="NAV" property="nav" />
+    <result column="ADJ_NAV" property="adjNav" />
+    <result column="ACCUM_NAV" property="accumNav" />
+    <result column="adjNavChange" property="adjNavChange" />
+    <result column="accumNavChange" property="accumNavChange" />
+    <result column="RETURN_RATE" property="returnRate" />
+    <result column="DIVIDEND" property="dividend" />
+    <result column="SPLIT" property="split" />
+  </resultMap>
+
+  <resultMap id="TvDateBoundaryMap" type="com.rong.tong.pfunds.module.view.TvDateBoundary">
+    <result column="startDate" property="startDate" />
+    <result column="endDate" property="endDate" />
+  </resultMap>
+
+  <resultMap id="TvMaxDrawdownTrendMap" type="com.rong.tong.pfunds.module.view.TvMaxDrawdownTrend">
+    <result column="END_DATE" property="endDate" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+  </resultMap>
+
+  <resultMap id="TvIntervalReturnMap" type="com.rong.tong.pfunds.module.view.TvIntervalReturn">
+    <result column="END_DATE" property="endDate" />
+    <result column="RETURN_RATE_EST" property="returnRateEst" />
+    <result column="RETURN_RATE_YTD" property="returnRateYtd" />
+    <result column="RETURN_RATE_1M" property="returnRate1m" />
+    <result column="RETURN_RATE_3M" property="returnRate3m" />
+    <result column="RETURN_RATE_6M" property="returnRate6m" />
+    <result column="RETURN_RATE_1Y" property="returnRate1y" />
+    <result column="RETURN_RATE_2Y" property="returnRate2y" />
+    <result column="RETURN_RATE_3Y" property="returnRate3y" />
+    <result column="RETURN_RATE_5Y" property="returnRate5y" />
+  </resultMap>
+
+  <resultMap id="TvYearMonReturnMap" type="com.rong.tong.pfunds.module.view.TvYearMonReturn">
+    <result column="END_DATE" property="endDate" />
+    <result column="NAV_RETURN" property="navReturn" />
+  </resultMap>
+
+  <resultMap id="TvRiskAssessmentMap" type="com.rong.tong.pfunds.module.view.TvRiskAssessment">
+    <result column="END_DATE" property="endDate" />
+    <result column="WINDOW" property="window" />
+    <result column="ANNUAL_TOTAL_RETURN" property="annualTotalReturn" />
+    <result column="ANNUAL_TOTAL_RISK" property="annualTotalRisk" />
+    <result column="MAX_DRAWDOWN" property="maxDrawdown" />
+    <result column="DOWNSIDE_RISK" property="downsideRisk" />
+    <result column="SHARPE_RATIO" property="sharpeRatio" />
+    <result column="JENSENS_ALPHA" property="jensensAlpha" />
+    <result column="SORTINO_RATIO" property="sortinoRatio" />
+    <result column="UP_CAPTURE_RATE" property="upCaptureRate" />
+    <result column="DOWN_CAPTURE_RATE" property="downCaptureRate" />
+  </resultMap>
+
+  <resultMap id="TvFundStyleMap" type="com.rong.tong.pfunds.module.view.TvFundStyle">
+    <result column="END_DATE" property="endDate" />
+    <result column="UP_CAPTURE_RATE" property="upCaptureRate" />
+    <result column="DOWN_CAPTURE_RATE" property="downCaptureRate" />
+  </resultMap>
+
+  <resultMap id="TvProduceInformationMap" type="com.rong.tong.pfunds.module.view.TvProduceInformation">
+    <result column="SEC_FULL_NAME" property="secFullName" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="ISSUE_PLATFORM" property="issuePlatform" />
+    <result column="CUSTODIAN" property="custodian" />
+    <result column="TRADING_BROKER" property="tradingBroker" />
+    <result column="ESTABLISH_DATE" property="establishDate" />
+    <result column="STATUS" property="status" />
+    <result column="PF_STYLE" property="pfStyle" />
+    <result column="SCALE_INITIAL" property="scaleInitial" />
+    <result column="INVEST_STRATEGY" property="investStrategy" />
+    <result column="INVEST_STRATEGY_CHILD" property="investStrategyChild" />
+    <result column="fen" property="fen" />
+    <result column="san" property="san" />
+    <result column="SUBSCRIPTION_START_POINT" property="subscriptionStartPoint" />
+    <result column="CLOSING_DURA_DESC" property="closingDuraDesc" />
+    <result column="OPEN_DATE_DESC" property="openDateDesc" />
+    <result column="ISSUE_FEE" property="issueFee" />
+    <result column="REDEEM_FEE" property="redeemFee" />
+    <result column="MANAGEMENT_FEE" property="managementFee" />
+    <result column="PERFORMANECE_RETURN" property="performaneceReturn" />
+    <result column="DURATION" property="duration" />
+    <result column="RECORD_CD" property="recordCd" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`FUND_ID`, e.`SECURITY_ID`, e.`CLASS_NAME`, e.`TICKER_SYMBOL`, e.`EXCHANGE_CD`, 
+    e.`CLASS_STATUS`, e.`EXPIRE_DATE`, e.`OPERATION_MODE`, e.`ETF_LOF`, e.`GUAR_RATIO`, 
+    e.`GUAR_PERIOD`, e.`IS_GUAR_FUND`, e.`UPDATE_TIME`, e.`TMSTAMP`, e.`IS_CLASS`, e.`CLEAR_TYPE`, 
+    e.`ESTABLISH_DATE`, e.`TICKER_SYMBOL_F`, e.`TICKER_SYMBOL_B`, e.`TICKER_SYMBOL_SUB`, 
+    e.`TICKER_SYMBOL_PM`, e.`TICKER_SYMBOL_M`, e.`SEC_SHORT_NAME_EX`, e.`TICKER_SYMBOL_EX`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_class` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundClass" >
+    select count(1) as recordCount from `tong-rong`.`fund_class` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundClass" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1)
+    FROM
+	`tong-rong`.fund_class a
+	JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+    where (b.SEC_FULL_NAME like #{key} OR b.SEC_SHORT_NAME like #{key})
+  </select>
+
+  <select id="selectSearchFundClassInfoList" resultMap="TvSearchPfundInfoResultMap">
+    SELECT
+    @rowno:=@rowno+1 as no
+    ,r.* from
+    (SELECT a.SECURITY_ID
+    ,b.SEC_SHORT_NAME
+    ,b.SEC_FULL_NAME
+    ,c.PARTY_ID
+    ,d.PARTY_SHORT_NAME
+    ,d.PARTY_FULL_NAME
+    ,c.PERSON_ID
+    ,e.`NAME`
+    ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+    ,truncate(c.nav,4) nav
+    ,DATE_FORMAT(c.end_date,'%Y-%m-%d') end_date
+    ,concat(truncate(f.return_rate_est,2),'%') return_accum
+    ,concat(truncate(g.WEEKLY_YIELD*100,2),'%') return_of_establish
+    ,(CASE WHEN j.id IS NOT NULL THEN TRUE ELSE FALSE END) fav
+    FROM
+    `tong-rong`.fund_class a
+    JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+    LEFT JOIN `rong-manage`.tb_raised_fund_current_nav c ON a.SECURITY_ID = c.SECURITY_ID
+    LEFT JOIN `tong-rong`.fund_inst_info d ON c.PARTY_ID = d.PARTY_ID
+    LEFT JOIN `tong-rong`.md_people e ON c.PERSON_ID = e.PERSON_ID
+    LEFT JOIN `rong-manage`.tb_raised_fund_current_nav_gr f ON a.SECURITY_ID = f.SECURITY_ID
+    LEFT JOIN `tong-rong`.fund_divm g ON a.SECURITY_ID = g.SECURITY_ID
+    LEFT JOIN `rong-manage`.tb_user_pro_fav j ON a.SECURITY_ID = j.security_id AND deltag = FALSE AND j.user_id = #{userId}
+    WHERE (b.SEC_FULL_NAME like #{key} OR b.SEC_SHORT_NAME like #{key})
+    <if test="orderBy != null">
+      ORDER BY ${orderBy}
+    </if>
+    limit #{limitStart},#{limitEnd}
+    ) r,(select @rowno:=#{limitStart}) t
+  </select>
+
+  <select id="getFundInfoSummary" resultMap="TvProduceSummaryMap">
+      SELECT a.SECURITY_ID
+      ,b.SEC_SHORT_NAME
+      ,b.SEC_FULL_NAME
+      ,'公募' as produceType
+      ,c.PARTY_ID
+      ,i.VALUE_NAME_CN INVEST_STRATEGY
+      ,IF(a.OPERATION_MODE='C','开放','封闭') STATUS
+      ,truncate(c.NAV,4) NAV
+      ,DATE_FORMAT(c.END_DATE,'%Y-%m-%d') END_DATE
+      ,e.return_rate_1y as RETURN_RATE_1Y
+      ,e.return_rate_est as RETURN_RATE_EST
+      ,truncate(c.ACCUM_NAV,4) ACCUM_NAV
+      ,concat(truncate(f.ANNUAL_TOTAL_RETURN *100,2),'%') as ANNUAL_TOTAL_RETURN
+      ,concat(truncate(f.MAX_DRAWDOWN *100,2),'%') as MAX_DRAWDOWN
+      ,truncate(f.SHARPE_RATIO,2) SHARPE_RATIO
+      ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+      ,d.PARTY_SHORT_NAME
+      ,d.PARTY_FULL_NAME
+      ,d.PARTY_ID
+      ,g.`NAME`
+      ,c.person_id
+      ,(SELECT count( DISTINCT 1 ) FROM `rong-manage`.tb_direct_store_org WHERE party_id = c.PARTY_ID) storeUser
+      ,(CASE WHEN j.id IS NOT NULL THEN TRUE ELSE FALSE END) fav
+      FROM
+      `tong-rong`.fund_class a
+      LEFT JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+      LEFT JOIN `rong-manage`.tb_raised_fund_current_nav c ON a.SECURITY_ID = c.SECURITY_ID
+      LEFT JOIN `tong-rong`.fund_inst_info d ON c.PARTY_ID = d.PARTY_ID
+      LEFT JOIN `rong-manage`.tb_raised_fund_current_nav_gr e ON a.SECURITY_ID = e.SECURITY_ID
+      LEFT JOIN (SELECT a.SECURITY_ID,a.ANNUAL_TOTAL_RETURN,a.MAX_DRAWDOWN,a.SHARPE_RATIO FROM `tong-rong`.fund_perf_indic2 a,
+      (SELECT MAX(ID) ID FROM `tong-rong`.fund_perf_indic2 WHERE SECURITY_ID = #{securityId} AND WINDOW = 8) b
+      WHERE a.ID = b.ID) f ON a.SECURITY_ID = f.SECURITY_ID
+      LEFT JOIN `tong-rong`.md_people g ON c.person_id = g.PERSON_ID
+      LEFT JOIN `tong-rong`.fund_type h ON a.SECURITY_ID = h.SECURITY_ID AND h.CODE_TYPE_ID = 40123
+      LEFT JOIN `tong-rong`.sys_code i ON h.VALUE_NUM_CD = i.VALUE_NUM_CD
+      LEFT JOIN `rong-manage`.tb_user_pro_fav j ON a.SECURITY_ID = j.security_id AND deltag = FALSE AND j.user_id = #{userId}
+      WHERE a.SECURITY_ID = #{securityId}
+      limit 1
+  </select>
+
+  <select id="hisNav" resultMap="TvHisNavMap">
+      SELECT
+      a.END_DATE
+      ,truncate(a.NAV,4) NAV
+      ,truncate(a.ACCUM_NAV,4) ADJ_NAV
+      ,truncate(a.ACCUM_NAV,4) ACCUM_NAV
+      ,concat(truncate(c.CHG_PCT,2),'%') as RETURN_RATE
+      ,truncate(b.DIVIDEND_BF_TAX,2) DIVIDEND
+      ,truncate(b.SPLIT_RATIO,2) SPLIT
+      FROM
+      `tong-rong`.fund_nav a
+      LEFT JOIN `tong-rong`.fund_div b ON a.SECURITY_ID = b.SECURITY_ID AND a.END_DATE = b.EFFECT_DATE
+      LEFT JOIN `tong-rong`.fund_nav_chg c ON a.SECURITY_ID = c.SECURITY_ID AND a.END_DATE = c.END_DATE
+      LEFT JOIN `tong-rong`.fund_adj_nav d ON a.SECURITY_ID = d.SECURITY_ID AND a.END_DATE = d.END_DATE
+      WHERE a.SECURITY_ID = #{securityId}
+      ORDER BY a.END_DATE DESC
+      limit #{limitStart},#{limitEnd}
+  </select>
+
+  <select id="hisNavCount" resultType="java.lang.Integer">
+      SELECT COUNT(1)
+      FROM `tong-rong`.fund_nav
+      WHERE SECURITY_ID = #{securityId}
+  </select>
+
+  <select id="hisNavDateBoundary" resultMap="TvDateBoundaryMap">
+      SELECT MAX(END_DATE) endDate
+      ,MIN(END_DATE) startDate
+      FROM `tong-rong`.fund_nav
+      WHERE SECURITY_ID = #{securityId}
+  </select>
+
+  <select id="accumNavTrend" resultMap="TvHisNavMap">
+    SELECT
+    a.END_DATE
+    ,truncate(NAV,4) NAV
+    ,truncate(ADJ_NAV,4) ADJ_NAV
+    ,truncate(ACCUM_NAV,4) ACCUM_NAV
+    ,concat(truncate((b.ADJ_NAV - @startAdjNav) *100,2),'%') adjNavChange
+    ,concat(truncate((a.ACCUM_NAV - @startAccumNav) *100,2),'%') accumNavChange
+    FROM
+    `tong-rong`.fund_nav a
+    LEFT JOIN `tong-rong`.fund_adj_nav b ON a.SECURITY_ID = b.SECURITY_ID AND a.END_DATE = b.END_DATE
+    LEFT JOIN(SELECT @startAccumNav := ACCUM_NAV FROM `tong-rong`.fund_nav WHERE SECURITY_ID = #{securityId}
+    <if test="startDate != null">
+      AND END_DATE >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND END_DATE &lt;= #{endDate}
+    </if>
+    ORDER BY END_DATE
+    LIMIT 1) r ON 1 = 1
+    LEFT JOIN(SELECT @startAdjNav := ADJ_NAV FROM `tong-rong`.fund_adj_nav WHERE SECURITY_ID = #{securityId}
+    <if test="startDate != null">
+      AND END_DATE >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND END_DATE &lt;= #{endDate}
+    </if>
+    ORDER BY END_DATE
+    LIMIT 1) t ON 1 = 1
+    WHERE a.SECURITY_ID = #{securityId}
+    <if test="startDate != null">
+      AND a.END_DATE >= #{startDate}
+    </if>
+    <if test="endDate != null">
+      AND a.END_DATE &lt;= #{endDate}
+    </if>
+    ORDER BY a.END_DATE
+  </select>
+
+  <select id="maxDrawdownTrend" resultMap="TvMaxDrawdownTrendMap">
+      SELECT
+      DATE_FORMAT(END_DATE,'%Y-%m-%d') END_DATE
+      ,concat('-',truncate(MAX_DRAWDOWN *100,2),'%') as MAX_DRAWDOWN
+      FROM `tong-rong`.fund_perf_indic2
+      WHERE SECURITY_ID = #{securityId}
+      AND WINDOW = 1
+      ORDER BY END_DATE
+  </select>
+
+  <select id="maxHisDrawdown" resultMap="TvMaxDrawdownTrendMap">
+      SELECT
+      MAX(a.END_DATE) END_DATE
+      ,concat('-',truncate(MAX(a.MAX_DRAWDOWN) *100,2),'%') as MAX_DRAWDOWN
+      FROM `tong-rong`.fund_perf_indic2 a
+      JOIN (SELECT MAX(MAX_DRAWDOWN) MAX_DRAWDOWN FROM `tong-rong`.fund_perf_indic2 WHERE SECURITY_ID = #{securityId} AND WINDOW = 1) b ON a.MAX_DRAWDOWN = b.MAX_DRAWDOWN
+      WHERE SECURITY_ID = #{securityId}
+      AND WINDOW = 1
+  </select>
+
+  <select id="getIntervalReturn" resultMap="TvIntervalReturnMap">
+      SELECT
+      a.END_DATE
+      ,concat(truncate(a.RETURN_RATE_EST,2),'%') as RETURN_RATE_EST
+      ,concat(truncate(a.RETURN_RATE_YTD,2),'%') as RETURN_RATE_YTD
+      ,concat(truncate(a.RETURN_RATE_1M,2),'%') as RETURN_RATE_1M
+      ,concat(truncate(a.RETURN_RATE_3M,2),'%') as RETURN_RATE_3M
+      ,concat(truncate(a.RETURN_RATE_6M,2),'%') as RETURN_RATE_6M
+      ,concat(truncate(a.RETURN_RATE_1Y,2),'%') as RETURN_RATE_1Y
+      ,concat(truncate(a.RETURN_RATE_2Y,2),'%') as RETURN_RATE_2Y
+      ,concat(truncate(a.RETURN_RATE_3Y,2),'%') as RETURN_RATE_3Y
+      ,concat(truncate(a.RETURN_RATE_5Y,2),'%') as RETURN_RATE_5Y
+      FROM
+      `rong-manage`.tb_raised_fund_current_nav_gr a
+      WHERE a.SECURITY_ID = #{securityId}
+  </select>
+
+  <select id="getYearReturn" resultMap="TvYearMonReturnMap">
+      SELECT
+      DATE_FORMAT(a.END_DATE,'%Y') END_DATE
+      ,concat(truncate(a.RETURN_RATE_1Y,2),'%') as NAV_RETURN
+      FROM
+      `tong-rong`.fund_nav_gr a
+      JOIN (SELECT MAX(END_DATE) END_DATE FROM `tong-rong`.fund_nav_gr WHERE SECURITY_ID = #{securityId} AND RETURN_RATE_1Y IS NOT NULL GROUP BY DATE_FORMAT(END_DATE,'%Y')) b ON a.END_DATE = b.END_DATE
+      WHERE a.SECURITY_ID = #{securityId}
+      AND a.RETURN_RATE_1Y IS NOT NULL
+      ORDER BY a.END_DATE DESC
+  </select>
+
+  <select id="getMonReturn" resultMap="TvYearMonReturnMap">
+      SELECT DATE_FORMAT(a.END_DATE,'%Y-%m') END_DATE
+      ,NAV_RETURN
+      FROM
+      (SELECT
+      STR_TO_DATE(concat(`YEAR`,'-',MON,'-01'),'%Y-%m-%d') END_DATE
+      ,concat(truncate(ADJ_NAV_RETURN,2),'%') as NAV_RETURN
+      FROM
+      `tong-rong`.fund_return_freq
+      WHERE SECURITY_ID = #{securityId}
+      AND FREQ = 'M'
+      ORDER BY STR_TO_DATE(concat(`YEAR`,'-',MON,'-01'),'%Y-%m-%d') DESC
+      limit 0,9) a
+      ORDER BY DATE(a.END_DATE);
+  </select>
+
+  <select id="riskAssessment" resultMap="TvRiskAssessmentMap">
+      SELECT
+      a.WINDOW
+      ,a.END_DATE
+      ,concat(truncate(ANNUAL_TOTAL_RETURN *100,2),'%') ANNUAL_TOTAL_RETURN
+      ,concat(truncate(ANNUAL_TOTAL_RISK *100,2),'%') ANNUAL_TOTAL_RISK
+      ,concat(truncate(MAX_DRAWDOWN *100,2),'%') MAX_DRAWDOWN
+      ,concat(truncate(DOWNSIDE_RISK *100,2),'%') DOWNSIDE_RISK
+      ,truncate(SHARPE_RATIO,2) SHARPE_RATIO
+      ,concat(truncate(JENSENS_ALPHA,2),'%') JENSENS_ALPHA
+      ,truncate(SORTINO_RATIO,2) SORTINO_RATIO
+      ,concat(truncate(UP_CAPTURE_RATE *100,2),'%') UP_CAPTURE_RATE
+      ,concat(truncate(DOWN_CAPTURE_RATE *100,2),'%') DOWN_CAPTURE_RATE
+      FROM
+      `tong-rong`.fund_perf_indic2 a
+      JOIN (SELECT WINDOW, MAX(END_DATE) END_DATE FROM `tong-rong`.fund_perf_indic2
+      WHERE SECURITY_ID = #{securityId} AND WINDOW IN (5,6,7,8) GROUP BY WINDOW) b ON a.WINDOW = b.WINDOW AND a.END_DATE = b.END_DATE
+      WHERE SECURITY_ID = #{securityId}
+      AND a.WINDOW IN (5,6,7,8)
+      ORDER BY a.WINDOW
+  </select>
+
+  <select id="fundStyle" resultMap="TvFundStyleMap">
+      SELECT
+      DATE_FORMAT(a.END_DATE,'%Y-%m') END_DATE
+      ,truncate(a.UP_CAPTURE_RATE,2) UP_CAPTURE_RATE
+      ,truncate(a.DOWN_CAPTURE_RATE,2) DOWN_CAPTURE_RATE
+      FROM
+      `tong-rong`.fund_perf_indic2 a
+      JOIN (SELECT MAX(END_DATE) END_DATE FROM `tong-rong`.fund_perf_indic2 WHERE SECURITY_ID = #{securityId} GROUP BY DATE_FORMAT(END_DATE,'%Y%m')) b ON a.END_DATE = b.END_DATE
+      WHERE a.SECURITY_ID = #{securityId}
+      AND a.WINDOW = 1
+      ORDER BY a.END_DATE DESC
+  </select>
+
+  <select id="produceInformation" resultMap="TvProduceInformationMap">
+      SELECT
+      b.SEC_FULL_NAME
+      ,b.SEC_SHORT_NAME
+      ,e.PARTY_FULL_NAME
+      ,e.PARTY_SHORT_NAME
+      ,DATE_FORMAT(a.ESTABLISH_DATE,'%Y-%m-%d') ESTABLISH_DATE
+      ,IF(a.OPERATION_MODE='C','开放','封闭') STATUS
+      ,k.VALUE_NAME_CN PF_STYLE
+      ,concat(ceil(f.TOTAL_SHARE/10000),'万') SCALE_INITIAL
+      ,h.VALUE_NAME_CN INVEST_STRATEGY
+      ,IF(a.IS_CLASS = 0,'否','是') fen
+      ,j.VALUE_NAME_CN CLOSING_DURA_DESC
+      ,(select DATE_FORMAT(max(RESUME_DATE),'%Y-%m-%d') from `tong-rong`.fund_stat where SECURITY_ID = #{securityId}) OPEN_DATE_DESC
+      ,concat(truncate((SELECT MIN_CHAR_RATE FROM `tong-rong`.fund_fee WHERE SECURITY_ID = #{securityId} AND CHARGE_TYPE = 10 LIMIT 1),2),'%') ISSUE_FEE
+      ,concat(truncate((SELECT MIN_CHAR_RATE FROM `tong-rong`.fund_fee WHERE SECURITY_ID = #{securityId} AND CHARGE_TYPE = 12 LIMIT 1),2),'%') REDEEM_FEE
+      ,(SELECT CHARGE_DESC FROM `tong-rong`.fund_fee WHERE SECURITY_ID = #{securityId} AND CHARGE_TYPE = 12 LIMIT 1) CHARGE_DESC
+	  ,concat(truncate((SELECT MIN_CHAR_RATE FROM `tong-rong`.fund_fee WHERE SECURITY_ID = #{securityId} AND CHARGE_TYPE = 15 LIMIT 1),2),'%') MANAGEMENT_FEE
+      ,concat(truncate((SELECT m.CHG FROM `tong-rong`.fund_nav_chg m, (SELECT MAX(ID) ID FROM `tong-rong`.fund_nav_chg  WHERE SECURITY_ID = #{securityId}) n WHERE n.ID = m.ID)*100,2),'%') PERFORMANECE_RETURN
+      FROM
+      `tong-rong`.fund_class a
+      LEFT JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+      LEFT JOIN `tong-rong`.fund d ON a.FUND_ID = d.FUND_ID
+      LEFT JOIN `tong-rong`.md_institution e ON e.PARTY_ID = d.INVESTMENT_ADVISER
+	  LEFT JOIN `tong-rong`.fund_issue f ON a.SECURITY_ID = f.SECURITY_ID
+	  LEFT JOIN `tong-rong`.fund_type g ON a.SECURITY_ID = g.SECURITY_ID AND g.CODE_TYPE_ID =40123
+      LEFT JOIN `tong-rong`.sys_code h ON g.VALUE_NUM_CD = h.VALUE_NUM_CD
+	  LEFT JOIN `tong-rong`.fund_chg_info i ON a.SECURITY_ID = i.SECURITY_ID AND i.CHG_TYPE_CD = '0102'
+	  LEFT JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40061) j ON i.CHG_TYPE_CD = j.VALUE_NUM_CD
+      LEFT JOIN (SELECT CODE_TYPE_ID, VALUE_EN_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40002) k ON d.CATEGORY = k.VALUE_EN_CD
+      WHERE a.SECURITY_ID = #{securityId}
+      limit 1
+  </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFund" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="FUND_ID" property="fundId" jdbcType="BIGINT" />
+    <result column="SEC_FULL_NAME" property="secFullName" jdbcType="VARCHAR" />
+    <result column="SEC_SHORT_NAME" property="secShortName" jdbcType="VARCHAR" />
+    <result column="MANAGEMENT_COMPANY" property="managementCompany" jdbcType="BIGINT" />
+    <result column="CUSTODIAN" property="custodian" jdbcType="BIGINT" />
+    <result column="INVESTMENT_ADVISER" property="investmentAdviser" jdbcType="BIGINT" />
+    <result column="MANAGEMENT_MODE" property="managementMode" jdbcType="VARCHAR" />
+    <result column="CATEGORY" property="category" jdbcType="VARCHAR" />
+    <result column="INDEX_FUND" property="indexFund" jdbcType="VARCHAR" />
+    <result column="ETF_LOF" property="etfLof" jdbcType="VARCHAR" />
+    <result column="IS_QDII" property="isQdii" jdbcType="TINYINT" />
+    <result column="IS_FOF" property="isFof" jdbcType="TINYINT" />
+    <result column="INVEST_TARGET" property="investTarget" jdbcType="VARCHAR" />
+    <result column="PERF_BENCHMARK" property="perfBenchmark" jdbcType="VARCHAR" />
+    <result column="REG_PLACE" property="regPlace" jdbcType="VARCHAR" />
+    <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="PERF_BENCHMARK_EN" property="perfBenchmarkEn" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.fund.module.entity.TbFund" extends="BaseResultMap" >
+    <result column="INVEST_FIELD" property="investField" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFund" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFund" extends="ListResultMap" >
+    <result column="INVEST_FIELD" property="investField" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`FUND_ID`, e.`SEC_FULL_NAME`, e.`SEC_SHORT_NAME`, e.`MANAGEMENT_COMPANY`, 
+    e.`CUSTODIAN`, e.`INVESTMENT_ADVISER`, e.`MANAGEMENT_MODE`, e.`CATEGORY`, e.`INDEX_FUND`, 
+    e.`ETF_LOF`, e.`IS_QDII`, e.`IS_FOF`, e.`INVEST_TARGET`, e.`PERF_BENCHMARK`, e.`REG_PLACE`, 
+    e.`ESTABLISH_DATE`, e.`UPDATE_TIME`, e.`TMSTAMP`, e.`PERF_BENCHMARK_EN`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`INVEST_FIELD`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFund" >
+    select count(1) as recordCount from `tong-rong`.`fund` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFund" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

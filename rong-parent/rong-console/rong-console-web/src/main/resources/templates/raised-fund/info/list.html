@@ -1,0 +1,90 @@
+
+<style type="text/css">
+    .f-left, .comm-item-content .help-tip{float:none !important;margin:0 auto;}
+</style>
+<div class="boxSearch">
+    <div>成立日期：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.establishDate.ge" id="beginEstablishDate" value=''/>
+        ～
+        <input type="text" class="timeSearch" name="e.establishDate.le" id="endEstablishDate" value=''/>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="visibleSelector"
+        >
+
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否推荐：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="recommendSelector"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否热搜：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="hotSearchSelector"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>基金名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="f.secShortName.like" /></div>
+    <div>基金全名：</div>
+    <div><input type="text" value='' class="input textSearch" name="f.secFullName.like" /></div>
+</div>
+<input type="hidden" id="overwite-deltag" value="" />
+<script>
+    param.pageInfo.sortField="e.securityId";
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindHotSearchFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["securityId"],"hotSearch",v);
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["securityId"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["securityId"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                securityId:id
+            }
+        }
+        param[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function () {
+        $('#beginEstablishDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endEstablishDate').getDateValue()})
+            }
+        });
+        $('#endEstablishDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginEstablishDate').getDateValue()})
+            }
+        });
+    });
+</script>

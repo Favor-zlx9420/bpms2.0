@@ -1,0 +1,74 @@
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.visible.eq"
+        >
+
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否推荐：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.recommend.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否热搜：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.hotSearch.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>姓：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.firstName.like" /></div>
+    <div>名：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.lastName.like" /></div>
+</div>
+<div class="boxSearch searchLong">
+    <div>公司：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.company.like" /></div>
+    <div>职位：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.position.like" /></div>
+</div>
+<div class="boxSearch searchLong">
+    <div>手机号码：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.phone.like" /></div>
+</div>
+<script>
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function bindHotSearchFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"hotSearch",v);
+    }
+    function bindRecommendFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+</script>

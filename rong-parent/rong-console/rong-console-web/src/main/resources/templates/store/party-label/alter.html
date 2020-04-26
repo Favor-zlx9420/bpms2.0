@@ -1,0 +1,54 @@
+<script>
+    function setItem(type){
+        var sel = $("#orgInfo");
+        var param = sel.data("param");
+        var val = sel.val();
+        if(!LE.isEmpty(val)){
+            var obj = param.selectedItems;
+            if(null != obj) {
+                $("#partyId").val(obj[0].partyId);
+            }
+        }
+    }
+    alterBindParam = {
+        afterBindFunc:function(entity){
+            $("#labelId").val($("#queryLabelId").val());
+            $("#labelName").html($("#queryLabelName").html());
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.visible" id="visible" value="true" />
+    <input type="hidden" name="entity.recommend" id="recommend" value="false" />
+    <input type="hidden" name="entity.partyId" id="partyId" />
+    <input type="hidden" name="entity.labelId" id="labelId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>标签</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left"><div id="labelName"></div></div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择直营私募机构</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element" style="width:430px;z-index:999;">
+                        <select id="orgInfo"
+                                data-rules="required"
+                                class="validator"
+                                data-load='{"url":"/store/org/simple-list","queryFields":{"mi.partyFullName.like":""},"listFields":{"textField":"partyFullName","valueField":"partyId"},"lazy":true,"readonly":false,"placeHolder":"请输入查询","defaultItem":{"partyId":"","partyFullName":"请输入查询"}}'
+                                data-change="function(){setItem(0);}"
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

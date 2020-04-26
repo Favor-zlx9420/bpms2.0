@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.member.mapper.MemCompanyCreditfileMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.member.module.entity.TbMemCompanyCreditfile" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="INTEGER" />
+    <result column="business_license" property="businessLicense" jdbcType="VARCHAR" />
+    <result column="business_license_urls" property="businessLicenseUrls" jdbcType="VARCHAR" />
+    <result column="business_license_certify_state" property="businessLicenseCertifyState" jdbcType="INTEGER" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="VARCHAR" />
+    <result column="registered_capital_urls" property="registeredCapitalUrls" jdbcType="VARCHAR" />
+    <result column="registered_capital_certify_state" property="registeredCapitalCertifyState" jdbcType="INTEGER" />
+    <result column="car_info" property="carInfo" jdbcType="VARCHAR" />
+    <result column="car_certify_urls" property="carCertifyUrls" jdbcType="VARCHAR" />
+    <result column="car_certify_state" property="carCertifyState" jdbcType="INTEGER" />
+    <result column="estate_info" property="estateInfo" jdbcType="VARCHAR" />
+    <result column="estate_certify_urls" property="estateCertifyUrls" jdbcType="VARCHAR" />
+    <result column="estate_certify_state" property="estateCertifyState" jdbcType="INTEGER" />
+    <result column="stock_fund" property="stockFund" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_urls" property="stockFundCertifyUrls" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_state" property="stockFundCertifyState" jdbcType="INTEGER" />
+    <result column="company_assets" property="companyAssets" jdbcType="VARCHAR" />
+    <result column="company_assets_urls" property="companyAssetsUrls" jdbcType="VARCHAR" />
+    <result column="company_assets_certify_state" property="companyAssetsCertifyState" jdbcType="INTEGER" />
+    <result column="other_info" property="otherInfo" jdbcType="VARCHAR" />
+    <result column="other_info_certify_urls" property="otherInfoCertifyUrls" jdbcType="VARCHAR" />
+    <result column="other_info_certify_state" property="otherInfoCertifyState" jdbcType="INTEGER" />
+    <result column="credit_points" property="creditPoints" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.member.module.view.TvMemCompanyCreditfile" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.member.module.view.TvMemCompanyCreditfile" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`business_license`, e.`business_license_urls`, 
+    e.`business_license_certify_state`, e.`registered_capital`, e.`registered_capital_urls`, 
+    e.`registered_capital_certify_state`, e.`car_info`, e.`car_certify_urls`, e.`car_certify_state`, 
+    e.`estate_info`, e.`estate_certify_urls`, e.`estate_certify_state`, e.`stock_fund`, 
+    e.`stock_fund_certify_urls`, e.`stock_fund_certify_state`, e.`company_assets`, e.`company_assets_urls`, 
+    e.`company_assets_certify_state`, e.`other_info`, e.`other_info_certify_urls`, e.`other_info_certify_state`, 
+    e.`credit_points`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_company_creditfile e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.member.module.query.TsMemCompanyCreditfile" >
+    select count(1) as recordCount from tb_mem_company_creditfile e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.member.module.query.TsMemCompanyCreditfile" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

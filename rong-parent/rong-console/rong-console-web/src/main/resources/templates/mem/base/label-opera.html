@@ -1,0 +1,92 @@
+<script>
+    var submitOpt={};
+    var alterBindParam = {};
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="/mem/base/label-opera">
+    <input type="hidden" name="entity.id" id="id" />
+    <input type="hidden" name="entity.userId" id="userId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择标签</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element" style="width:300px;">
+                        <select name="entity.labelId" id="labelId"
+                                data-rules="required"
+                                class="validator"
+                                data-load='{"url":"/comm/label/dataGrid?&e.type.eq=6&pageInfo.pageSize=200","defaultItem":{"id":"","name":"请选择"}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>是否推荐</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.recommend" id="recommend"
+                               data-text="是|否"
+                               data-value="true|false"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>推荐理由</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.labelReason" id="labelReason" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签0</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-regex="^\S{0,63}$"
+                               data-tip="自定义标签0"
+                               class="input validator" name="entity.labelVar0" id="labelVar0" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签1</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-regex="^\S{0,63}$"
+                               data-tip="自定义标签1"
+                               class="input validator" name="entity.labelVar1" id="labelVar1" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签2</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-regex="^\S{0,63}$"
+                               data-tip="自定义标签2"
+                               class="input validator" name="entity.labelVar2" id="labelVar2" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>自定义标签3</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-regex="^\S{0,63}$"
+                               data-tip="自定义标签3"
+                               class="input validator" name="entity.labelVar3" id="labelVar3" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

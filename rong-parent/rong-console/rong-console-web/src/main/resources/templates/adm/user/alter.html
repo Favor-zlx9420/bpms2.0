@@ -1,0 +1,169 @@
+<script type="text/javascript">
+	var $pwd = null;
+	var $usr = null;
+	var viyTree;
+	var entity=${entity};
+	var pwRegex;
+	var alterBindParam = {
+        afterRenderFunc:function(entity){
+            $usr = $(".comm-alter-form").find("input[data-id=userName]");
+            $pwd = $(".comm-alter-form").find("input[data-id=password]");
+
+            if(entity.id > 0){
+                $usr.val(entity.userName);
+                pwRegex = $pwd.attr("data-regex");
+                $pwd.attr("data-extra-rules","checkEditPwd").removeAttr("data-rules").removeAttr("data-regex");
+            }
+            $('#passwordExpiration').datetimepicker({});
+		},
+		afterCheckFormFunc:function(entity){
+
+            viyTree = new ViyTree({
+                data:${tree},
+                boxSelector:"#permissionTreeBox",
+                checkEvent:true
+            });
+		}
+	}
+	var submitOpt = {
+		wrap:function(req){
+			var entity = req.entity;
+			entity.permissionStr = viyTree.getCheckedValue();
+			entity.userName = $usr.val();
+			var v=$pwd.val();
+			if(v.length > 0){
+				entity.password = $.md5(v);
+			}
+		}
+	};
+	function checkEditPwd(){
+		var v = $pwd.val();
+		if(v.length > 0 && !(new RegExp(pwRegex).test(v))){
+			return $pwd.attr("data-tip");
+		}
+        return ResultStatus.ok;
+	}
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+	<div class="comm-outer-box">
+		<div class="comm-inner-box">
+			<div class="comm-item-box viy-select-item-box">
+				<div class="comm-item-title"><div>选择角色</div></div>
+				<div class="comm-item-content">
+					<div class="f-left select-com-box le-form-element" style="width:300px;">
+						<select name="entity.roleId" id="roleId"
+								data-rules="required"
+								class="validator"
+								data-load='{"url":"/adm/role/dataGrid?&state=1&pageInfo.pageSize=200","defaultItem":{"id":"","name":"请选择"}}'
+						>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>登录账号</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-rules="required"
+							   data-regex="^[a-zA-Z0-9_$]{${admNameMinLen},${admNameMaxLen}}$"
+							   data-tip="用户登录后台的账号,请输入字母/数字或者'_'或'$',长度${admNameMinLen}-${admNameMaxLen}"
+							   class="input validator" data-id="userName"
+							   style="ime-mode:disabled;-ms-ime-mode: disabled;"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>登录密码</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="password"
+							   data-rules="required"
+							   data-regex="^\S{${admPwdMinLen},${admPwdMaxLen}}$"
+							   data-tip="输入登录密码,长度${admPwdMinLen}-${admPwdMaxLen}"
+							   class="input validator" data-id="password" style="ime-mode:disabled;" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>昵称</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-regex="^\S{0,63}$"
+							   data-tip="输入昵称,0-63"
+							   class="input validator" name="entity.nickName" id="nickName" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>真实姓名</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-rules=""
+							   data-tip="输入真实姓名,0-12"
+							   class="input validator" name="entity.realName" id="realName" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>后台用户身份证号码</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-rules="idnumber"
+							   data-tip="输入后台用户身份证号码"
+							   class="input validator" name="entity.idNumber" id="idNumber" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>email</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-rules="email"
+							   data-tip="输入后台用户Email"
+							   class="input validator" name="entity.email" id="email" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>手机</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-rules="phone"
+							   data-tip="输入用户手机"
+							   class="input validator" name="entity.phone" id="phone" />
+					</div>
+				</div>
+			</div>
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>密码过期时间</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<input type="text"
+							   data-tip="密码过期时间"
+							   data-rules="required"
+							   data-bind-function="dateTimeFunc"
+							   class="input validator" name="entity.passwordExpiration" id="passwordExpiration" />
+					</div>
+				</div>
+			</div>
+			<#include  "../../layout/comm-alter-state-item.html" />
+			<div class="comm-item-box">
+				<div class="comm-item-title"><div>权限设置</div></div>
+				<div class="comm-item-content">
+					<div class="f-left">
+						<div id="permissionTreeBox"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include  "../../layout/comm-alter-btn.html" />
+</form>

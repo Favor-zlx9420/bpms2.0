@@ -1,0 +1,96 @@
+<script>
+    var viewParam = {
+        beforeBindFunc:function(entity){
+            if(Consts.CustomerAuditState.待审核 == entity["state"] || Consts.CustomerAuditState.再次提交 == entity["state"]) {
+                $("#auditBtnBox").children().eq(0).attr("data-result",Consts.CustomerAuditState.未通过审核).next().attr("data-result",Consts.CustomerAuditState.通过审核);
+                $("#auditBtnBox .audit-btn").removeClass("hide").click(function () {
+                    var _this = $(this);
+                    var thisk={
+                        form : _this.closest("form"),
+                    };
+                    if (!LET.checkForm(thisk.form)) {
+                        return false;
+                    }
+                    var result = _this.attr("data-result");
+                    var title = _this.find("span").text();
+                    var id = entity.id;
+                    var memo = $("#auditMemo").val();
+                    if(result == Consts.CustomerAuditState.未通过审核 && LE.isEmpty(memo)){
+                        lBox.alert({content:"拒绝原因必填!"})
+                        return false;
+                    }
+                    _audit(title, result, id,memo);
+                }).insertAfter(".ifrcom-btm-btn-box .btn-cancel");
+            }
+        },
+        otherFunc:function(entity){
+            $("#coverImageUrlShow").attr("src",entity["coverImageUrl"]);
+            $("#videoSource").attr("src",entity["videoUrl"]);
+            //参数校验设置
+            LET.intCheckFormTip("#auditWitdrawForm");
+        }
+    };
+</script>
+<form id="auditWitdrawForm" autocomplete="off" class="comm-view-form comm-iframe-form viy-form" action="${auditAction}">
+    <input type="hidden" name="id" id="id" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演标题</div></div>
+                <div class="comm-item-content"><div class="f-left" id="title"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>主讲人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="presenter"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演时间</div></div>
+                <div class="comm-item-content">
+                    <span id="commentUserName"></span>/<span id="showDate" data-bind-function="bindDateTimeFunc"></span>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>所属机构</div></div>
+                <div class="comm-item-content"><div class="f-left" id="orgName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>上传者姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="uploadUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="uploadUserPhone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>上传时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>封面图</div></div>
+                <div class="comm-item-content"><div class="f-left">
+                    <img id="coverImageUrlShow" style="width:320px;height:200px;" />
+                </div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演视频</div></div>
+                <div class="comm-item-content"><div class="f-left">
+                    <video width="320" height="240" controls="controls">
+                        <source id="videoSource">
+                        Your browser does not support the video tag.
+                    </video>
+                </div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>拒绝原因</div></div>
+                <textarea placeholder="拒绝时，拒绝原因必填" id="auditMemo" class="input textarea" cols="80" rows="6"></textarea>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+    <#if hasAuditPermission!false>
+    <div id="auditBtnBox">
+        <div class="viyui-btn viyui-btn-sm viyui-danger hide audit-btn"><i class="icon-ban-circle"></i><span>拒绝</span></div>
+        <div class="viyui-btn viyui-btn-sm hide audit-btn"><i class="icon-check"></i><span>审核通过</span></div>
+    </div>
+</#if>
+</form>

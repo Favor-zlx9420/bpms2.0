@@ -1,0 +1,169 @@
+<script>
+    var alterBindParam={
+        afterRenderFunc:function(entity){
+            $("#ckbChangePwd").click(function(){
+                if($(this).is(":checked")){
+                    jQuery(".change-pwd-item").removeClass("hide").find("input").attr("data-regex","^\\S{${admPwdMinLen},${admPwdMaxLen}}$");
+                }else{
+                    jQuery(".change-pwd-item").addClass("hide").find("input").removeAttr("data-regex");
+                    jQuery("#newPassword").val("");
+                    jQuery("#reNewPassword").val("");
+                }
+            });
+        }
+    }
+    submitOpt = {
+        otherCheck: function () {
+            $("#submit-pwd",alterBindParam.selector).val($.md5($("#in-pwd",alterBindParam.selector).val())).trigger("change");
+            var npwdv=$("#newPassword",alterBindParam.selector).val();
+            if(npwdv.length > 0){
+                $("#submit-new-pwd",alterBindParam.selector).val($.md5(npwdv)).trigger("change");
+            }
+            return true;
+        },successFunc:function(){
+            lBox.closeWin(function(){
+                top.location.href = applicationPath;
+            });
+        }
+    };
+    function checkNewPasswordIsSame(){
+        var $npwd=$("#newPassword");
+        var $rnpwd=$("#reNewPassword");
+        if($npwd.val() != $rnpwd.val()){
+            return "第二次输入的新密码与第一次输入不一致";
+        }
+        //
+        return ResultStatus.ok;
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="sys/info">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户登录名
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <span style="color:#00a0e9;" id="userName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        原后台用户密码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text" style="display:none;" id="name" name="name" />
+                        <input type="password"
+                               data-rules="required"
+                               data-regex="^\S{${admPwdMinLen},${admPwdMaxLen}}$"
+                               data-tip="输入原登录密码，长度[${admPwdMinLen},${admPwdMaxLen}]"
+                               class="input validator" id="in-pwd" style="ime-mode:disabled;" />
+                        <input type="hidden" name="password" id="submit-pwd" />
+                    </div>
+                    <div style="clear:left;">
+                        <label class="viyui-checkbox"><input type="checkbox" id="ckbChangePwd">同时修改密码(密码过期时间：<span id="passwordExpiration" data-bind-function="dateTimeFunc"></span>)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box change-pwd-item hide">
+                <div class="comm-item-title">
+                    <div>
+                        新密码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="password"
+                               data-tip="输入新后台用户密码,长度${admPwdMinLen}-${admPwdMaxLen}"
+                               class="input validator" id="newPassword" style="ime-mode:disabled;" />
+                        <input type="hidden" name="newPassword" id="submit-new-pwd" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box change-pwd-item hide">
+                <div class="comm-item-title">
+                    <div>
+                        重复输入新密码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="password"
+                               data-extra-rules="checkNewPasswordIsSame"
+                               data-tip="输入新后台用户密码,长度${admPwdMinLen}-${admPwdMaxLen}"
+                               class="input validator" id="reNewPassword" style="ime-mode:disabled;" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        昵称
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-regex="^\S{0,20}$"
+                               data-tip="输入后台用户昵称，长度0-20"
+                               class="input validator" name="nickName" id="nickName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        真实姓名
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="^\S{0,20}$"
+                               data-tip="输入真实姓名"
+                               class="input validator" name="realName" id="realName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        email
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="email"
+                               data-tip="输入Email"
+                               maxlength="100"
+                               class="input validator" name="email" id="email" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        后台用户手机/电话
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-rules="phone"
+                               data-tip="输入手机"
+                               class="input validator" name="phone" id="phone" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../layout/comm-alter-btn.html" />
+</form>

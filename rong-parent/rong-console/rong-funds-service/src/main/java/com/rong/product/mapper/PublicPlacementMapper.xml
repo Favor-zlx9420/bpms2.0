@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.product.mapper.PublicPlacementMapper">
+    <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundClass">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="FUND_ID" property="fundId" jdbcType="BIGINT"/>
+        <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT"/>
+        <result column="CLASS_NAME" property="className" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL" property="tickerSymbol" jdbcType="VARCHAR"/>
+        <result column="EXCHANGE_CD" property="exchangeCd" jdbcType="CHAR"/>
+        <result column="CLASS_STATUS" property="classStatus" jdbcType="VARCHAR"/>
+        <result column="EXPIRE_DATE" property="expireDate" jdbcType="DATE"/>
+        <result column="OPERATION_MODE" property="operationMode" jdbcType="VARCHAR"/>
+        <result column="ETF_LOF" property="etfLof" jdbcType="VARCHAR"/>
+        <result column="GUAR_RATIO" property="guarRatio" jdbcType="DECIMAL"/>
+        <result column="GUAR_PERIOD" property="guarPeriod" jdbcType="DECIMAL"/>
+        <result column="IS_GUAR_FUND" property="isGuarFund" jdbcType="TINYINT"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT"/>
+        <result column="IS_CLASS" property="isClass" jdbcType="INTEGER"/>
+        <result column="CLEAR_TYPE" property="clearType" jdbcType="INTEGER"/>
+        <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE"/>
+        <result column="TICKER_SYMBOL_F" property="tickerSymbolF" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL_B" property="tickerSymbolB" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL_SUB" property="tickerSymbolSub" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL_PM" property="tickerSymbolPm" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL_M" property="tickerSymbolM" jdbcType="VARCHAR"/>
+        <result column="SEC_SHORT_NAME_EX" property="secShortNameEx" jdbcType="VARCHAR"/>
+        <result column="TICKER_SYMBOL_EX" property="tickerSymbolEx" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="TvProductManagermentResultMap" type="com.rong.product.module.view.TvProductManagerment">
+        <!--        证券内部编码-->
+        <result column="SECURITY_ID" property="securityId"/>
+        <!--        产品名称-->
+        <result column="SEC_SHORT_NAME" property="productName"/>
+        <!--        近一年年化收益-->
+        <result column="return_of_latest_year" property="annualizedReturns"/>
+        <!--        起投金额-->
+        <result column="SUBSCRIPTION_START_POINT" property="initialDeliveryAmount"/>
+        <!--        存续期限-->
+        <result column="DURATION" property="term"/>
+        <!--        审核状态-->
+        <result column="RECORD_STATUS" property="auditStatus"/>
+        <!--        最新净值-->
+        <result column="nav" property="theLatestNetValue"/>
+        <!--        基金经理-->
+        <result column="NAME" property="fundManager"/>
+        <!--        基金经理ID-->
+        <result column="person_id" property="fundManagerId"/>
+        <!--        最新净值日期-->
+        <result column="end_date" property="theLatestNetValueDate"/>
+        <!--        累计净值-->
+        <result column="accum_nav" property="theCumulativeNetValue"/>
+        <!--        日涨幅-->
+        <result column="DAILYINCREASESDEGREES" property="dailyIncreasesDegrees"/>
+    </resultMap>
+
+    <sql id="Base_Overall_Colum">
+        fc.SECURITY_ID AS SECURITY_ID,
+	    ms.SEC_SHORT_NAME AS SEC_SHORT_NAME,
+	    TRUNCATE ( trfc.nav, 4 ) AS nav,
+	    TRUNCATE ( trfc.accum_nav, 4 ) AS accum_nav,
+	    DATE_FORMAT(trfc.end_date,'%Y-%m-%d') AS end_date,
+	    CONCAT( TRUNCATE ( trfcng.return_rate_1y, 2 ), '%' ) AS return_of_latest_year,
+	    trfc.person_id AS person_id,
+	    mp.`NAME` AS NAME
+    </sql>
+    <select id="count" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(1)
+        from `tong-rong`.fund_class fc
+	LEFT JOIN `tong-rong`.md_security ms ON fc.SECURITY_ID = ms.SECURITY_ID
+	LEFT JOIN `rong-manage`.tb_raised_fund_current_nav trfc ON fc.SECURITY_ID = trfc.SECURITY_ID
+	LEFT JOIN `rong-manage`.tb_raised_fund_current_nav_gr trfcng ON fc.SECURITY_ID = trfcng.SECURITY_ID
+	LEFT JOIN `tong-rong`.md_people mp ON trfc.person_id = mp.person_id
+	LEFT JOIN `rong-manage`.tb_user_pro_fav tupf ON tupf.security_id = fc.security_id
+	AND tupf.deltag = false
+	where tupf.user_id = ${userId} order by trfc.end_date desc;
+    </select>
+    <select id="findThePublicOfferingDetails" resultMap="TvProductManagermentResultMap">
+        select
+        <include refid="Base_Overall_Colum"/>
+        from `tong-rong`.fund_class fc
+        LEFT JOIN `tong-rong`.md_security ms ON fc.SECURITY_ID = ms.SECURITY_ID
+        LEFT JOIN `rong-manage`.tb_raised_fund_current_nav trfc ON fc.SECURITY_ID = trfc.SECURITY_ID
+        LEFT JOIN `rong-manage`.tb_raised_fund_current_nav_gr trfcng ON fc.SECURITY_ID = trfcng.SECURITY_ID
+        LEFT JOIN `tong-rong`.md_people mp ON trfc.person_id = mp.person_id
+        LEFT JOIN `rong-manage`.tb_user_pro_fav tupf ON tupf.security_id = fc.security_id
+        AND tupf.deltag = false
+        where tupf.user_id = ${userId} order by trfc.end_date desc LIMIT ${pageNum},${pageSize};
+    </select>
+    <select id="fundTypeEnquiry" resultType="java.lang.String">
+        SELECT
+	sc.VALUE_NAME_CN
+FROM
+	`tong-rong`.fund f
+	LEFT JOIN `tong-rong`.fund_class fc ON f.FUND_ID = fc.FUND_ID
+	LEFT JOIN `tong-rong`.sys_code sc ON f.CATEGORY = sc.VALUE_EN_CD
+	AND sc.CODE_TYPE_ID = ${strategyCode}
+WHERE
+	fc.SECURITY_ID = ${securityId};
+    </select>
+
+</mapper>

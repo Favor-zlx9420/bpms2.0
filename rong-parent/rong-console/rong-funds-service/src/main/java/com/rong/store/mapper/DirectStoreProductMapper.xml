@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.store.mapper.DirectStoreProductMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.store.module.entity.TbDirectStoreProduct" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="visible" property="visible" jdbcType="BIT" />
+    <result column="recommend" property="recommend" jdbcType="BIT" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.store.module.view.TvDirectStoreProduct" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.store.module.view.TvDirectStoreProduct" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`type`, e.`security_id`, 
+    e.`visible`, e.`recommend`, e.`sort`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.securityId != null">
+        and e.security_id=#{entity.securityId}
+      </if>
+      <if test="entity.type != null">
+        and e.type=#{entity.type}
+      </if>
+      <if test="entity.visible != null">
+        and e.visible=#{entity.visible}
+      </if>
+      <if test="entity.recommend != null">
+        and e.recommend=#{entity.recommend}
+      </if>
+      <if test="entity.deltag != null">
+        and e.deltag=#{entity.deltag}
+      </if>
+    </if>
+    <if test="secFullName != null and secFullName != ''">
+      and ms.SEC_FULL_NAME like concat('%',#{secFullName},'%')
+    </if>
+    <if test="partyFullName != null and partyFullName != ''">
+      and mi.PARTY_FULL_NAME like concat('%',#{partyFullName},'%')
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+
+    ,ms.SEC_SHORT_NAME secShortName
+    ,ms.SEC_FULL_NAME secFullName
+    ,mi.PARTY_SHORT_NAME partyShortName
+    ,mi.PARTY_FULL_NAME partyFullName
+    ,mi.PARTY_ID partyId
+    ,(select ANNUAL_TOTAL_RETURN from `tong-rong`.pfund_perf_indic where security_id=e.security_id and WINDOW=5 order by id desc limit 1) last1YearReturnA
+    ,(select ANNUAL_TOTAL_RISK from `tong-rong`.pfund_perf_indic where security_id=e.security_id and WINDOW=5 order by id desc limit 1) last1YearRisk
+
+    from tb_direct_store_product e
+    left join `tong-rong`.md_security ms on ms.security_id = e.security_id
+    left join `tong-rong`.md_institution mi on mi.party_id = ms.PARTY_ID
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.store.module.query.TsDirectStoreProduct" >
+    select count(1) as recordCount from tb_direct_store_product e
+    left join `tong-rong`.md_security ms on ms.security_id = e.security_id
+    left join `tong-rong`.md_institution mi on mi.party_id = ms.PARTY_ID
+    where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.store.module.query.TsDirectStoreProduct" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

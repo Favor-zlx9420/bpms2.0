@@ -1,0 +1,189 @@
+
+<style type="text/css">
+    .btn-edit-level{
+        width: 5px;
+        padding-left: 5px;
+        position: absolute;
+        top: 6px;
+        left: 70px;
+    }
+</style>
+<style type="text/css">
+    .btn-save-as{display:none !important;}
+</style>
+<script type="text/javascript">
+    var submitOpt={};
+    var alterBindParam = {
+        afterBindFunc:function(entity){
+            levelHistoryGrid = null;
+            var user = ${user};
+            $("#levelHistoryForm").find("#queryUserId").val(user.id);
+            new LET.Tab(".tab-panel-box");
+            LET.dataBind(".mem-box",user);
+            LET.dataBind(".current-level-box",entity);
+            LET.dataBind(".edit-level-box",entity);
+
+
+            $('#beginDate').datetimepicker({
+                onShow: function (ct) {this.setOptions({maxDateTime: $('#endDate').getDateValue()})}
+            });
+            $('#endDate').datetimepicker({
+                onShow: function (ct) {this.setOptions({minDateTime: $('#beginDate').getDateValue()})}
+            });
+
+            $(".btn-submit").width("39px").appendTo("#operaBox");
+            $(".btn-submit").click(function(){
+                submitOfJson.call(this);
+            });
+            $(".btn-edit-level").click(function(){
+                $(".edit-level-box").removeClass("hide");
+            });
+        },
+        afterRenderFunc:function(entity){
+            $("#level option").eq(1).remove();
+        }
+    };
+    var levelHistoryGrid;
+    var levelHistoryParam = {
+        form:"#levelHistoryForm",
+        selected:false,
+        theads:[
+            {
+                tableHeader:"id",
+                sortable:true,
+                rowWidth:70,
+                fieldName:"id"
+            },
+            {
+                tableHeader:"等级",
+                sortable:false,
+                rowWidth:120,
+                fieldName:"level",
+                visibleTemplate:"bindUserLevelFunc"
+            },
+            {
+                tableHeader:"开始时间",
+                sortable:false,
+                rowWidth:140,
+                fieldName:"beginDate"
+            },
+            {
+                tableHeader:"截止时间",
+                sortable:false,
+                rowWidth:140,
+                fieldName:"endDate"
+            },
+            {
+                tableHeader:"创建时间",
+                sortable:false,
+                rowWidth:140,
+                fieldName:"createDate"
+            },
+            {
+                tableHeader:"更新时间",
+                sortable:false,
+                rowWidth:140,
+                fieldName:"updateDate"
+            },
+            {
+                tableHeader:"e",
+                sortable:false,
+                rowWidth:0
+            },
+        ],
+        dataList:[]
+    };
+    //延迟加载
+    function showLevelHistory(){
+        if(null == levelHistoryGrid) {
+            levelHistoryGrid = $("#levelHistoryGrid").dataGrid(levelHistoryParam);
+            levelHistoryGrid.reload();
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="/mem/base/level-opera">
+    <div class="tab-panel-box" data-control="#tabContent">
+        <div class="tab"><i class="icon icon-star"></i>用户以及等级信息</div>
+        <div class="tab"data-event="showLevelHistory"><i class="icon icon-pencil"></i>历史等级记录</div>
+    </div>
+    <div class="tab-content-box comm-outer-box" id="tabContent">
+        <div class="comm-inner-box tab-content-comm-item">
+            <div class="comm-item-box mem-box">
+                <div class="comm-item-title"><div>用户名/姓名</div></div>
+                <div class="comm-item-content"><span id="userName"></span>/<span id="realName"></span></div>
+            </div>
+            <div class="current-level-box">
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>当前等级</div></div>
+                    <div class="comm-item-content">
+                        <div data-bind-id="level" data-bind-function="bindUserLevelFunc"></div>
+                        <div class="viyui-btn viyui-btn-xs btn-edit-level"><i class="icon-pencil"></i></div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>开始时间</div></div>
+                    <div class="comm-item-content"><div data-bind-id="beginDate" data-bind-function="dateTimeFunc"></div></div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>截止时间</div></div>
+                    <div class="comm-item-content"><div data-bind-id="endDate" data-bind-function="dateTimeFunc"></div></div>
+                </div>
+            </div>
+            <div class="edit-level-box hide">
+                <input type="hidden" data-bind-id="id" name="entity.id" />
+                <input type="hidden" data-bind-id="userId" name="entity.userId" />
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>当前等级</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <select name="entity.level"
+                                    id="level"
+                                    class="validator no-render had-edit"
+                                    data-rules="required"
+                                    data-enumber="Consts.MemLevel"
+                                    data-load='{"defaultItem":{"请选择":""}}'
+                            >
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>开始时间</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-tip="开始时间"
+                                   data-rules="required"
+                                   data-bind-function="dateTimeFunc"
+                                   class="input validator had-edit" name="entity.beginDate" id="beginDate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>截止时间</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <input type="text"
+                                   data-tip="截止时间,如果想将某个用户vip取消，只需将时间设置比当前小即可"
+                                   data-rules="required"
+                                   data-bind-function="dateTimeFunc"
+                                   class="input validator had-edit" name="entity.endDate" id="endDate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>操作</div></div>
+                    <div class="comm-item-content" id="operaBox">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="levelHistoryGrid" class="comm-inner-box tab-content-comm-item viy-ui-table"></div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>
+<form id="levelHistoryForm" name="levelHistoryForm" action="/mem/level/dataGrid" method="post">
+    <input type="hidden" name="e.userId.eq" id="queryUserId" />
+    <input type="hidden" name="e.deltag.eq" value="true" />
+</form>

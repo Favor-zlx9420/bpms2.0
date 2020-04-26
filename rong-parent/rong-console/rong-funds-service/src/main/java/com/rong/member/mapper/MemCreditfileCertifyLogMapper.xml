@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.member.mapper.MemCreditfileCertifyLogMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.member.module.entity.TbMemCreditfileCertifyLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="creditfile_state" property="creditfileState" jdbcType="INTEGER" />
+    <result column="creditfile_type" property="creditfileType" jdbcType="INTEGER" />
+    <result column="relation_links" property="relationLinks" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="adm_user_id" property="admUserId" jdbcType="BIGINT" />
+    <result column="adm_user_name" property="admUserName" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.member.module.view.TvMemCreditfileCertifyLog" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.member.module.view.TvMemCreditfileCertifyLog" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`member_id`, e.`creditfile_state`, 
+    e.`creditfile_type`, e.`relation_links`, e.`description`, e.`adm_user_id`, e.`adm_user_name`, 
+    e.`memo`, e.`ip`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_creditfile_certify_log e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.member.module.query.TsMemCreditfileCertifyLog" >
+    select count(1) as recordCount from tb_mem_creditfile_certify_log e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.member.module.query.TsMemCreditfileCertifyLog" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

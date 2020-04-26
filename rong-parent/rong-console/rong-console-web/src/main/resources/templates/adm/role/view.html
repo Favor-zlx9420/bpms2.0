@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    var viewParam = {
+        otherFunc:function(entity){
+            new ViyTree({
+                data:${tree},
+                boxSelector:"#permissionTreeBox",
+                checkEvent:false
+            });
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>角色名称</div></div>
+                <div class="comm-item-content"><div class="f-left" id="name"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content"><div class="f-left" id="description"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="state" data-bind-function="commStateFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>拥有权限</div></div>
+                <div class="comm-item-content">
+                    <div id="permissionTreeBox"></div>
+                    <input type="hidden" id="permissionStr" name="permissionStr" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

@@ -1,0 +1,45 @@
+<div class="ifrcom-btm-btn-box">
+    <div class="viyui-btn viyui-btn-sm btn-cancel">返回</div>
+</div>
+<div class="clear-all"></div>
+<script>
+    var _viewParam = {
+        selector:".comm-view-form",
+        dataBindSelector : ".comm-view-form",
+        beforeBindFunc:null,
+        otherFunc:null,
+        data:null
+    };
+    if(typeof viewParam == "object"){
+        $.extend(_viewParam,viewParam);
+    }
+    $(function(){
+        $(".comm-outer-box",_viewParam.selector).css("height",function(){
+            var totalHeight = $(this).closest("form").height();
+            var extHeight = 0;
+            var index = $(this).index();
+            $(this).parent().children("div").each(function(){
+                if($(this).index() != index){
+                    extHeight += $(this).visibleHeight();
+                }
+            });
+            return totalHeight - extHeight;
+        });
+//            .children(".comm-inner-box").width(function(){
+//            return $(this).parent().width() + 24;
+//        });
+        if(null == _viewParam.data){
+            _viewParam.data = ${entity};
+        }
+        if(null != _viewParam.beforeBindFunc){
+            _viewParam.beforeBindFunc(_viewParam.data);
+        }
+        LET.dataBind(_viewParam.dataBindSelector,_viewParam.data);
+        if(null != _viewParam.otherFunc){
+            _viewParam.otherFunc(_viewParam.data);
+        }
+        $(".ifrcom-btm-btn-box .btn-cancel").click(function(){
+            lBox.closeWin();
+        });
+    });
+</script>

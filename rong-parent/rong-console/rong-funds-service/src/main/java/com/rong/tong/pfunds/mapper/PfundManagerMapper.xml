@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundManager" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PERSON_ID" property="personId" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="DATE" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="IS_INCUMBENT" property="isIncumbent" jdbcType="TINYINT" />
+    <result column="ACCESSION_DATE" property="accessionDate" jdbcType="DATE" />
+    <result column="DIMISSION_DATE" property="dimissionDate" jdbcType="DATE" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="TvSearchPfundManagerResultMap" type="com.rong.tong.pfunds.module.view.TvSearchPfundManager">
+    <result column="no" property="no" />
+    <result column="PERSON_ID" property="personId" />
+    <result column="NAME" property="name" />
+    <result column="SECURITY_ID" property="securityId" />
+    <result column="SEC_SHORT_NAME" property="secShortName" />
+    <result column="SEC_FULL_NAME" property="secFullName" />
+    <result column="YEAR" property="year" />
+    <result column="NUM_ALL" property="numAll" />
+    <result column="NUM_DURA" property="numDura" />
+    <result column="PARTY_ID" property="partyId" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" />
+    <result column="totalReturn" property="totalReturn" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundManager" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundManager" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PERSON_ID`, e.`SECURITY_ID`, e.`PUBLISH_DATE`, e.`POSITION`, e.`IS_INCUMBENT`, 
+    e.`ACCESSION_DATE`, e.`DIMISSION_DATE`, e.`UPDATE_TIME`, e.`TMSTAMP`, e.`PARTY_ID`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_manager e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundManager" >
+    select count(1) as recordCount from `tong-rong`.pfund_manager e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundManager" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) from `rong-manage`.tb_private_funds_current_manager_ranking
+	where NAME like #{key}
+  </select>
+  <select id="selectSearchPfundManagerList" resultMap="TvSearchPfundManagerResultMap">
+    SELECT
+    @rowno:=@rowno+1 as no
+    ,r.* from
+    (SELECT
+      PERSON_ID
+      ,NAME
+      ,PARTY_ID
+      ,PARTY_SHORT_NAME
+      ,PARTY_FULL_NAME
+      ,`YEAR`
+      ,NUM_ALL
+      ,SECURITY_ID
+      ,SEC_SHORT_NAME
+      ,SEC_FULL_NAME
+      ,concat(truncate(RETURN_RATE_EST,2),'%') totalReturn
+      FROM `rong-manage`.tb_private_funds_current_manager_ranking
+      WHERE NAME like #{key}
+      <if test="orderBy != null">
+        ORDER BY ${orderBy}
+      </if>
+      limit #{limitStart},#{limitEnd}
+    ) r,(select @rowno:=#{limitStart}) t
+  </select>
+  <select id="getTotalReturn" resultMap="TvSearchPfundManagerResultMap">
+    SELECT
+    concat(truncate(AVG(RETURN_MAN),2),'%') AS totalReturn
+    from `tong-rong`.pfund_man_return
+    WHERE PERSON_ID = #{personId}
+  </select>
+</mapper>

@@ -1,0 +1,47 @@
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>操作栏目</div></div>
+                <div class="comm-item-content"><div class="f-left" id="columnName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>操作人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="userName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>uri</div></div>
+                <div class="comm-item-content"><div class="f-left" id="uri"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>操作状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="state" data-bind-function="logStateFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>ip</div></div>
+                <div class="comm-item-content"><div class="f-left" id="ip"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="time" data-bind-function="dateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>入参</div></div>
+                <div class="comm-item-content"><div class="f-left" id="arguments"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>出参</div></div>
+                <div class="comm-item-content"><div class="f-left" id="returnValue"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>其他参数</div></div>
+                <div class="comm-item-content"><div class="f-left" id="otherArgs"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>操作描述</div></div>
+                <div class="comm-item-content"><div class="f-left" id="operaDesc"></div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.user.mapper.UserOrgReservationMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.user.module.entity.TbUserOrgReservation" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.user.module.view.TvUserOrgReservation" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.user.module.view.TvUserOrgReservation" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`user_id`, e.`party_id`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.userId != null">
+        and e.user_id = #{entity.userId}
+      </if>
+      <if test="entity.deltag != null">
+        and e.deltag = #{entity.deltag}
+      </if>
+      <if test="entity.partyId != null">
+        and e.party_id = #{entity.partyId}
+      </if>
+      <if test="entity.state != null">
+        and e.state = #{entity.state}
+      </if>
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_org_reservation e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.user.module.query.TsUserOrgReservation" >
+    select count(1) as recordCount from tb_user_org_reservation e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.user.module.query.TsUserOrgReservation" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="selectPriOrg" resultType="com.rong.user.module.view.TvUserOrgReservation" parameterType="com.rong.user.module.query.TsUserOrgReservation">
+    -- 我的预约，机构
+    select
+
+    e.id,e.user_id userId,e.party_id partyId,e.state
+    ,mi.PARTY_SHORT_NAME partyShortName
+    ,mi.PARTY_FULL_NAME partyFullName
+    ,(select avg(RETURN_ACCUM) from tb_private_funds_current_income ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) returnAccum
+    ,(select avg(RETURN_A) from tb_private_funds_current_income ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) returnA
+    ,(select avg(NAV) from tb_private_funds_current_nav ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) nav
+
+    ,(select avg(ACCUM_NAV) from tb_private_funds_current_nav ci left join `tong-rong`.md_security s on s.security_id = ci.security_id where s.PARTY_ID=e.party_id order by id desc limit 1) accumNav
+
+    from tb_user_org_reservation e
+    left join `tong-rong`.md_institution mi on mi.PARTY_ID = e.party_id
+    where 1=1
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

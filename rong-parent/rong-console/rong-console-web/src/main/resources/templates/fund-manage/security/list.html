@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <#include  "../../layout/css-js.html" />
+</head>
+<body>
+<form autocomplete="off" id="commQueryForm" name="com_form_action" class="comm-query-form" action="${viewModel.dataGridAction}" method="post" onsubmit="return false;">
+    <div class="s_top_Pannel s-top-btn-box">
+        <#include  "../../layout/ordinary-search-btn.html" />
+    </div>
+    <div id="searchContent" class="tapContentBox search-content singleSearchBox">
+
+        <style type="text/css">
+            .list-btn{float:right;width:40px !important;margin-left:5px;}
+        </style>
+        <div class="box-search">
+            <div>成立日期：
+                <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.establishDate.gt" id="beginCreateDate" value=''/>
+                ~
+                <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.establishDate.lt" id="endCreateDate" value=''/>
+            </div>
+        </div>
+        <div class="box-search">
+            <div>产品名称：<input placeholder="请输入产品名称" type="text" value='' class="input textSearch w189" name="securityName" /></div>
+        </div>
+        <div class="box-search">
+            <div>机构名称：<input placeholder="请输入机构名称" type="text" value='' class="input textSearch w189" name="partyName" /></div>
+        </div>
+        <div class="clear"></div>
+        <div class="box-search">
+            <div>显示状态：
+                <select class="selSearch no-render w194" name="visible">
+                    <option value="">全部</option>
+                    <option value="true">显示</option>
+                    <option value="false">隐藏</option>
+                </select>
+            </div>
+        </div>
+        <div class="box-search">
+            <div>投资策略：<select class="selSearch no-render w194" name="investStrategy">
+                <option value="">全部</option>
+                <option value="1">股票策略</option>
+                <option value="2">复合策略</option>
+                <option value="3">宏观策略</option>
+                <option value="4">事件驱动</option>
+                <option value="5">组合基金</option>
+                <option value="6">债券策略</option>
+                <option value="7">管理期货</option>
+                <option value="8">复合策略</option>
+                <option value="9">其他策略</option>
+            </select>
+            </div>
+        </div>
+        <div class="box-search">
+            <div>产品类型：<select class="selSearch no-render w194" name="type">
+                <option value="0">私募</option>
+                <option value="2">公募</option>
+            </select>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="box-search">
+            <div>基金性质：
+                <select class="selSearch no-render w194" name="securityType" >
+                    <option value="">全部</option>
+                    <option value="指数型">指数型</option>
+                    <option value="股票型">股票型</option>
+                    <option value="债券型">债券型</option>
+                    <option value="混合型">混合型</option>
+                    <option value="QDII基金">QDII基金</option>
+                    <option value="货币型">货币型</option>
+                    <option value="超短期理财产品">超短期理财产品</option>
+                </select>
+            </div>
+        </div>
+        <script>
+            ifwin.width = 800;
+            ifwin.height = 600;
+            ifwin.showView = false;
+            param.pageInfo.sortField="e.securityId";
+            function showEditInfo(tr, v, i) {
+                var html = "";
+                html += "<a class='btn-list-view' style='margin-right:5px;' data-id='" + tr["securityId"] + "'>查看详情</a>";
+                return html;
+            }
+            function bindDurationFunc(tr,v,i){
+                if(LE.isEmpty(v)){
+                    return "-";
+                }
+                return v + "月";
+            }
+            function bindRiskRatingFunc(tr,v,i){
+                return "-";
+            }
+            function bindScaleInitialFunc(tr,v,i){
+                if(LE.isEmpty(v)){
+                    return "-";
+                }
+                return v + "万";
+            }
+            function bindTypeFunc(tr,v,i){
+                return v == "0" ? "私募":"公募";
+            }
+            function bindVisibleFunc(tr,v,i){
+                return defaultBindSwitchItem(tr["securityId"],"visible",v);
+            }
+            function editItem(securityId,item,value){
+                var param = {
+                    url:"${viewModel.editAction}",
+                    entity:{
+                        securityId:securityId
+                    }
+                }
+                param.entity[item] = value;
+                editParam(param);
+            }
+            $(document).ready(function() {
+                $('#beginCreateDate').datetimepicker({
+                    onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+                });
+                $('#endCreateDate').datetimepicker({
+                    onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+                });
+            });
+        </script>
+    </div>
+</form>
+<div id="commGrid" class="viy-ui-table com-con-info"></div>
+</body>
+</html>

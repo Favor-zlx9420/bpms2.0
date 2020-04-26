@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.PrivateFundsCurrentIncomeMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbPrivateFundsCurrentIncome" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="return_a" property="returnA" jdbcType="DECIMAL" />
+    <result column="return_accum" property="returnAccum" jdbcType="DECIMAL" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentIncome" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentIncome" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`security_id`, e.`return_a`, e.`return_accum`, e.`end_date`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_private_funds_current_income e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentIncome" >
+    select count(1) as recordCount from tb_private_funds_current_income e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentIncome" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetIncomeTemp">
+    truncate table `rong-manage`.tb_private_funds_current_income_temp;
+    insert into `rong-manage`.tb_private_funds_current_income_temp
+    (security_id,return_a,return_accum,end_date,person_id,party_id)
+    select e.security_id,return_a,return_accum,e.end_date
+    ,(select PERSON_ID from `tong-rong`.pfund_manager where SECURITY_ID=e.SECURITY_ID AND IS_INCUMBENT = 1 limit 1)
+    ,(select INVEST_CONSULTANT from `tong-rong`.pfund where SECURITY_ID=e.SECURITY_ID)
+    from `tong-rong`.pfund_nav_return e
+	,(select max(end_date) end_date,SECURITY_ID from `tong-rong`.pfund_nav_return group by SECURITY_ID)g
+    where e.SECURITY_ID=g.SECURITY_ID and e.END_DATE=g.end_date
+  </update>
+
+  <select id="resetIncomeTempCount" resultType="java.lang.Integer">
+    select count(1) from `rong-manage`.tb_private_funds_current_income_temp
+  </select>
+
+  <update id="resetIncome">
+    truncate table `rong-manage`.tb_private_funds_current_income;
+    insert into `rong-manage`.tb_private_funds_current_income
+    select * from `rong-manage`.tb_private_funds_current_income_temp
+  </update>
+</mapper>

@@ -1,0 +1,483 @@
+<style type="text/css">
+    #com_form_action_afile,#com_form_action_afile .com_con_info_ifr{height:100%;overflow:hidden;}
+    #com_form_action_afile #file-tab-content{height:78%;overflow-y:auto;}
+
+    #com_form_action_afile div#imgSelectBoxDiv{margin:5px 0;}
+    #com_form_action_afile .select-file select{display:inline;}
+    #com_form_action_afile table.comm-inner-box div#imgPageBox{float:none;clear:both;margin:10px 0;}
+    #imgInfo td div{float:none;}
+    #multiFilesBox img{width:50px;}
+    #com_form_action_afile .comm-inner-box{margin-bottom: 40px;}
+    #com_form_action_afile .comm-inner-box div.remv-img-btn{
+        margin: 0 auto;
+        float: none;
+        width: 80px;}
+    #com_form_action_afile .comm-inner-box div.file-icon-box{float:none;text-align:center;}
+    #com_form_action_afile .comm-inner-box div.file-icon-box .icon{font-size:22px;}
+    #com_form_action_afile .progress-bar-box{width: 130px;
+        display: inline-block;
+        height: 15px;
+        margin-bottom: -3px;
+        border: 1px solid #908d8d;
+        margin-right: 5px;}
+    #com_form_action_afile .progress-bar-box .progress-bar{
+        width: 0%;
+        background: #908d8d;
+        height: 100%;
+    }
+    #com_form_action_afile .multi-img-show-box{width:100%;}
+    #com_form_action_afile .comm-inner-box .page_pri_div{float:none !important;}
+</style>
+<form id="com_form_action_afile" autocomplete="off" class="select-file" method="post" name="com_form_action_afile" enctype="multipart/form-data" action="javascript:return false;">
+     <div id="com_con_info_file" class="com_con_info_ifr">
+        <div class="tab-panel-box tab-panel-box-pic" data-control="#file-tab-content">
+            <div class="tab" data-val="0">上传一个附件</div>
+            <div class="tab hide multi" data-val="1">上传多个附件</div>
+            <div class="tab" data-val="2">选择网络附件</div>
+            <div class="tab" data-val="3">从附件库选择</div>
+        </div>
+        <div style="clear:both;padding-bottom:1px;"></div>
+        <div id="file-tab-content" class="tab-contentbox">
+            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                <tbody>
+                    <tr>
+                        <th width="150px"><div style="height:30px;line-height:30px;">附件说明：</div></th>
+                        <td>
+                            <div style="font-size:14px;font-weight:bold;">标签可以从系统设置->全局设置->标签管理</div>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th><div>文件名称：</div></th>
+                        <td>
+                            <div>
+                            <input
+                                    data-rules="required"
+                                    data-regex="^\S{1,255}$"
+                                    data-tip="长度1-255"
+                                    type="text" class="input" name="name" id="name" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">附件选择：</div></th>
+                        <td>
+                            <div>
+                                <div>
+                                    <input type="text" data-fc="selectFile" class="input" readonly="readonly" />
+                                    <input type="file" onchange="showInfo()" id="imgFile" name="imgFile" style="display:none;" />
+                                    <div class="viyui-btn btn-select-file" data-fc="selectFile"><i class="icon-undo"></i>浏览本地附件</div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">标签选择：</div></th>
+                        <td>
+                             <div id="fileLabelList" class="page_pri_div selected-box"></div>
+                             <input type="hidden" value="" name="labelIds" id="labelIds" />
+                        </td>
+                    </tr>
+                    <tr class="hide" id="imgInfo">
+                        <th width="150px"><div style="height:24px;line-height:26px;">附件信息：</div></th>
+                        <td>
+                            <div>文件名：<span id="fileName"></span></div>
+                            <div>文件大小：<span id="fileSize"></span></div>
+                            <div>文件类型：<span id="fileType"></span></div>
+                            <div>上传进度：<div class="progress-bar-box"><div id="progressBar" class="progress-bar"></div></div><span id="progressHtml">0%</span></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box hide multi" cellpadding="0" cellspacing="2">
+                <tbody>
+                <tr>
+                    <th width="90px"><div style="height:30px;line-height:30px;">附件说明：</div></th>
+                    <td>
+                        <div style="font-size:14px;font-weight:bold;">一次性可以选择多个附件进行上传哟</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">附件选择：</div></th>
+                    <td>
+                        <div>
+                            <div class="viyui-btn viyui-btn-sm" onclick="$('#multiFile').trigger('click');">浏览本地附件</div>
+                            <div class="viyui-btn viyui-btn-sm" style="margin-left:10px;" onclick="bitFileUpload()">点击上传</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">附件信息：</div></th>
+                    <td>
+                        <div class="multi-img-show-box">
+                            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                                <thead>
+                                    <th width="60px">图标</th>
+                                    <th width="180px">附件名称</th>
+                                    <th width="90px">附件大小</th>
+                                    <th>上传进度</th>
+                                    <th width="110px">操作</th>
+                                </thead>
+                                <tbody id="multiFilesBox"></tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><div style="height:24px;line-height:26px;">标签选择：</div></th>
+                    <td>
+                        <div id="imgLabelMultiList" class="page_pri_div selected-box"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box" style="display:none;" cellpadding="0" cellspacing="2">
+                <tbody>
+                    <tr>
+                        <th width="150px"><div style="height:30px;line-height:30px;">链接说明：</div></th>
+                        <td>
+                            <div style="font-size:14px;font-weight:bold;">在下框输入一张网络附件地址，如：<br />http://s0.hao123img.com/index/images/search_logo/web.png</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="150px"><div style="height:24px;line-height:26px;">设置：</div></th>
+                        <td>
+                            <div><input value="http://" type="text" id="input_pic_link" style="width:480px;" name="input_pic_link" class="input validator" /></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box other" style="display:none;"  cellpadding="0" cellspacing="2">
+            <tbody>
+                <tr>
+                    <th width="150px"><div style="height:30px;line-height:30px;">附件说明：</div></th>
+                    <td>
+                        <div style="font-size:14px;font-weight:bold;">可以从已上传的附件中选择附件，<br />可以根据标签搜索不同分类附件</div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div style="height:30px;line-height:30px;">选择标签：</div></th>
+                    <td>
+                        <div style="">
+                        <select id="selPicTag" onchange="getFileList()">
+                            <option value="">所有上传附件</option>
+                        </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div style="height:24px;line-height:26px;">选择附件：</div></th>
+                    <td>
+                        <div id="imgSelectBoxDiv" class="img-list-box"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div id="imgPageBox"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+         <div class="alter-btm-btn-box">
+             <div class="viyui-btn viyui-btn-sm btn-cancel" onclick="lBox.closeWin()">取消</div>
+             <div class="viyui-btn viyui-btn-sm btn-submit" onclick="file_upload()">保存</div>
+         </div>
+    </div>
+</form>
+<form id="multiForm" method="post" name="multiForm" enctype="multipart/form-data" action="javascript:return false;">
+    <input type="file" onchange="preLoadMultiFiles(this)" id="multiFile" multiple="multiple" name="imgFile" style="display:none;" />
+    <input type="hidden" value="" name="labelIds" id="labelMultiIds" />
+</form>
+<script id="imgLabelItemHtml" type="text/html">
+	<a data-val='{id}' data-fc="function(){$(this).toggleClass('selected');}">{name}<i class="icon-zui"></i></a>
+</script>
+<script id="selImgLabelItemHtml" type="text/html">
+	<option value="{id}">{name}</option>
+</script>
+<script id="imgItemHtml" type="text/html">
+	<div class="img-list" data-src="{lmtSrc}"><div data-fc="setPicSelected">{name}</div><i class="icon-zui"></i></div>
+</script>
+<script type="text/javascript">
+    var tmpMultiFiles=null,uploadFiles=null;
+    tmpMultiFiles=[];
+    uploadFiles=[];
+    if (typeof file_upload != "function") {
+        function file_upload() {
+            var it = $(".tab-panel-box-pic .tab.current").attr("data-val");
+            if (it == "0") {
+            	uploadFile();
+            } else if (it == "1") {//多附件上传
+                if(uploadFiles.length == 0){
+                    lBox.alert({content:"未选择附件！"});
+                    return;
+                }
+                addMultiFiles(uploadFiles);
+                lBox.closeWin();
+            } else if (it == "2") {//网址
+                addFile({name:"网络附件",lmtSrc:LE.$("input_pic_link").value});//这个在父窗口定义
+                lBox.closeWin();
+            } else {//图库选择
+                var v = $("#imgSelectBoxDiv div.selected").attr("data-src");
+                var name = $("#imgSelectBoxDiv div.selected").text();
+                if (v == undefined || v.length == 0) {
+               		lBox.alert({content:"未选择附件！"});
+               		return;
+                }
+               	addFile({name:name,lmtSrc:v}); 
+               	lBox.closeWin();
+            }
+        }
+        function showInfo(){
+            var file = document.getElementById('imgFile').files[0];
+            if(null != file){
+                $("#imgInfo").removeClass("hide");
+                $("#fileName").html(file.name);
+                var fileSize = 0;
+                var maxSize = ${maxSize?string("###")};
+                var suffix = "";
+                if (file.size > 1024 * 1024) {
+                    maxSize /=1024;
+                    fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString();
+                    suffix = 'MB';
+                }else {
+                    fileSize = (Math.round(file.size * 100 / 1024) / 100).toString();
+                    suffix = 'KB';
+                }
+                $("#fileSize").html(fileSize+suffix);
+                $("#fileType").html(file.type);
+                if(maxSize < fileSize){
+                    $("#imgFile").val("");
+                    lBox.alert({content:"上传附件大小限制："+maxSize+suffix});
+                    return;
+                }
+            }
+            $("#imgFile").siblings('input').val($("#imgFile").val());
+        }
+        function selectFile(){
+        	$("#imgFile").click();
+        }
+        function uploadFile(){
+        	var v=$("#imgFile").val();
+        	var name = $("#name").val();
+        	if(name.length == 0){
+        		lBox.alert({content:'请输入附件名称'});
+        		$("#name").focus();
+        		return;
+        	}
+        	if(v.length == 0){
+        		lBox.alert({content:'没有找到附件'});
+        		return;
+        	}
+        	$("#labelIds").val(function(){
+        		return $("#fileLabelList .selected").map(function(){return $(this).attr("data-val");}).get().join(",");
+        	});
+        	var upload_path = Dictionary.file_upload_path;
+        	if(upload_path.indexOf("?") == -1){
+        		upload_path += "?";
+        	}
+    		Dictionary.img_upload_dir = "file";
+        	upload_path +="&dir=" + Dictionary.img_upload_dir;
+        	upload_path +="&type=" + Dictionary.img_upload_type;
+        	upload_path +="&resize=0";
+        	upload_path +="&lbIds=" + $("#labelIds").val();
+            var m = lBox.wait({content:"正在操作，请稍后..."});
+        	var options = {
+                url: upload_path,
+                type:"post",
+                dataType:"json",
+                success: function(data){
+                    m.close(function(){
+                        if(checkResultIsOk(data)){
+                            addFile(data.content);
+                            lBox.closeWin();
+                        }
+                    });
+                },
+                xhr:function(){
+                    var xhr = $.ajaxSettings.xhr();
+                    if(onFileSingleProgress && xhr.upload) {
+                        xhr.upload.addEventListener("progress" , onFileSingleProgress, false);
+                        return xhr;
+                    }
+                }
+			};
+			$("#com_form_action_afile").ajaxSubmit(options);
+        }
+        function onFileSingleProgress(evt){
+            //console.log(evt.loaded);  //已经上传大小情况
+            var loaded = evt.loaded;
+            var tot = evt.total;
+            var per = Math.floor(10000*loaded/tot)/100;  //已经上传的百分比
+            $("#progressHtml").html(per+"%");
+            $("#progressBar").css("width",per+"%");
+        }
+        function onFileprogress(fileItem,evt){
+            //console.log(evt.loaded);  //已经上传大小情况
+            var loaded = evt.loaded;
+            var tot = evt.total;
+            var per = Math.floor(10000*loaded/tot)/100;  //已经上传的百分比
+            var box = $("#multiFilesBox .b_item_"+fileItem.index);
+            $(box).find(".progress-html").html(per+"%");
+            $(box).find(".progress-bar").css("width",per+"%");
+        }
+        function getFileList(param){
+        	var tsImageSams={
+        		"pageInfo.pageSize":5,
+        		"pageInfo.pageIndex" : 1,
+        		"entity.sysType" : Consts.SysType.文件类别,
+        		"selLabelId":$("#selPicTag").val()
+        	};
+        	$.extend(tsImageSams,param);
+        	$.get("/comm/imagesams/simlist",tsImageSams,function(res){
+        		//绑定
+        		$("#imgSelectBoxDiv").html("");
+                var pageBox = $("#imgPageBox");
+                var pi = res.content.pageInfo;
+                pi.renderType = 1;
+                pageBox.html(ViyGrid.page(pi));
+                if(!pageBox.is("[data-evented]")){
+                    pageBox.attr("data-evented",true);
+                    ViyGrid.pageEvent(pageBox,{
+                        pageSize:tsImageSams["pageInfo.pageSize"],
+                        page:tsImageSams["pageInfo.pageIndex"]
+                    },function(pageInfo){
+                        getFileList({
+                            "pageInfo.pageSize":pageInfo.pageSize,
+                            "pageInfo.pageIndex" : pageInfo.pageIndex
+                        });
+                    },getFileList);
+                }
+        		repeater("#imgItemHtml","#imgSelectBoxDiv",res.content.list,true);
+        	},"json");
+        }
+        function preLoadMultiFiles(_this){
+            var files = _this.files;
+            var maxSize = ${maxSize?string("###")}*1024;
+            $("#multiFilesBox").html("");
+            tmpMultiFiles=[];
+            for(var i=0;i<files.length;++i){
+                var file = files[i];
+                var sam = getFileSizeSam(file,maxSize);
+                if(sam == 0){
+                    lBox.alert({content:"附件大小为0了哟."});
+                    continue;
+                }
+                if(file.size > maxSize){
+                    lBox.alert({content:"限制上传附件大小为["+sam.maxSizeFmt+sam.suffix+"]了哟"});
+                    continue;
+                }
+                var tr = $("<tr class='b_item_"+i+"'></tr>");
+                //附件预览
+                var typeView = fileTypeIcon[file.type.replace('/','_')];
+                if(null == typeView){
+                    typeView = fileTypeIcon.other;
+                }
+
+                var td = $("<td><div class='file-icon-box' title='"+file.type+"'><i class='icon icon-"+typeView+"' /></div></td>");
+                tmpMultiFiles.push({
+                    file:file,
+                    index:i,
+                    icon:typeView
+                });
+                tr.append(td);
+                //名称
+                tr.append("<td><div>"+file.name+"</div></td>");
+                //大小
+                tr.append("<td><div>"+sam.fileSize+sam.suffix+"</div></td>");
+                //进度
+                tr.append("<td><div><div class='progress-bar-box'><div class='progress-bar'></div></div><span class=\"progress-html\">0%</span></div></td>");
+                //操作
+                tr.append("<td><div class=\"viyui-btn viyui-btn-sm viyui-danger remv-img-btn\" onclick=\"removeFileImt("+i+");\"><i class=\"icon-trash\"></i>移除该附件</div></td>");
+                $("#multiFilesBox").append(tr);
+            }
+            return;
+        }
+        function removeFileImt(index){
+            var tmp = [];
+            for(var i = 0;i<tmpMultiFiles.length;++i){
+                if(index != tmpMultiFiles[i].index){
+                    tmp.push(tmpMultiFiles[i]);
+                }
+            }
+            $("#multiFilesBox .b_item_"+index).remove();
+            tmpMultiFiles = tmp;
+            document.getElementById("multiFile").value = "";
+        }
+        function bitFileUpload(){
+            var multiFile = $("#multiFile");
+            var trs = $("#multiFilesBox tr");
+            if(trs.length == 0){
+                lBox.alert({content:'没有找到附件！'});
+                return;
+            }
+            if(trs.filter(".had-load").length == trs.length){
+                lBox.alert({content:'已经上传完毕，无需再传了哟！'});
+                return;
+            }
+            $("#labelMultiIds").val(function(){
+                return $("#imgLabelMultiList .selected").map(function(){return $(this).attr("data-val");}).get().join(",");
+            });
+            var upload_path = Dictionary.file_upload_path;
+            if(upload_path.indexOf("?") == -1){
+                upload_path += "?";
+            }
+            Dictionary.img_upload_dir = "file";
+            upload_path +="&dir=" + Dictionary.img_upload_dir;
+            upload_path +="&type=" + Dictionary.img_upload_type;
+            upload_path +="&resize=0";
+            upload_path +="&lbIds=" + $("#labelMultiIds").val();
+            var m = lBox.wait({content:"正在操作，请稍后..."});
+            var oks = 0,totals=0;
+            for(var i = 0;i<tmpMultiFiles.length;++i){
+                uploadSingleFile(upload_path,{
+                    name:tmpMultiFiles[i].file.name,
+                    file:tmpMultiFiles[i].file,
+                    index:tmpMultiFiles[i].index,
+                    icon:tmpMultiFiles[i].icon
+                },onFileprogress,function(data,it){
+                    ++totals;
+                    if(checkResultIsOk(data)){
+                        $("#multiFilesBox .b_item_"+it.index).addClass("had-load");
+                        ++oks;
+                        data.content["icon"] = it.icon;
+                        uploadFiles.push(data.content);
+                    }
+                });
+            }
+            var ck = setInterval(function(){
+                if(totals == tmpMultiFiles.length){
+                    m.close(function(){
+                        lBox.ok({content:"上传成功了哟.成功数["+oks+"]"});
+                    });
+                    clearInterval(ck);
+                }
+            });
+        }
+        function getFileListForm(action,act,inHtmlSelector,pageIndex){
+        	if(isNaN(pageIndex) || pageIndex.length == 0 ){
+        		lBox.alert({conent:"页码应为正整数"});return;
+        	}
+        	getFileList({
+        		"pageInfo.pageIndex" : pageIndex
+        	});
+        }
+        function setPicSelected(){
+        	$(this).parent().addClass("selected").siblings().removeClass("selected");
+        }
+    }
+ $(function(){
+ 	//绑定附件标签列表
+     var fileLabelList='${(RequestParameters["labelList"])!""}';
+	repeater("#imgLabelItemHtml","#fileLabelList,#imgLabelMultiList",fileLabelList,false);
+	repeater("#selImgLabelItemHtml","#selPicTag",fileLabelList,true);
+     if('${multi!""}' == "1"){
+         $(".multi").removeClass("hide");
+     };
+	
+	//参数校验设置
+	LET.intCheckFormTip("#com_form_action_afile");
+ 	new LET.Tab(".tab-panel-box-pic");
+ 	getFileList();
+ });
+</script>

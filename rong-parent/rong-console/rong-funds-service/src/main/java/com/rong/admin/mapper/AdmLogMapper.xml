@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.admin.mapper.AdmLogMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.admin.module.entity.TbAdmLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="column_id" property="columnId" jdbcType="BIGINT" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="adm_user_name" property="admUserName" jdbcType="VARCHAR" />
+    <result column="adm_user_id" property="admUserId" jdbcType="BIGINT" />
+    <result column="opera_desc" property="operaDesc" jdbcType="VARCHAR" />
+    <result column="uri" property="uri" jdbcType="VARCHAR" />
+    <result column="return_value" property="returnValue" jdbcType="VARCHAR" />
+    <result column="other_args" property="otherArgs" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.admin.module.entity.TbAdmLog" extends="BaseResultMap" >
+    <result column="arguments" property="arguments" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.admin.module.view.TvAdmLog" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.admin.module.view.TvAdmLog" extends="ListResultMap" >
+    <result column="arguments" property="arguments" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`column_id`, e.`time`, 
+    e.`adm_user_name`, e.`adm_user_id`, e.`opera_desc`, e.`uri`, e.`return_value`, e.`other_args`, 
+    e.`ip`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`arguments`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_log e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.admin.module.query.TsAdmLog" >
+    select count(1) as recordCount from tb_adm_log e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.admin.module.query.TsAdmLog" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

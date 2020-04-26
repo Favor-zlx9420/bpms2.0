@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundLeverageInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundLeverageInfo" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="FUND_ID" property="fundId" jdbcType="BIGINT" />
+    <result column="CATEGORY" property="category" jdbcType="VARCHAR" />
+    <result column="IDX_ID" property="idxId" jdbcType="BIGINT" />
+    <result column="IDX_CN" property="idxCn" jdbcType="VARCHAR" />
+    <result column="SECURITY_M" property="securityM" jdbcType="BIGINT" />
+    <result column="SECURITY_A" property="securityA" jdbcType="BIGINT" />
+    <result column="SECURITY_B" property="securityB" jdbcType="BIGINT" />
+    <result column="A_SHARE" property="aShare" jdbcType="DECIMAL" />
+    <result column="B_SHARE" property="bShare" jdbcType="DECIMAL" />
+    <result column="IS_CONVERT" property="isConvert" jdbcType="TINYINT" />
+    <result column="A_RATIO_IN_TA" property="aRatioInTa" jdbcType="DECIMAL" />
+    <result column="B_RATIO_IN_TA" property="bRatioInTa" jdbcType="DECIMAL" />
+    <result column="MIN_MERGE_M" property="minMergeM" jdbcType="DECIMAL" />
+    <result column="MIN_MERGE_A" property="minMergeA" jdbcType="DECIMAL" />
+    <result column="MIN_MERGE_B" property="minMergeB" jdbcType="DECIMAL" />
+    <result column="MIN_SPLIT_M" property="minSplitM" jdbcType="DECIMAL" />
+    <result column="MIN_SPLIT_A" property="minSplitA" jdbcType="DECIMAL" />
+    <result column="MIN_SPLIT_B" property="minSplitB" jdbcType="DECIMAL" />
+    <result column="ESTABLISH_DATE" property="establishDate" jdbcType="DATE" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="REGULAR_SPLIT_DATE" property="regularSplitDate" jdbcType="DATE" />
+    <result column="UP_THRESHOLD" property="upThreshold" jdbcType="DECIMAL" />
+    <result column="DOWN_THRESHOLD" property="downThreshold" jdbcType="DECIMAL" />
+    <result column="SPLIT_NOTE" property="splitNote" jdbcType="VARCHAR" />
+    <result column="IS_SUB_M" property="isSubM" jdbcType="TINYINT" />
+    <result column="IS_RED_M" property="isRedM" jdbcType="TINYINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="FIXED_RETURN_A" property="fixedReturnA" jdbcType="VARCHAR" />
+    <result column="MAX_APPLY" property="maxApply" jdbcType="DECIMAL" />
+    <result column="MAX_REDEEM" property="maxRedeem" jdbcType="DECIMAL" />
+    <result column="APPLY_PATTERN" property="applyPattern" jdbcType="BIGINT" />
+    <result column="REDEEM_PATTERN" property="redeemPattern" jdbcType="BIGINT" />
+    <result column="IS_FIXED" property="isFixed" jdbcType="TINYINT" />
+    <result column="INITIAL_LEVER" property="initialLever" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundLeverageInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundLeverageInfo" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`FUND_ID`, e.`CATEGORY`, e.`IDX_ID`, e.`IDX_CN`, e.`SECURITY_M`, e.`SECURITY_A`, 
+    e.`SECURITY_B`, e.`A_SHARE`, e.`B_SHARE`, e.`IS_CONVERT`, e.`A_RATIO_IN_TA`, e.`B_RATIO_IN_TA`, 
+    e.`MIN_MERGE_M`, e.`MIN_MERGE_A`, e.`MIN_MERGE_B`, e.`MIN_SPLIT_M`, e.`MIN_SPLIT_A`, 
+    e.`MIN_SPLIT_B`, e.`ESTABLISH_DATE`, e.`END_DATE`, e.`REGULAR_SPLIT_DATE`, e.`UP_THRESHOLD`, 
+    e.`DOWN_THRESHOLD`, e.`SPLIT_NOTE`, e.`IS_SUB_M`, e.`IS_RED_M`, e.`UPDATE_TIME`, 
+    e.`TMSTAMP`, e.`FIXED_RETURN_A`, e.`MAX_APPLY`, e.`MAX_REDEEM`, e.`APPLY_PATTERN`, 
+    e.`REDEEM_PATTERN`, e.`IS_FIXED`, e.`INITIAL_LEVER`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_leverage_info` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundLeverageInfo" >
+    select count(1) as recordCount from `tong-rong`.`fund_leverage_info` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundLeverageInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

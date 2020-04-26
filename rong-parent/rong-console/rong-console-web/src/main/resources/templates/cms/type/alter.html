@@ -1,0 +1,206 @@
+<style type="text/css" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+       xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+       xmlns:v-on="http://www.w3.org/1999/xhtml">
+    #dynItemBox select {
+        display: inline;
+    }
+</style>
+<script type="text/javascript">
+    var submitOpt = {
+        otherPostParams: {
+            delDynIds: [],
+            dyns: []
+        }
+    }
+    helpApp = null;
+    helpApp = new Vue({
+        el: '#dynBox',
+        data: {
+            otherPostParams: submitOpt.otherPostParams
+        },
+        methods: {
+
+            addDyns: function () {
+                var item = {
+                    id: 0,
+                    name: "",
+                    htmlType: 0,
+                    sort: 0.00,
+                    state: 1,
+                    type: 0,
+                    value: ""
+                };
+                var dl = helpApp.otherPostParams.dyns.length;
+                if (dl > 0) {
+                    var lastSort = helpApp.otherPostParams.dyns[dl - 1].sort;
+                    if (!LE.isFloat_2(lastSort)) {
+                        lastSort = 0;
+                    }
+                    item.sort = lastSort + 1;
+                }
+                helpApp.otherPostParams.dyns.push(item);
+                this.setFormTip("#dynBox tr:last");
+            }
+            ,
+            removeItem: function (e) {
+                var index = $(e.target).closest("tr").index();
+                var element = helpApp.otherPostParams.dyns.splice(index, 1)[0];
+                if (element.id != 0) {
+                    submitOpt.otherPostParams.delDynIds[submitOpt.otherPostParams.delDynIds.length] = element.id;
+                }
+            }
+            ,
+            setFormTip: function (selector) {
+                setTimeout(function () {
+                    //参数校验设置
+                    LET.intCheckFormTip();
+                }, 10);
+            }
+        },
+        mounted: function () {
+            this.setFormTip("#dynBox");
+        }
+    });
+    var alterBindParam = {
+        afterBindFunc: function (entity) {
+            if (entity["dyns"] != undefined) {
+                submitOpt.otherPostParams.dyns = entity["dyns"];
+            }
+            new LET.scrollTab(".tab-panel-box-type");
+        }
+    }
+</script>
+<form id="tsesf" autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form"
+      action="${viewModel.alterActionUrl}">
+    <div class="tab-panel-box tab-panel-box-type" data-control="#type_tabContent">
+        <div class="tab">基本属性</div>
+        <div class="tab">扩展属性</div>
+    </div>
+    <div class="comm-outer-box">
+        <input type="hidden" value="0" name="entity.id" id="id"/>
+        <div id="type_tabContent" class="scroll-tab">
+            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                <tbody>
+                <tr class="">
+                    <th width="150px">
+                        <div>类型名称：</div>
+                    </th>
+                    <td>
+                        <div>
+                            <input
+                                    data-rules="required"
+                                    data-regex="^\S{1,127}$"
+                                    data-tip="不可重复,长度1-127,[请勿输入','，'|'等特殊字符串]"
+                                    type="text" class="input validator" name="entity.name" id="name"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th>
+                        <div>状态：</div>
+                    </th>
+                    <td>
+                        <div class="le-form-element switch" style="width:60px;">
+                            <input type="hidden" class="switch" name="entity.state" id="state"
+                                   data-text="正常|无效"
+                                   data-value="1|0"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th>
+                        <div>描述：</div>
+                    </th>
+                    <td>
+                        <div>
+                            <textarea name="entity.description" id="description" class="input textarea"
+                                      style="width:300px;" cols="80" rows="6"></textarea>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                <tbody id="dynBox">
+                <tr>
+                    <th class="scroll-tab-item-title" width="100px" rowspan="2">扩展属性</th>
+                    <td colspan="6">
+                        <div v-on:click="addDyns" class="viyui-btn viyui-btn-sm" style="margin:5px 0;"><i class="icon icon-plus"></i>添加一个扩展属性
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0;">
+                        <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+                            <thead>
+                            <tr style="width:100%;">
+                                <th style="width:265px">
+                                    <div>属性名称</div>
+                                </th>
+                                <th style="width:130px">
+                                    <div style="width:150px">属性类型</div>
+                                </th>
+                                <th>
+                                    <div data-tip="多个选择请用“｜”分割，如“红色，白色，绿色”可输入“红色|白色|绿色”">属性值</div>
+                                </th>
+                                <th style="width:120px">
+                                    <div>排序[最多两位小数]</div>
+                                </th>
+                                <th style="width:40px">
+                                    <div>操作</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="it in otherPostParams.dyns">
+                                <td>
+                                    <div>
+                                        <input data-rules="required" data-tip="长度1-20" data-regex="^\S{1,20}$"
+                                               type="text"
+                                               class="input validator" style="width:120px;" v-model='it.name'/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select v-model='it.htmlType' class="properType no-render">
+                                        <optgroup label="下拉框">
+                                            <option value="0">单选下拉框</option>
+                                            <option value="1">多选下拉框</option>
+                                        </optgroup>
+                                        <optgroup label="输入项">
+                                            <option value="2">单行文本框</option>
+                                            <option value="3">多行文本框</option>
+                                        </optgroup>
+                                        <optgroup label="选择框">
+                                            <option value="4">单选框</option>
+                                            <option value="5">多选框</option>
+                                        </optgroup>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input data-tip="值"
+                                               data-tip-type="1"
+                                               type="text" maxlength="200"
+                                               class="input validator" style="width:180px;" v-model="it.value"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div><input data-tip-type="1" data-rules="required,decimal_2" data-tip=""
+                                                data-bind-function="respInpDecimal_2" type="text" maxlength="10"
+                                                class="validator had-edit" style="width:70px;" v-model="it.sort"/></div>
+                                </td>
+                                <td>
+                                    <div><i class="icon-times" v-on:click="removeItem"></i></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <#include "../../layout/comm-alter-btn.html" />
+</form>

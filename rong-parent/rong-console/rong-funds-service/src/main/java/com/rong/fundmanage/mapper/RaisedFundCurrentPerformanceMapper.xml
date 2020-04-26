@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.RaisedFundCurrentPerformanceMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbRaisedFundCurrentPerformance" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="return_rate_1w" property="returnRate1w" jdbcType="DECIMAL" />
+    <result column="return_rate_1y" property="returnRate1y" jdbcType="DECIMAL" />
+    <result column="stdev" property="stdev" jdbcType="DECIMAL" />
+    <result column="sharpe_ratio" property="sharpeRatio" jdbcType="DECIMAL" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvRaisedFundCurrentPerformance" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvRaisedFundCurrentPerformance" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`security_id`, e.`end_date`, e.`return_rate_1w`, e.`return_rate_1y`, 
+    e.`stdev`, e.`sharpe_ratio`, e.`person_id`, e.`party_id`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_raised_fund_current_performance e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsRaisedFundCurrentPerformance" >
+    select count(1) as recordCount from tb_raised_fund_current_performance e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsRaisedFundCurrentPerformance" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetPerformanceTemp">
+      truncate table `rong-manage`.tb_raised_fund_current_performance_temp;
+      insert into `rong-manage`.tb_raised_fund_current_performance_temp
+      (security_id
+          ,return_rate_1w
+          ,return_rate_1y
+          ,stdev
+          ,sharpe_ratio
+          ,end_date
+      ,person_id,party_id,create_date)
+      select e.security_id
+          ,e.return_rate_1w
+      ,e.return_rate_1y
+      ,e.stdev
+      ,e.sharpe_ratio
+      ,e.end_date
+      ,(select PERSON_ID from `tong-rong`.fund_manager_new where SECURITY_ID=e.SECURITY_ID limit 1)
+      ,(select MANAGEMENT_COMPANY from `tong-rong`.fund_class a,`tong-rong`.fund b where a.SECURITY_ID=e.SECURITY_ID and a.FUND_ID=b.FUND_ID)
+        ,now()
+      from `tong-rong`.fund_performance e,
+      (select max(end_date) end_date,SECURITY_ID from `tong-rong`.fund_performance group by SECURITY_ID)g
+      where e.SECURITY_ID=g.SECURITY_ID and e.END_DATE=g.end_date
+  </update>
+
+    <select id="resetPerformanceTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_raised_fund_current_performance_temp
+    </select>
+
+    <update id="resetPerformance">
+        truncate table `rong-manage`.tb_raised_fund_current_performance;
+        insert into `rong-manage`.tb_raised_fund_current_performance
+        select * from `rong-manage`.tb_raised_fund_current_performance_temp
+    </update>
+</mapper>

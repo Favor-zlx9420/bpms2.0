@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>备忘录列表</title>
+    <#include  "../../layout/css-js.html" />
+    <style type="text/css">
+        .msg-top-1 .favorite,.msg-top-1 #btnSetConditionState{display:none;}
+    </style>
+</head>
+<body>
+<form id="commQueryForm" class="msg-form" name="com_form_action" action="${viewModel.dataGridAction}">
+    <input type="hidden" name="entity.deltag" />
+    <input type="hidden" name="entity.state" id="state" />
+    <input type="hidden" name="endRemindTime" id="endRemindTime" />
+    <div class="s_top_Pannel s-top-btn-box msg-top-1">
+        <#include  "../../layout/ordinary-search-btn.html" />
+        <div class="simp-state">
+            <#list AideMemoireStateDesc as adsd>
+                <div class="viyui-btn viyui-btn-sm msg-state-btn-${adsd.getValue()}" data-state="${adsd.getValue()}"><i class="icon-envelope"></i><span>${adsd.getDesc()}</span></div>
+            </#list>
+            <div class="viyui-btn viyui-btn-sm msg-state-btn--1" data-state=""><i class="icon-tags"></i><span>全部</span></div>
+        </div>
+    </div>
+</form>
+<div id="commGrid" class="viy-ui-table com-con-info msg-table"></div>
+<script>
+    ifwin.height= 450;
+    autoLoadBg = false;
+    param.theads=[
+        {
+            fieldShowName:"id",
+            sortable:false,
+            rowWidth:70,
+            fieldProperName:"id",
+            fieldName:"e.id"
+        },
+        {
+            fieldShowName:"标题",
+            sortable:false,
+            rowWidth:0,
+            fieldProperName:"title",
+            fieldName:"e.title"
+        },
+        {
+            fieldShowName:"提醒时间",
+            sortable:true,
+            rowWidth:160,
+            fieldProperName:"remindTime",
+            fieldName:"e.remind_time"
+        },
+        {
+            fieldShowName:"状态",
+            sortable:true,
+            rowWidth:70,
+            fieldProperName:"stateDesc",
+            fieldName:"e.state",
+            visibleTemplate:stateDescFunc
+        },
+        {
+            fieldShowName:"生成时间",
+            sortable:false,
+            rowWidth:160,
+            fieldProperName:"createDate",
+            fieldName:"e.create_date"
+        }
+    ];
+    var queryEntity=${queryEntity};
+    $(function(){
+        //绑定查询项目
+        LET.dataBindByName("#commQueryForm",queryEntity);
+        $("#commQueryForm .simp-state .viyui-btn").click(function(){
+            var state = $(this).attr("data-state");
+            $("#endRemindTime").val("");
+            $("#commQueryForm").find("#state").val(state);
+            viyGrid.reload();
+        });
+    });
+</script>
+</body>

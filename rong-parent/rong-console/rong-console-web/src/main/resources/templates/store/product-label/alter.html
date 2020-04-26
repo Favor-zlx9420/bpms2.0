@@ -1,0 +1,79 @@
+<script>
+    function setItem(type){
+        var sel = $("#orgInfo");
+        var param = sel.data("param");
+        var val = sel.val();
+        if(!LE.isEmpty(val)){
+            var obj = param.selectedItems;
+            if(null != obj) {
+                $("#securityId").val(obj[0].securityId);
+            }
+        }
+    }
+    alterBindParam = {
+        afterBindFunc:function(entity){
+            $("#labelId").val($("#queryLabelId").val());
+            $("#labelName").html($("#queryLabelName").html());
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.visible" id="visible" value="true" />
+    <input type="hidden" name="entity.recommend" id="recommend" value="false" />
+    <input type="hidden" name="entity.securityId" id="securityId" />
+    <input type="hidden" name="entity.labelId" id="labelId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>标签</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left"><div id="labelName"></div></div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择直营私募产品</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element" style="width:430px;z-index:999;">
+                        <select id="orgInfo"
+                                data-rules="required"
+                                class="validator"
+                                data-tip="如果搜不到产品，可能是暂未将基金产品假如直营店，建议先将该产品加入直营店"
+                                data-load='{"url":"/private-fund/info/simple-list?dsp.id.ge=0","queryFields":{"s.secFullName.like":""},"listFields":{"textField":"secFullName","valueField":"securityId"},"lazy":true,"readonly":false,"placeHolder":"请输入查询","defaultItem":{"securityId":"","secFullName":"请输入查询"}}'
+                                data-change="function(){setItem(0);}"
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>推荐理由</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.labelReason" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>基金标签0</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.labelVar0" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>基金标签1</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.labelVar1" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

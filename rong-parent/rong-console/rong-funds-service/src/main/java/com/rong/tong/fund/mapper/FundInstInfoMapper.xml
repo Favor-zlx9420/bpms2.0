@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundInstInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundInstInfo" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="INTEGER" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" jdbcType="VARCHAR" />
+    <result column="PARTY_SHORT_NAME" property="partyShortName" jdbcType="VARCHAR" />
+    <result column="PARTY_FULL_NAME_EN" property="partyFullNameEn" jdbcType="VARCHAR" />
+    <result column="PARTY_SHORT_NAME_EN" property="partyShortNameEn" jdbcType="VARCHAR" />
+    <result column="REG_DATE" property="regDate" jdbcType="DATE" />
+    <result column="LEGAL_REP" property="legalRep" jdbcType="VARCHAR" />
+    <result column="REG_COUNTRY_CD" property="regCountryCd" jdbcType="CHAR" />
+    <result column="REG_PROVINCE" property="regProvince" jdbcType="VARCHAR" />
+    <result column="REG_CITY" property="regCity" jdbcType="VARCHAR" />
+    <result column="REG_ADDR" property="regAddr" jdbcType="VARCHAR" />
+    <result column="REG_CAP" property="regCap" jdbcType="DECIMAL" />
+    <result column="REG_CAP_CURR_CD" property="regCapCurrCd" jdbcType="CHAR" />
+    <result column="OFFICE_ADDR" property="officeAddr" jdbcType="VARCHAR" />
+    <result column="POST_CODE" property="postCode" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="WEBSITE" property="website" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+    <result column="BOARD_SECRY" property="boardSecry" jdbcType="VARCHAR" />
+    <result column="GEN_MANA" property="genMana" jdbcType="VARCHAR" />
+    <result column="LEGAL_ENTITY_ID" property="legalEntityId" jdbcType="VARCHAR" />
+    <result column="CREDIT_CODE" property="creditCode" jdbcType="VARCHAR" />
+    <result column="PARTY_NATURE_CD" property="partyNatureCd" jdbcType="VARCHAR" />
+    <result column="CLOSE_DATE" property="closeDate" jdbcType="DATE" />
+    <result column="INST_STATUS" property="instStatus" jdbcType="SMALLINT" />
+    <result column="PHOTO" property="photo" jdbcType="VARCHAR" />
+    <result column="PARTY_TYPE" property="partyType" jdbcType="VARCHAR" />
+    <result column="PARTY_SECT" property="partySect" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.fund.module.entity.TbFundInstInfo" extends="BaseResultMap" >
+    <result column="OPA_SCOPE" property="opaScope" jdbcType="LONGVARCHAR" />
+    <result column="PRIME_OPERATING" property="primeOperating" jdbcType="LONGVARCHAR" />
+    <result column="PROFILE" property="profile" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundInstInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundInstInfo" extends="ListResultMap" >
+    <result column="OPA_SCOPE" property="opaScope" jdbcType="LONGVARCHAR" />
+    <result column="PRIME_OPERATING" property="primeOperating" jdbcType="LONGVARCHAR" />
+    <result column="PROFILE" property="profile" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PARTY_ID`, e.`PARTY_FULL_NAME`, e.`PARTY_SHORT_NAME`, e.`PARTY_FULL_NAME_EN`, 
+    e.`PARTY_SHORT_NAME_EN`, e.`REG_DATE`, e.`LEGAL_REP`, e.`REG_COUNTRY_CD`, e.`REG_PROVINCE`, 
+    e.`REG_CITY`, e.`REG_ADDR`, e.`REG_CAP`, e.`REG_CAP_CURR_CD`, e.`OFFICE_ADDR`, e.`POST_CODE`, 
+    e.`EMAIL`, e.`WEBSITE`, e.`TEL`, e.`FAX`, e.`BOARD_SECRY`, e.`GEN_MANA`, e.`LEGAL_ENTITY_ID`, 
+    e.`CREDIT_CODE`, e.`PARTY_NATURE_CD`, e.`CLOSE_DATE`, e.`INST_STATUS`, e.`PHOTO`, 
+    e.`PARTY_TYPE`, e.`PARTY_SECT`, e.`UPDATE_TIME`, e.`TMSTAMP`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`OPA_SCOPE`, e.`PRIME_OPERATING`, e.`PROFILE`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_inst_info` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundInstInfo" >
+    select count(1) as recordCount from `tong-rong`.`fund_inst_info` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundInstInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

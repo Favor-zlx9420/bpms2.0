@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.user.mapper.UserCommentReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.user.module.entity.TbUserCommentReply" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="visible" property="visible" jdbcType="BIT" />
+    <result column="reply_user_id" property="replyUserId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="audit_user_id" property="auditUserId" jdbcType="BIGINT" />
+    <result column="reply_user_name" property="replyUserName" jdbcType="VARCHAR" />
+    <result column="audit_user_name" property="auditUserName" jdbcType="VARCHAR" />
+    <result column="comment_id" property="commentId" jdbcType="BIGINT" />
+    <result column="audit_result" property="auditResult" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.user.module.view.TvUserCommentReply" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.user.module.view.TvUserCommentReply" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`visible`, e.`reply_user_id`, 
+    e.`content`, e.`audit_user_id`, e.`reply_user_name`, e.`audit_user_name`, e.`comment_id`, 
+    e.`audit_result`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_comment_reply e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.user.module.query.TsUserCommentReply" >
+    select count(1) as recordCount from tb_user_comment_reply e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.user.module.query.TsUserCommentReply" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

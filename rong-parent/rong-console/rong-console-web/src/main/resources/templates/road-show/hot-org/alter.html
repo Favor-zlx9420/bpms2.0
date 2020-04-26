@@ -1,0 +1,21 @@
+
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.visible" id="visible" value="true" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box" id="userInfoBox">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>输入机构id</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required,integer"
+                                type="text" class="input validator" name="entity.partyId" id="partyId" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

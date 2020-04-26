@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.PrivateFundsCurrentPerfMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbPrivateFundsCurrentPerf" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="security_id" property="securityId" jdbcType="BIGINT" />
+    <result column="window" property="window" jdbcType="VARCHAR" />
+    <result column="return_of_latest_year" property="returnOfLatestYear" jdbcType="DECIMAL" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="return_of_establish" property="returnOfEstablish" jdbcType="DECIMAL" />
+    <result column="return_of_latest_month" property="returnOfLatestMonth" jdbcType="DECIMAL" />
+    <result column="return_of_this_year" property="returnOfThisYear" jdbcType="DECIMAL" />
+    <result column="risk_of_latest_year" property="riskOfLatestYear" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentPerf" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentPerf" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`security_id`, e.`window`, e.`return_of_latest_year`, e.`end_date`, e.`return_of_establish`, 
+    e.`return_of_latest_month`,e.`return_of_this_year`,e.`risk_of_latest_year`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_private_funds_current_perf e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentPerf" >
+    select count(1) as recordCount from tb_private_funds_current_perf e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentPerf" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetPerfTemp">
+    truncate table `rong-manage`.tb_private_funds_current_perf_temp;
+    insert into `rong-manage`.tb_private_funds_current_perf_temp
+    (security_id,return_of_latest_year,return_of_establish
+    ,return_of_latest_month
+    ,return_of_this_year
+    ,risk_of_latest_year
+    ,sharpe_ratio_1m
+    ,sharpe_ratio_3m
+    ,sharpe_ratio_6m
+    ,sharpe_ratio_1y
+    ,sharpe_ratio_2y
+    ,sharpe_ratio_3y
+    ,sharpe_ratio_est
+    ,sharpe_ratio_ytd
+    ,max_drawdown_est
+    ,update_date,person_id,party_id)
+    select
+    e.security_id,
+    (select annual_total_return from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '5' order by id desc limit 1),
+    (select annual_total_return from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '8' order by id desc limit 1),
+    (select annual_total_return from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '1' order by id desc limit 1),
+    (select annual_total_return from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '4' order by id desc limit 1),
+    (select ANNUAL_TOTAL_RISK from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '5' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '1' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '2' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '3' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '5' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '6' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '7' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '8' order by id desc limit 1),
+    (select sharpe_ratio from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '4' order by id desc limit 1),
+    (select MAX_DRAWDOWN from `tong-rong`.tb_private_funds_current_maxdate_perf where security_id=e.security_id and window = '8' order by id desc limit 1),
+    now()
+    ,(select PERSON_ID from `tong-rong`.pfund_manager where SECURITY_ID=e.SECURITY_ID AND IS_INCUMBENT = 1 limit 1)
+    ,(select INVEST_CONSULTANT from `tong-rong`.pfund where SECURITY_ID=e.SECURITY_ID)
+    from
+    `tong-rong`.pfund e
+  </update>
+
+  <select id="resetPerfTempCount" resultType="java.lang.Integer">
+    select count(1) from `rong-manage`.tb_private_funds_current_perf_temp
+  </select>
+
+  <update id="resetPerf">
+    truncate table `rong-manage`.tb_private_funds_current_perf;
+    insert into `rong-manage`.tb_private_funds_current_perf
+    select * from `rong-manage`.tb_private_funds_current_perf_temp
+  </update>
+</mapper>

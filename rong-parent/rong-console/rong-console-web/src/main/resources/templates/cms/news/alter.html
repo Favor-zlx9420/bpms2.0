@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>添加路演</title>
+    <#include  "../../layout/css-js.html" />
+    <script charset="utf-8" type="text/javascript" src="/contents/scripts/kindeditor/kindeditor.js" ></script>
+    <link rel="stylesheet" href="/contents/scripts/kindeditor/themes/default/default.css" />
+    <style type="text/css">
+        #tableEditorDivBox div{float:none;}/*----------防止编辑器样式问题---- --- ----*/
+        #alter-form .alter-btm-btn-box .viyui-btn{float:left;margin-left:20%;}
+        #alter-form .btn-cancel{float: right !important;margin-right: 46% !important;}
+        .pic-view{height:110px !important;}
+        .pic-view img{min-width:100px;}
+    </style>
+    <script>
+    var _editor=null,current_imgBox = null,current_fileBox = null,editPic = false,editFile = false;
+    var alterBindParam = {
+        afterBindFunc:function(entity){
+            if(entity.id > 0){
+                if(!LE.isEmpty(entity["picList"])){
+                    $("#picSrcShow").attr("src",entity["picList"]);
+                }
+            }
+            $('#displaydate').datetimepicker({});
+            new LET.scrollTab(".tab-panel-box");
+            //编辑器
+            KindEditor.loadScript('/contents/scripts/kindeditor/kindeditor.js?sm', function() {
+                _editor=KindEditor.create('#content',{
+                    uploadJson : Dictionary.file_upload_path,
+                    post_origin : true,
+                    fileManagerJson : '/contents/scripts/kindeditor/asp.net/file_manager_json.ashx',allowFileManager : true,resizeType:0});
+            });
+        }
+    }
+    Dictionary.img_is_resize = "1";
+
+    //图片
+    function setPic(){
+        current_imgBox=$(this).parent();
+        lBox.newWin('设置图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+    }
+    //添加图片
+    function addImg(src){
+        $(current_imgBox).siblings("input").val(src);
+        $("img",current_imgBox).attr("src",src);
+    }
+
+    var submitOpt = {
+        wrap:function(req){
+            //pic
+            var entity = req.entity;
+            entity.content = _editor.html();
+            req.dynList = [];
+        },
+        successFunc:function(){
+            location.href = "/cms/news/list";
+        }
+    };
+    $(function(){
+        $("#commonAlterBox .btn-cancel").click(function(){
+            location.href = "/cms/news/list";
+        });
+    });
+</script>
+</head>
+<body>
+<form autocomplete="off" id="alter-form" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <div class="comm-outer-box">
+        <input type="hidden" value="0" name="entity.id" id="id" />
+        <input type="hidden" value="false" name="entity.changeDyn" id="changeDyn" />
+        <div id="news_tabContent" class="scroll-tab">
+        <table class="comm-inner-box" cellpadding="0" cellspacing="2">
+            <tbody>
+                <tr class="">
+                    <th width="150px"><div>文章标题：</div></th>
+                    <td>
+                        <div>
+                        <input
+                                data-rules="required"
+                                data-regex="^[\s\S]{1,255}$"
+                                data-tip="长度1-255"
+                                type="text" class="input validator longinput" name="entity.title" id="title" />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th><div>文章类型：</div></th>
+                    <td>
+                        <div class="select-com-box le-form-element" style="width:400px;">
+                            <select name="entity.cateId" id="cateId"
+                                    data-load='{"url":"/cms/category/dataGrid?&e.state.eq=1&e.deltag.eq=0&e.parentId.eq=9&pageInfo.pageSize=2000","defaultItem":{"id":"","name":"请选择"}}'
+                            >
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th><div>状态：</div></th>
+                    <td>
+                        <div class="le-form-element switch" style="width:60px;">
+                            <input type="hidden" class="switch" name="entity.state" id="state"
+                                   data-text="显示|隐藏"
+                                   data-value="1|0"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th><div>是否置顶：</div></th>
+                    <td>
+                        <div class="le-form-element switch" style="width:60px;">
+                            <input type="hidden" class="switch" name="entity.top" id="top"
+                                   data-text="是|否"
+                                   data-value="true|false"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th><div>是否精选：</div></th>
+                    <td>
+                        <div class="le-form-element switch" style="width:60px;">
+                            <input type="hidden" class="switch" id="choiceness"
+                                   data-text="是|否"
+                                   data-value="true|false"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th width="150px;"><div>封面图：</div></th>
+                    <td>
+                        <div class="edit_div">
+                            <div class="pic-view">
+                                <img style="cursor: pointer;height:100px;" id="picSrcShow" src="/contents/images/pic1.png" data-fc="function(){setPic.call(this);}" />
+                            </div>
+                            <input type="hidden" id="picList" name="entity.picList" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div>编辑人：</div></th>
+                    <td>
+                        <div>
+	                        <input
+                                    data-rules="required"
+                                    data-regex="^\S{1,63}$"
+                                    data-tip="该文章的实际作者，长度1-63"
+                                    type="text" class="input validator longinput" name="entity.author" id="author" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px"><div>文章来源：</div></th>
+                    <td>
+                        <div>
+	                        <input
+                                    data-rules="required"
+                                    data-regex="^\S{1,127}$"
+                                    data-tip="该文章的来源，长度1-127"
+                                    type="text" class="input validator longinput" name="entity.comeFrom" id="comeFrom" />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th><div>简述：</div></th>
+                    <td>
+                        <div>
+                        <textarea name="entity.description" id="description" class="input textarea longinput" cols="80" rows="6"></textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="">
+                    <th valign="top"><div>内容：</div></th>
+                    <td>
+                    <div id="tableEditorDivBox" style="width:840px;">
+                        <textarea id="content" class="input textarea" style ="width:840px; height:700px; visibility:hidden;"></textarea>
+                    </div>
+                    <div class="editor-height-alter-box">
+                      <div class="editor-height-alter add" title="增加编辑器高度" data-fc="function(){LET.addEditHeight(_editor,'#hidEditHeight',100,940);}">&nbsp;</div>
+                      <div class="editor-height-alter sub" title="降低编辑器高度" data-fc="function(){LET.addEditHeight(_editor,'#hidEditHeight',-100,940);}">&nbsp;</div>
+                      <input type="hidden" id="hidEditHeight" value="700" />
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>
+</body>

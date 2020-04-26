@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.roadshow.mapper.RoadShowInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.roadshow.module.entity.TbRoadShowInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="BIT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="show_date" property="showDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="view_users" property="viewUsers" jdbcType="INTEGER" />
+    <result column="cate_id" property="cateId" jdbcType="BIGINT" />
+    <result column="label_id" property="labelId" jdbcType="BIGINT" />
+    <result column="label_id0" property="labelId0" jdbcType="BIGINT" />
+    <result column="presenter" property="presenter" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="cover_image_url" property="coverImageUrl" jdbcType="VARCHAR" />
+    <result column="doc_url" property="docUrl" jdbcType="VARCHAR" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="upload_user_id" property="uploadUserId" jdbcType="BIGINT" />
+    <result column="audit_user_id" property="auditUserId" jdbcType="BIGINT" />
+    <result column="presenter_introduce" property="presenterIntroduce" jdbcType="VARCHAR" />
+    <result column="show_duration" property="showDuration" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.roadshow.module.view.TvRoadShowInfo" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.roadshow.module.view.TvRoadShowInfo" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`org_id`, 
+    e.`type`, e.`show_date`, e.`view_users`, e.`cate_id`, e.`label_id`, e.`presenter`, 
+    e.`title`, e.`detail`, e.`doc_url`, e.`video_url`, e.`upload_user_id`, e.`audit_user_id`,
+    e.cover_image_url, e.`end_date`,e.`presenter_introduce`,e.`show_duration`,e.`label_id0`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_road_show_info e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.roadshow.module.query.TsRoadShowInfo" >
+    select count(1) as recordCount from tb_road_show_info e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.roadshow.module.query.TsRoadShowInfo" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+
+  <select id="countOrgs" resultType="java.lang.Integer">
+    select count(distinct org_id) from tb_road_show_info
+  </select>
+</mapper>

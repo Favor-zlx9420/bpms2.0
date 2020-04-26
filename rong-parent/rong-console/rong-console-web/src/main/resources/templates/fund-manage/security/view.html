@@ -1,0 +1,78 @@
+<script>
+    $(function(){
+       $("#visible").on("click",".switch-btn",function(){
+            $(this).toggleClass("switch-btn-checked");
+       });
+    });
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>产品名称</div></div>
+                <div class="comm-item-content"><div class="f-left" id="secShortName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>产品全称</div></div>
+                <div class="comm-item-content"><div class="f-left" id="secFullName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>所属机构</div></div>
+                <div class="comm-item-content"><div class="f-left" id="partyShortName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>产品规模</div></div>
+                <div class="comm-item-content"><div class="f-left" id="scaleInitial" data-bind-function="bindScaleInitialFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>投资期限</div></div>
+                <div class="comm-item-content"><div class="f-left" id="duration" data-bind-function="bindDurationFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>风险等级</div></div>
+                <div class="comm-item-content"><div class="f-left" id="riskRating" data-bind-function="bindRiskRatingFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>认购起点</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>付息方式</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>认购时间</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>基金经理</div></div>
+                <div class="comm-item-content"><div class="f-left" id="managerName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>预期年化收益率</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>产品成立时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="establishDate" data-bind-function="bindDateFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>投资策略</div></div>
+                <div class="comm-item-content"><div class="f-left" id="investStrategy"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>显示状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="visible" data-bind-function="bindVisibleFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>申购费率</div></div>
+                <div class="comm-item-content"><div class="f-left"><span id="applyFee"></span>%</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>赎回费率</div></div>
+                <div class="comm-item-content"><div class="f-left"><span id="redeemFee"></span>%</div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

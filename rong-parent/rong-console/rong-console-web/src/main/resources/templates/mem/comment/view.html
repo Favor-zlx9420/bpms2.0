@@ -1,0 +1,29 @@
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>评论类型</div></div>
+                <div class="comm-item-content"><div class="f-left" id="type" data-bind-function="bindTargetTypeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>评论目标</div></div>
+                <div class="comm-item-content"><div class="f-left" id="targetInfo"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户</div></div>
+                <div class="comm-item-content">
+                    <span id="commentUserName"></span>/<span id="realName"></span>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>评论时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>内容</div></div>
+                <div class="comm-item-content"><div class="f-left" id="content"></div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

@@ -1,0 +1,87 @@
+<script type="text/javascript">
+	var alterBindParam = {
+        afterRenderFunc:function(entity){
+            if(entity.id > 0){
+                if(entity["labelIds"] != null){
+                    $("#labelList a").each(function(){
+                        if(LE.in_str(entity.labelIds,$(this).attr("data-val"),",")){
+                            $(this).addClass("selected");
+                        }
+                    });
+                }
+            }
+            $('#remindTime').datetimepicker();
+		}
+	}
+    var submitOpt = {
+        otherCheck: function () {
+            $("#labelIds").val(function () {
+                return $("#labelList .selected").map(function () {
+                    return $(this).attr("data-val");
+                }).get().join(",");
+            });
+            return true;
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+	<div class="comm-outer-box">
+		<table class="comm-inner-box" cellpadding="0" cellspacing="2">
+			<tbody>
+				<tr class="">
+					<th><div>标题：</div></th>
+					<td>
+						<div>
+							<input
+									data-rules="required"
+									data-regex="^\S{1,127}$"
+									data-tip="长度1-127,[请勿输入','，'|'等特殊字符串]"
+									type="text" class="input validator" name="entity.title" id="title" />
+						</div>
+					</td>
+				</tr>
+				<tr class="">
+					<th><div>内容：</div></th>
+					<td>
+						<div>
+							<textarea name="entity.content" id="content" class="input textarea" cols="80" rows="6"></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr class="">
+					<th><div>状态：</div></th>
+					<td>
+						<div class="le-form-element">
+							<#list AideMemoireStateDesc as ams>
+								<label class="viyui-radio"><input data-bind-id="state" name="entity.state" type="radio" value="${ams.getValue()}" />${ams.getDesc()}</label>
+							</#list>
+						</div>
+					</td>
+				</tr>
+				<tr class="">
+					<th><div>提醒时间：</div></th>
+					<td>
+						<div>
+						<input type="text"
+						data-tip="提醒时间"
+						class="input validator" name="entity.remindTime" id="remindTime" />
+						</div>
+					</td>
+				</tr>
+				<tr class="">
+					<th width="150px"><div>标签选择：</div></th>
+					<td>
+						<div id="labelList" class="page_pri_div selected-box">
+							<#list labels as it>
+							<a data-val='${it.id}' data-fc="function(){$(this).toggleClass('selected');}">${it.name}<i class="icon-zui"></i></a>
+							</#list>
+						</div>
+						<input type="hidden" value="" name="entity.labelIds" id="labelIds" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+   </div>
+	<#include  "../../layout/comm-alter-btn.html" />
+</form>

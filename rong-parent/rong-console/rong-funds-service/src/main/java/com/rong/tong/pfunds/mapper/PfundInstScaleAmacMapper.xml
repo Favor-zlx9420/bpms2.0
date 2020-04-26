@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundInstScaleAmacMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundInstScaleAmac" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" jdbcType="VARCHAR" />
+    <result column="MAIN_FUND_TYPE" property="mainFundType" jdbcType="VARCHAR" />
+    <result column="SCALE" property="scale" jdbcType="VARCHAR" />
+    <result column="INST_ID" property="instId" jdbcType="VARCHAR" />
+    <result column="NUM" property="num" jdbcType="INTEGER" />
+    <result column="IS_NEW" property="isNew" jdbcType="INTEGER" />
+    <result column="FETCH_DATE" property="fetchDate" jdbcType="DATE" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstScaleAmac" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstScaleAmac" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PARTY_ID`, e.`PARTY_FULL_NAME`, e.`MAIN_FUND_TYPE`, e.`SCALE`, e.`INST_ID`, 
+    e.`NUM`, e.`IS_NEW`, e.`FETCH_DATE`, e.`UPDATE_TIME`, e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_inst_scale_amac e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstScaleAmac" >
+    select count(1) as recordCount from `tong-rong`.pfund_inst_scale_amac e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstScaleAmac" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

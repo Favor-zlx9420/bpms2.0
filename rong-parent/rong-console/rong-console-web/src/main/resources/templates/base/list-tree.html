@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>${viewModel.title!""}</title>
+    <#include  "../layout/css-js.html" />
+</head>
+<body>
+<form id="treeQueryForm" name="com_form_action" class="comm-query-form tree-query-form" action="${viewModel.dataGridAction}" method="post" onsubmit="return false;">
+    <input type="hidden" id="deltag" name="e.deltag.eq" />
+    <div class="s_top_Pannel s-top-btn-box">
+        <#include  "../layout/ordinary-tree-btn.html" />
+        <#include  "${viewModel.listAction}.html" />
+    </div>
+</form>
+<div id="viyGrid" class="viy-ui-table viy-treetable com-con-info"></div>
+</body>
+</html>

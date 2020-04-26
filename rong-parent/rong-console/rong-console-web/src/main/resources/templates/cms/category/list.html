@@ -1,0 +1,30 @@
+
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+</style>
+<div class="box-search">
+    <div>创建时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>栏目名称：<input placeholder="请输入栏目名称" type="text" value='' class="input textSearch w189" name="e.name.like" /></div>
+</div>
+
+<script>
+    ifwin.width = 800;
+    ifwin.height = 600;
+    ifwin.showView = false;
+    param.pageInfo.sortField="e.id";
+    param.queryParams["e.parentId.eq"] = "9";
+    $(document).ready(function() {
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+    });
+</script>

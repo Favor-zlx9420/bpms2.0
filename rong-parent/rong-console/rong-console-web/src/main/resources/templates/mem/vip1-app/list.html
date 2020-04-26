@@ -1,0 +1,60 @@
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+</style>
+<div class="boxSearch searchLong">
+    <div>审核状态：</div>
+    <div>
+        <select class="selSearch no-render" name="e.auditResult.in" multiple="multiple" size="5"
+                data-enumber="Consts.CustomerAuditState"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>申请时间：</div>
+    <div>
+        <input type="text" class="timeSearch" name="e.createDate.ge" id="beginCreateDate" value=''/>
+        <br />
+        至
+        <br />
+        <input type="text" class="timeSearch" name="e.createDate.le" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="boxSearch">
+    <div>申请用户姓名：</div>
+    <div>
+        <input type="text" value='' class="input textSearch" name="mb.realName.like" />
+        <br />
+        申请用户号码（登录用户名）：
+        <br />
+        <input type="text" value='' class="input textSearch" name="mb.userName.like" />
+    </div>
+</div>
+<script>
+    //初始化信息重写
+    ifwin.width=1250;
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        $(viyGrid.selector).on("click",".list-audit",function(){
+            var _this = $(this);
+            lBox.newWin("审核","${auditAction}?id="+_this.attr("data-id"), ifwin.width, ifwin.height, true);
+        });
+    });
+    function bindAppUserInfo(tr,v,i){
+        return tr["appUserName"]+"/"+tr["appRealName"];
+    }
+    function bindAuditStateFunc(tr,v,i){
+        var html="";
+        if(tr["auditResult"] == Consts.CustomerAuditState.待审核 || tr["auditResult"] == Consts.CustomerAuditState.再次提交){
+            html +="<div class=\"viyui-btn viyui-btn-xs list-btn list-audit\" data-id='"+tr["id"]+"'>审核</div>";
+        }
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.CustomerAuditState,tr["auditResult"])+"</div>";
+        return html;
+    }
+</script>

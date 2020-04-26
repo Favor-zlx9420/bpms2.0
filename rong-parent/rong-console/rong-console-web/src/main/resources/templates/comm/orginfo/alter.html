@@ -1,0 +1,90 @@
+<script type="text/javascript">
+    //图片
+    Dictionary.img_upload_type = "orginfo";
+    Dictionary.img_upload_dir = "img";
+    Dictionary.img_is_resize = "0";
+    function setPic(type){
+        current_imgBox=$(this).siblings(".pic-view");
+        lBox.newWin('设置图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+    }
+    //添加图片
+    function addImg(src){
+        $(current_imgBox).siblings("input").val(src);
+        $("img",current_imgBox).attr("src",src);
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.type" id="type" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>机构名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,255}$"
+                                data-tip="长度1-255,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>机构简称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,128}$"
+                                data-tip="长度1-128,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.shortName" id="shortName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>机构地址</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.area" id="area" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>联系电话/手机</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="tel"
+                                data-tip="机构联系方式"
+                                type="text" class="input validator" name="entity.servicePhone" id="servicePhone" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box hide">
+                <div class="comm-item-title"><div>图片地址</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div class="pic-view"><img id="picSrcShow" src="" /></div>
+                        <div class="viyui-btn viyui-btn-sm btn-select-img" data-fc="function(){setPic.call(this);}">设置图片</div>
+                        <input type="hidden" id="imgSamUrl" name="entity.imgSamUrl" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>机构网址</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^\S{0,255}$"
+                                data-tip="请别忘记加http:// 长度0-255,[a-zA-Z0-9_-]"
+                                type="text" class="input validator" name="entity.netUrl" id="netUrl" />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

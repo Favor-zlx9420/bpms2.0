@@ -1,0 +1,39 @@
+<div class="box-search">
+    <div>反馈时间：
+        <input type="text" placeholder="开始时间" class="timeSearch" name="e.createDate.gt" id="beginCreateDate" value=''/>
+       ~
+        <input type="text" placeholder="结束时间" class="timeSearch" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search searchLong">
+    <div>搜索：<input placeholder="请输入短信手机号码、用户名" type="text" value='' class="input textSearch" name="keyword" /></div>
+</div>
+<script>
+    ifwin.listEditText = "切换";
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        listEdit = function(entity){
+            lBox.confirm({
+                title: "提示",
+                content: "您确定要解除该用户今日短信次数？",
+                btnConfirmFunc: function () {
+                    var param = {
+                        url:"${viewModel.editAction}",
+                        entity:{
+                            id:entity.id
+                        }
+                    }
+                    editParam(param);
+                }
+            });
+        }
+    });
+    function bindMessageFunc(tr,v,i){
+        return "阿里云";
+    }
+</script>

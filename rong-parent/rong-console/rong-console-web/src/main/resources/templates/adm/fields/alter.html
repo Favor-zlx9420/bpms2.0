@@ -1,0 +1,106 @@
+<script>
+    $(function(){
+        $("#commonAlterBox .btn-save-as").removeClass("hide");
+    });
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>栏目id</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required,integer"
+                                type="text" class="input validator" name="entity.columnId" id="columnId" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>表名</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,255}$"
+                                data-tip="长度1-255,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.tableName" id="tableName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>别名</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,127}$"
+                                data-tip="长度1-127,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.tableAlias" id="tableAlias" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>表头名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,127}$"
+                                data-tip="长度1-127,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.tableHeader" id="tableHeader" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>属性名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,127}$"
+                                data-tip="长度1-127,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.fieldName" id="fieldName" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>列值模板或者返回值方法</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules=""
+                                data-regex="^\S{0,127}$"
+                                data-tip="长度0-127,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator" name="entity.visibleTemplate" id="visibleTemplate" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>列宽度</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required,integer"
+                                type="text" class="input validator" name="entity.rowWidth" id="rowWidth" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>是否排序</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:50px;">
+                        <input type="hidden" class="switch" name="entity.sortable" id="sortable"
+                               data-text="是|否"
+                               data-value="true|false"
+                        />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

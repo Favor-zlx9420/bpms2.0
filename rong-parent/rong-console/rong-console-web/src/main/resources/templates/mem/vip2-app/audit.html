@@ -1,0 +1,143 @@
+<script>
+    var alterBindParam = {
+        afterRenderFunc:function(entity){
+            $('#endDate').datetimepicker({
+                onShow: function (ct) {this.setOptions({minDateTime: new Date()})}
+            });
+            $("#pic-bizCardUrl1").attr("src",entity["bizCardUrl1"]);
+            $("#pic-bizCardUrl2").attr("src",entity["bizCardUrl2"]);
+            $("#pic-holdingPhotoUrl1").attr("src",entity["holdingPhotoUrl1"]);
+            $("#pic-holdingPhotoUrl2").attr("src",entity["holdingPhotoUrl2"]);
+            $("#pic-transferInfoUrl1").attr("src",entity["transferInfoUrl1"]);
+            $("#pic-transferInfoUrl2").attr("src",entity["transferInfoUrl2"]);
+            $("#pic-transferInfoUrl3").attr("src",entity["transferInfoUrl3"]);
+            $("#pic-transferInfoUrl4").attr("src",entity["transferInfoUrl4"]);
+        },
+        afterCheckFormFunc:function(entity){
+
+        }
+    }
+    var submitOpt = {
+        otherCheck:function(){
+            var auditResult = $("#auditResult").val();
+            if(auditResult == Consts.CustomerAuditState.通过审核){
+                if(LE.isEmpty($("#endDate").val())){
+                    lBox.alert({content:"请选择截止时间!"})
+                    return false;
+                }
+            }
+            if(!confirm("确定将该用户申请审核为：" + findNameByValueFromConsts(Consts.CustomerAuditState,auditResult) + "吗？")){
+                return false;
+            }
+            return true;
+        },
+        wrap:function(req){
+            var entity = req.entity;
+        }
+    };
+</script>
+<style type="text/css">
+    .comm-alter-form img{height:80px;}
+</style>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${auditAction}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <input type="hidden" name="entity.appUserId" id="appUserId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>用户信息</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><span id="appUserName"></span>/<span id="appRealName"></span></div>
+                    </div>
+                </div>
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>申请时间</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left" id="createDate" data-bind-function="dateTimeFunc"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>名片图片1</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-bizCardUrl1"></div>
+                    </div>
+                </div>
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>名片图片2</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-bizCardUrl2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>手持证件照1</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-holdingPhotoUrl1"></div>
+                    </div>
+                </div>
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>手持证件照2</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-holdingPhotoUrl2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>转账截图1</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-transferInfoUrl1"></div>
+                    </div>
+                </div>
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>转账截图2</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-transferInfoUrl2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>转账截图3</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-transferInfoUrl3"></div>
+                    </div>
+                </div>
+                <div class="f-left w50">
+                    <div class="comm-item-title"><div>转账截图4</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left"><img id="pic-transferInfoUrl4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>审核结果</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.auditResult" id="auditResult"
+                               data-rules="required"
+                               data-text="通过|不通过"
+                               data-value="1|-1"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>蓝V截止时间</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input type="text"
+                               data-tip="蓝V截止时间"
+                               data-bind-function="dateTimeFunc"
+                               class="input validator" name="endDate" id="endDate" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

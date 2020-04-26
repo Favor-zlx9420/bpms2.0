@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>融总管后台管理中心</title>
+    <#include "layout/css-js.html" />
+    <style type="text/css">
+        #main_content_box {
+            /*padding-right: 10px;*/
+        }
+
+        .tree-box .list-row {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .tree-box .list-row span {
+            cursor: pointer;
+        }
+
+        .tree-box i.tree-item.select-tree-state.icon-stack {
+            display: none;
+        }
+
+        div.tree-item-box {
+            float: none;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div id="main_content">
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <img src="/contents/images/con_logo.png"/>
+            <label class="navbar-brand">后台管理系统</label>
+        </div>
+        <div class="collapse navbar-right">
+            <div class="user-box">
+                <img src="/contents/images/admin/admin_head.jpg" />
+                <a id="showName" data-fc="function(){lBox.newWin2('修改个人信息','sys/info',800,500);}"></a>
+            </div>
+            <div class="logout-box">
+                <i class="icon-signout"></i>
+                <a data-fc="logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <div id="main_con_content">
+        <div id="main_con_Left_Nav">
+            <dl id="marin_con_left_Nav_ul"></dl>
+        </div>
+        <div id="main_content_box" class="viyui-tab viyui-tab-card">
+            <div class="root-path">
+                <div>
+                    <span>当前位置：</span>
+                    <span id="firstColumn"></span>>
+                    <span id="secondColumn"></span>
+                </div>
+            </div>
+            <div class="viyui-tab-box hide">
+                <div class="tab-btn pull-left"><i class="icon icon-caret-left"></i></div>
+                <div class="tab-btn pull-right"><i class="icon icon-caret-right"></i></div>
+                <ul class="viyui-tab-title" data-control="#main_tabContent">
+                    <li class='tab'><i class="icon-home"></i>系统首页<i class="icon-caret-down"></i></li>
+                </ul>
+            </div>
+            <div class="viyui-tab-content" id="main_tabContent">
+                <div class="viyui-tab-item" style="display: block;">
+                    <div class="smp-box">
+                        <iframe id="latelyRegisterFrame"></iframe>
+                    </div>
+                    <div class="smp-box">
+                        <iframe id="simpleCalcularFrame"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/html" id="marin_con_left_Nav_ulItems">
+    <dd class="nav-list-item">
+        <a data-id="{id}">{name}<i class="icon icon-chevron-down"></i></a>
+        {subContents}
+    </dd>
+</script>
+<script type="text/html" id="left_sec_items">
+    <dd class="side-list-item" data-parentId="{parentId}">
+        <div><i class="{icon} hide"></i><a data-id="cid_{id}" href="#type={urlLink}?&topcid={id}&cid={id}">{name}</a></div>
+        {subContents}
+    </dd>
+</script>
+<script type="text/javascript">
+    var entity = ${tvAdmin};
+    var columns = ${columns};
+    columns = columns.filter(function (x) {
+        return !x.isBtn && x.visible;
+    }).sort(function (x, y) {
+        return x.sort - y.sort;
+    });
+    $(document).ready(function () {
+        LA.set_wd_ht_auto(LE.$("main_content_box"), $("#second-side"), $("#main_con_Left_Nav"), 0); //高度自动
+        new LET.Tab("#main_content_box .viyui-tab-title");
+        //点击左侧菜单，右边栏显示
+        $("#marin_con_left_Nav_ul").on("click", ".side-list-item a", function () {
+            var _t = $(this);
+            var dd = _t.closest("dd");
+            dd.addClass("active").siblings().removeClass("active");
+            var viyId = _t.attr("data-id");
+            var href;
+            var title = _t.html();
+            if (!_t.is(".tree-text")) {
+                href = _t.attr("href").replace("#type=", "");
+            }
+            loadTab(viyId, href, title);
+            var st = $(this).text();
+            var ft = $(this).closest(".nav-list-item").children("a").text();
+            $("#firstColumn").html(ft);
+            $("#secondColumn").html(st);
+        }).on("click",".nav-list-item > a",function(){
+            $(this).closest("dd").toggleClass("active").siblings().removeClass("active");
+        });
+
+
+        var fcs = columns.filter(function (x) {
+            return x.parentId == 0
+        });
+        repeater("#marin_con_left_Nav_ulItems", "#marin_con_left_Nav_ul", fcs, false, function (item, key) {
+            if(key != 'subContents'){
+                return item[key];
+            }
+
+            var sons = columns.filter(function (x) {
+                return x.parentId == item["id"];
+            });
+            if (sons.length === 0) {
+                return "";
+            }
+            var inHtml = "<dl class='sub-nav-box'>";
+            for (var i in sons) {
+                var html = $("#left_sec_items").html().replace(repeater.reg, function (_m, _key) {
+                    if (_key == "icon" || _key == "subContents") {
+                        return "";
+                    } else if (_key == "hide") {
+                        return "hide";
+                    }
+                    return sons[i][_key];
+                });
+                inHtml += html;
+            }
+            return inHtml + "</dl>";
+
+        });
+
+
+        LET.dataBind("#com_content", entity);
+        $("#showName").html(entity["nickName"]);
+    });
+
+    function loadTab(viyId, href, text) {
+        var box = $("#main_content_box");
+        var titlebox = $(".viyui-tab-title", box);
+        var tag = titlebox.children("[data-viyui-id='" + viyId + "']");
+        if (tag.length == 0) {
+            //top.navM = lBox.wait({content:"正在加载，请稍后..."});
+            //没有，构建iframe
+            var html = '<iframe src="' + applicationPath + href + '" name="' + viyId + '"></iframe>';
+            tag = $('<li class="tab" data-viyui-id="' + viyId + '">' + text + '<i class="icon-caret-down"></i><i class="icon-times close-tab"></i></li>');
+            titlebox.append(tag);
+            $(titlebox.attr("data-control")).append('<div class="viyui-tab-item">' + html + '</div>');
+        }
+        tag.trigger("click");
+    }
+
+    function logout() {
+        lBox.confirm({
+            title: "退出登录提示", content: "是否退出登录?", btnConfirmFunc: function () {
+                top.location.href = applicationPath + '/logout?c=1';
+            }
+        });
+    }
+
+</script>
+</html>

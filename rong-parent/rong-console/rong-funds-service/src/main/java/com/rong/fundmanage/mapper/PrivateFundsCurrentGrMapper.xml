@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.fundmanage.mapper.PrivateFundsCurrentGrMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.fundmanage.module.entity.TbPrivateFundsCurrentGr" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="RETURN_RATE" property="returnRate" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_WTD" property="returnRateWtd" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_1W" property="returnRate1w" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_MTD" property="returnRateMtd" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_1M" property="returnRate1m" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_3M" property="returnRate3m" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_6M" property="returnRate6m" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_YTD" property="returnRateYtd" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_1Y" property="returnRate1y" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_2Y" property="returnRate2y" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_3Y" property="returnRate3y" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_5Y" property="returnRate5y" jdbcType="DECIMAL" />
+    <result column="RETURN_RATE_EST" property="returnRateEst" jdbcType="DECIMAL" />
+    <result column="IS_YEAR" property="isYear" jdbcType="TINYINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+    <result column="party_id" property="partyId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentGr" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.fundmanage.module.view.TvPrivateFundsCurrentGr" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`END_DATE`, e.`RETURN_RATE`, e.`RETURN_RATE_WTD`, e.`RETURN_RATE_1W`, 
+    e.`RETURN_RATE_MTD`, e.`RETURN_RATE_1M`, e.`RETURN_RATE_3M`, e.`RETURN_RATE_6M`, 
+    e.`RETURN_RATE_YTD`, e.`RETURN_RATE_1Y`, e.`RETURN_RATE_2Y`, e.`RETURN_RATE_3Y`, 
+    e.`RETURN_RATE_5Y`, e.`RETURN_RATE_EST`, e.`IS_YEAR`, e.`UPDATE_TIME`, e.`TMSTAMP`, 
+    e.`person_id`, e.`party_id`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_private_funds_current_gr e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentGr" >
+    select count(1) as recordCount from tb_private_funds_current_gr e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.fundmanage.module.query.TsPrivateFundsCurrentGr" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <update id="resetGrTemp">
+    truncate table `rong-manage`.tb_private_funds_current_gr_temp;
+    insert into `rong-manage`.tb_private_funds_current_gr_temp
+    (SECURITY_ID,END_DATE,RETURN_RATE,RETURN_RATE_WTD,RETURN_RATE_1W
+		,RETURN_RATE_MTD,RETURN_RATE_1M,RETURN_RATE_3M,RETURN_RATE_6M,RETURN_RATE_YTD,RETURN_RATE_1Y
+		,RETURN_RATE_2Y,RETURN_RATE_3Y,RETURN_RATE_5Y,RETURN_RATE_EST,IS_YEAR,UPDATE_TIME,TMSTAMP,person_id,party_id)
+    select e.SECURITY_ID,e.END_DATE,RETURN_RATE,RETURN_RATE_WTD,RETURN_RATE_1W
+		,RETURN_RATE_MTD,RETURN_RATE_1M,RETURN_RATE_3M,RETURN_RATE_6M,RETURN_RATE_YTD,RETURN_RATE_1Y
+		,RETURN_RATE_2Y,RETURN_RATE_3Y,RETURN_RATE_5Y,RETURN_RATE_EST,IS_YEAR,UPDATE_TIME,TMSTAMP
+    ,(select PERSON_ID from `tong-rong`.pfund_manager where SECURITY_ID=e.SECURITY_ID limit 1)
+    ,(select INVEST_CONSULTANT from `tong-rong`.pfund where SECURITY_ID=e.SECURITY_ID)
+    from `tong-rong`.pfund_nav_gr e
+    ,(select SECURITY_ID,MAX(END_DATE) END_DATE from `tong-rong`.pfund_nav_gr group by security_id) f
+    where e.SECURITY_ID = f.SECURITY_ID AND e.END_DATE = f.END_DATE
+  </update>
+
+    <select id="resetGrTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_private_funds_current_gr_temp
+    </select>
+
+    <update id="resetGr">
+        truncate table `rong-manage`.tb_private_funds_current_gr;
+        insert into `rong-manage`.tb_private_funds_current_gr
+        SELECT * FROM `rong-manage`.tb_private_funds_current_gr_temp
+    </update>
+
+  <update id="resetYearTemp">
+    truncate table `rong-manage`.tb_private_funds_current_gr_year_temp;
+    insert into `rong-manage`.tb_private_funds_current_gr_year_temp
+    (SECURITY_ID
+		,RETURN_RATE_1A
+		,RETURN_RATE_2A
+		,RETURN_RATE_3A
+		,RETURN_RATE_4A
+		,RETURN_RATE_5A
+		,RETURN_RATE_6A
+		,RETURN_RATE_7A
+		,RETURN_RATE_8A
+		,RETURN_RATE_YTD
+		)
+    select e.SECURITY_ID
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y1}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y2}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y3}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y4}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y5}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y6}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y7}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{y8}, e.RETURN_RATE_YTD, null))
+		,Max(IF(DATE_FORMAT(e.END_DATE,'%Y') = #{nowY}, e.RETURN_RATE_YTD, null))
+		from `tong-rong`.pfund_nav_gr e
+		,(select SECURITY_ID,max(END_DATE) END_DATE from `tong-rong`.pfund_nav_gr WHERE RETURN_RATE_YTD IS NOT NULL group by security_id,DATE_FORMAT(END_DATE,'%Y')) a
+		WHERE a.SECURITY_ID = e.SECURITY_ID AND e.END_DATE = a.END_DATE
+		GROUP BY e.SECURITY_ID
+  </update>
+
+    <select id="resetYearTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_private_funds_current_gr_year_temp
+    </select>
+
+    <update id="resetYear">
+        truncate table `rong-manage`.tb_private_funds_current_gr_year;
+        insert into `rong-manage`.tb_private_funds_current_gr_year
+        SELECT * FROM `rong-manage`.tb_private_funds_current_gr_year_temp
+    </update>
+
+  <update id="restCompanyRankingTemp">
+    truncate table `rong-manage`.tb_private_funds_current_company_ranking_temp;
+    insert into `rong-manage`.tb_private_funds_current_company_ranking_temp
+        (PARTY_ID
+		,SCALE
+		,REG_CITY
+		,REG_PROVINCE
+		,PARTY_SHORT_NAME
+		,PARTY_FULL_NAME
+		,KEY_PERSON
+		,NUM_ALL
+		,SHARPE_RATIO_1M
+		,SHARPE_RATIO_3M
+		,SHARPE_RATIO_6M
+		,SHARPE_RATIO_1Y
+		,SHARPE_RATIO_2Y
+		,SHARPE_RATIO_3Y
+		,SHARPE_RATIO_EST
+		,SHARPE_RATIO_YTD
+		,RETURN_RATE_1M
+		,RETURN_RATE_3M
+		,RETURN_RATE_6M
+		,RETURN_RATE_1Y
+		,RETURN_RATE_2Y
+		,RETURN_RATE_3Y
+		,RETURN_RATE_5Y
+		,RETURN_RATE_EST
+		,RETURN_RATE_YTD
+		,SECURITY_ID
+		,SEC_SHORT_NAME
+		,SEC_FULL_NAME
+		,nav
+		,end_date
+		,return_accum
+		)
+        SELECT a.PARTY_ID
+		,g.SCALE
+		,b.REG_CITY
+		,b.REG_PROVINCE
+		,b.PARTY_SHORT_NAME
+		,b.PARTY_FULL_NAME
+		,a.LEGAL_REP
+		,c.NUM_ALL
+		,h.SHARPE_RATIO_1M
+		,h.SHARPE_RATIO_3M
+		,h.SHARPE_RATIO_6M
+		,h.SHARPE_RATIO_1Y
+		,h.SHARPE_RATIO_2Y
+		,h.SHARPE_RATIO_3Y
+		,h.SHARPE_RATIO_EST
+		,h.SHARPE_RATIO_YTD
+		,h.RETURN_RATE_1M
+		,h.RETURN_RATE_3M
+		,h.RETURN_RATE_6M
+		,h.RETURN_RATE_1Y
+		,h.RETURN_RATE_2Y
+		,h.RETURN_RATE_3Y
+		,h.RETURN_RATE_5Y
+		,h.RETURN_RATE_EST
+		,h.RETURN_RATE_YTD
+		,c.SECURITY_ID
+		,d.SEC_SHORT_NAME
+		,d.SEC_FULL_NAME
+		,e.nav
+		,e.end_date
+		,f.return_accum
+		FROM
+		`tong-rong`.pfund_inst_info a
+		JOIN `tong-rong`.md_institution b ON a.PARTY_ID = b.PARTY_ID
+		LEFT JOIN `tong-rong`.pfund_inst_rep c ON a.PARTY_ID = c.PARTY_ID
+		LEFT JOIN `tong-rong`.md_security d ON c.SECURITY_ID = d.SECURITY_ID
+		LEFT JOIN `rong-manage`.tb_private_funds_current_nav e ON c.SECURITY_ID = e.SECURITY_ID
+		LEFT JOIN `rong-manage`.tb_private_funds_current_income f ON c.SECURITY_ID = f.SECURITY_ID
+		LEFT JOIN `tong-rong`.pfund_inst_scale_amac g ON a.PARTY_ID = g.PARTY_ID AND g.MAIN_FUND_TYPE = '私募证券自主发行' AND IS_NEW = 1
+		LEFT JOIN (
+			SELECT a.INVEST_CONSULTANT
+			,AVG(c.sharpe_ratio_1m) SHARPE_RATIO_1M
+			,AVG(c.sharpe_ratio_3m) SHARPE_RATIO_3M
+			,AVG(c.sharpe_ratio_6m) SHARPE_RATIO_6M
+			,AVG(c.sharpe_ratio_ytd) SHARPE_RATIO_YTD
+			,AVG(c.sharpe_ratio_1y) SHARPE_RATIO_1Y
+			,AVG(c.sharpe_ratio_2y) SHARPE_RATIO_2Y
+			,AVG(c.sharpe_ratio_3y) SHARPE_RATIO_3Y
+			,AVG(c.sharpe_ratio_est) SHARPE_RATIO_EST
+			,AVG(b.RETURN_RATE_1M) RETURN_RATE_1M
+			,AVG(b.RETURN_RATE_3M) RETURN_RATE_3M
+			,AVG(b.RETURN_RATE_6M) RETURN_RATE_6M
+			,AVG(b.RETURN_RATE_1Y) RETURN_RATE_1Y
+			,AVG(b.RETURN_RATE_2Y) RETURN_RATE_2Y
+			,AVG(b.RETURN_RATE_3Y) RETURN_RATE_3Y
+			,AVG(b.RETURN_RATE_5Y) RETURN_RATE_5Y
+			,AVG(b.RETURN_RATE_EST) RETURN_RATE_EST
+			,AVG(b.RETURN_RATE_YTD) RETURN_RATE_YTD
+			FROM `tong-rong`.pfund a,`rong-manage`.tb_private_funds_current_gr b,`rong-manage`.tb_private_funds_current_perf c
+			WHERE a.SECURITY_ID = b.SECURITY_ID
+			AND a.SECURITY_ID = c.SECURITY_ID
+			AND a.INVEST_CONSULTANT IS NOT NULL
+			GROUP BY a.INVEST_CONSULTANT
+		) h ON a.PARTY_ID = h.INVEST_CONSULTANT
+  </update>
+
+    <select id="restCompanyRankingTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_private_funds_current_company_ranking_temp
+    </select>
+
+    <update id="restCompanyRanking">
+       truncate table `rong-manage`.tb_private_funds_current_company_ranking;
+        insert into `rong-manage`.tb_private_funds_current_company_ranking
+        SELECT * FROM `rong-manage`.tb_private_funds_current_company_ranking_temp
+    </update>
+
+  <update id="restManagerRankingTemp">
+    truncate table `rong-manage`.tb_private_funds_current_manager_ranking_temp;
+    insert into `rong-manage`.tb_private_funds_current_manager_ranking_temp
+        (PERSON_ID
+		,REG_CITY
+		,REG_PROVINCE
+		,`NAME`
+		,PARTY_ID
+		,PARTY_SHORT_NAME
+		,PARTY_FULL_NAME
+		,`YEAR`
+		,BACKGROUND
+		,BACKGROUND_VALUE
+		,NUM_ALL
+		,SHARPE_RATIO_1M
+		,SHARPE_RATIO_3M
+		,SHARPE_RATIO_6M
+		,SHARPE_RATIO_1Y
+		,SHARPE_RATIO_2Y
+		,SHARPE_RATIO_3Y
+		,SHARPE_RATIO_EST
+		,SHARPE_RATIO_YTD
+		,RETURN_RATE_1M
+		,RETURN_RATE_3M
+		,RETURN_RATE_6M
+		,RETURN_RATE_1Y
+		,RETURN_RATE_2Y
+		,RETURN_RATE_3Y
+		,RETURN_RATE_5Y
+		,RETURN_RATE_EST
+		,RETURN_RATE_YTD
+		,SECURITY_ID
+		,SEC_SHORT_NAME
+		,SEC_FULL_NAME
+		,nav
+		,end_date
+		,return_accum
+		)
+        SELECT a.PERSON_ID
+        ,c.REG_CITY
+        ,c.REG_PROVINCE
+        ,b.`NAME`
+        ,c.PARTY_ID
+        ,c.PARTY_SHORT_NAME
+        ,c.PARTY_FULL_NAME
+        ,d.`YEAR`
+        ,e.BACKGROUND
+        ,f.VALUE_NAME_CN
+        ,g.NUM_ALL
+        ,h.SHARPE_RATIO_1M
+        ,h.SHARPE_RATIO_3M
+        ,h.SHARPE_RATIO_6M
+        ,h.SHARPE_RATIO_1Y
+        ,h.SHARPE_RATIO_2Y
+        ,h.SHARPE_RATIO_3Y
+        ,h.SHARPE_RATIO_EST
+        ,h.SHARPE_RATIO_YTD
+        ,h.RETURN_RATE_1M
+        ,h.RETURN_RATE_3M
+        ,h.RETURN_RATE_6M
+        ,h.RETURN_RATE_1Y
+        ,h.RETURN_RATE_2Y
+        ,h.RETURN_RATE_3Y
+        ,h.RETURN_RATE_5Y
+        ,h.RETURN_RATE_EST
+        ,h.RETURN_RATE_YTD
+        ,g.SECURITY_ID
+        ,k.SEC_SHORT_NAME
+        ,k.SEC_FULL_NAME
+        ,i.nav
+        ,i.end_date
+        ,j.return_accum
+        FROM
+        (SELECT PERSON_ID FROM `tong-rong`.pfund_manager WHERE IS_INCUMBENT = 1 GROUP BY PERSON_ID) a
+        JOIN `tong-rong`.md_people b ON a.PERSON_ID = b.PERSON_ID
+				LEFT JOIN `tong-rong`.pfund_mana_year d ON a.PERSON_ID = d.PERSON_ID
+        LEFT JOIN (SELECT a.PERSON_ID,a.BACKGROUND FROM `tong-rong`.pfund_inst_manager a
+					JOIN (SELECT max(ID) ID FROM `tong-rong`.pfund_inst_manager GROUP BY PERSON_ID) b ON a.ID = b.ID) e ON a.PERSON_ID = e.PERSON_ID
+        LEFT JOIN (SELECT CODE_TYPE_ID, VALUE_NUM_CD,VALUE_NAME_CN FROM `tong-rong`.sys_code WHERE CODE_TYPE_ID =40045) f ON e.BACKGROUND = f.VALUE_NUM_CD
+        LEFT JOIN `tong-rong`.pfund_manager_rep g ON a.PERSON_ID = g.PERSON_ID
+        LEFT JOIN `tong-rong`.md_security k ON g.SECURITY_ID = k.SECURITY_ID
+        LEFT JOIN `rong-manage`.tb_private_funds_current_nav i ON g.SECURITY_ID = i.SECURITY_ID
+        LEFT JOIN `rong-manage`.tb_private_funds_current_income j ON g.SECURITY_ID = j.SECURITY_ID
+        LEFT JOIN `tong-rong`.md_institution c ON i.party_id = c.PARTY_ID
+        LEFT JOIN (
+            SELECT a.PERSON_ID
+            ,AVG(c.sharpe_ratio_1m) SHARPE_RATIO_1M
+            ,AVG(c.sharpe_ratio_3m) SHARPE_RATIO_3M
+            ,AVG(c.sharpe_ratio_6m) SHARPE_RATIO_6M
+            ,AVG(c.sharpe_ratio_ytd) SHARPE_RATIO_YTD
+            ,AVG(c.sharpe_ratio_1y) SHARPE_RATIO_1Y
+            ,AVG(c.sharpe_ratio_2y) SHARPE_RATIO_2Y
+            ,AVG(c.sharpe_ratio_3y) SHARPE_RATIO_3Y
+            ,AVG(c.sharpe_ratio_est) SHARPE_RATIO_EST
+            ,AVG(b.RETURN_RATE_1M) RETURN_RATE_1M
+            ,AVG(b.RETURN_RATE_3M) RETURN_RATE_3M
+            ,AVG(b.RETURN_RATE_6M) RETURN_RATE_6M
+            ,AVG(b.RETURN_RATE_1Y) RETURN_RATE_1Y
+            ,AVG(b.RETURN_RATE_2Y) RETURN_RATE_2Y
+            ,AVG(b.RETURN_RATE_3Y) RETURN_RATE_3Y
+            ,AVG(b.RETURN_RATE_5Y) RETURN_RATE_5Y
+            ,AVG(b.RETURN_RATE_EST) RETURN_RATE_EST
+            ,AVG(b.RETURN_RATE_YTD) RETURN_RATE_YTD
+            FROM `tong-rong`.pfund_manager a,`rong-manage`.tb_private_funds_current_gr b,`rong-manage`.tb_private_funds_current_perf c
+            WHERE a.SECURITY_ID = b.SECURITY_ID
+            AND a.SECURITY_ID = c.SECURITY_ID
+            AND a.PERSON_ID IS NOT NULL
+            GROUP BY a.PERSON_ID
+        ) h ON a.PERSON_ID = h.PERSON_ID
+  </update>
+
+    <select id="restManagerRankingTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_private_funds_current_manager_ranking_temp
+    </select>
+
+    <update id="restManagerRanking">
+        truncate table `rong-manage`.tb_private_funds_current_manager_ranking;
+        insert into `rong-manage`.tb_private_funds_current_manager_ranking
+        SELECT * FROM `rong-manage`.tb_private_funds_current_manager_ranking_temp
+    </update>
+
+    <update id="restPfundRankingTemp">
+    truncate table `rong-manage`.tb_private_funds_current_pfund_ranking_temp;
+    insert into `rong-manage`.tb_private_funds_current_pfund_ranking_temp
+        (
+    SECURITY_ID,
+    SEC_SHORT_NAME,
+    SEC_FULL_NAME,
+    ESTABLISH_DATE,
+    INVEST_STRATEGY,
+    PF_STYLE,
+    REG_CITY,
+    REG_PROVINCE,
+    PARTY_ID,
+    PARTY_SHORT_NAME,
+    PARTY_FULL_NAME,
+		FEN,
+		SAN
+    )
+    SELECT a.SECURITY_ID
+            ,b.SEC_SHORT_NAME
+            ,b.SEC_FULL_NAME
+            ,a.ESTABLISH_DATE
+            ,a.INVEST_STRATEGY
+            ,a.PF_STYLE
+            ,c.REG_CITY
+            ,c.REG_PROVINCE
+            ,a.INVEST_CONSULTANT
+            ,c.PARTY_SHORT_NAME
+            ,c.PARTY_FULL_NAME
+            ,h.VALUE_NUM_CD
+            ,IF(i.SECURITY_ID IS NOT NULL,1,0)
+            FROM
+            `tong-rong`.pfund a
+            JOIN `tong-rong`.md_security b ON a.SECURITY_ID = b.SECURITY_ID
+            LEFT JOIN `tong-rong`.md_institution c ON a.INVEST_CONSULTANT = c.PARTY_ID
+            LEFT JOIN `tong-rong`.pfund_type h ON a.SECURITY_ID = h.SECURITY_ID
+            LEFT JOIN (SELECT SECURITY_ID FROM `tong-rong`.pfund_rel GROUP BY SECURITY_ID) i ON a.SECURITY_ID = i.SECURITY_ID;
+
+            UPDATE `rong-manage`.tb_private_funds_current_pfund_ranking_temp a,`rong-manage`.tb_private_funds_current_nav b
+            SET a.NAV = b.nav,a.END_DATE = b.end_date
+            WHERE a.SECURITY_ID = b.security_id;
+            UPDATE `rong-manage`.tb_private_funds_current_pfund_ranking_temp a,`rong-manage`.tb_private_funds_current_perf b
+            SET a.return_of_establish = b.return_of_establish
+            ,a.SHARPE_RATIO_EST = b.sharpe_ratio_est
+            ,a.SHARPE_RATIO_1Y = b.sharpe_ratio_1y
+            ,a.SHARPE_RATIO_2Y = b.sharpe_ratio_2y
+            ,a.SHARPE_RATIO_3Y = b.sharpe_ratio_3y
+            WHERE a.SECURITY_ID = b.security_id;
+
+            UPDATE `rong-manage`.tb_private_funds_current_pfund_ranking_temp a,`rong-manage`.tb_private_funds_current_gr b
+            SET
+             a.RETURN_RATE_1M	= b.RETURN_RATE_1M
+            ,a.RETURN_RATE_3M = b.RETURN_RATE_3M
+            ,a.RETURN_RATE_6M = b.RETURN_RATE_6M
+            ,a.RETURN_RATE_1Y = b.RETURN_RATE_1Y
+            ,a.RETURN_RATE_2Y = b.RETURN_RATE_2Y
+            ,a.RETURN_RATE_3Y = b.RETURN_RATE_3Y
+            ,a.RETURN_RATE_5Y = b.RETURN_RATE_5Y
+            ,a.RETURN_RATE_EST = b.RETURN_RATE_EST
+            ,a.RETURN_RATE_YTD = b.RETURN_RATE_YTD
+            WHERE a.SECURITY_ID = b.security_id;
+            UPDATE `rong-manage`.tb_private_funds_current_pfund_ranking_temp a,`rong-manage`.tb_private_funds_current_gr_year b
+            SET
+             a.RETURN_RATE_1A	= b.RETURN_RATE_1A
+            ,a.RETURN_RATE_2A = b.RETURN_RATE_2A
+            ,a.RETURN_RATE_3A = b.RETURN_RATE_3A
+            ,a.RETURN_RATE_4A = b.RETURN_RATE_4A
+            ,a.RETURN_RATE_5A = b.RETURN_RATE_5A
+            ,a.RETURN_RATE_6A = b.RETURN_RATE_6A
+            ,a.RETURN_RATE_7A = b.RETURN_RATE_7A
+            WHERE a.SECURITY_ID = b.security_id;
+    </update>
+
+    <select id="restPfundRankingTempCount" resultType="java.lang.Integer">
+        select count(1) from `rong-manage`.tb_private_funds_current_pfund_ranking_temp
+    </select>
+
+    <update id="restPfundRanking">
+        truncate table `rong-manage`.tb_private_funds_current_pfund_ranking;
+        insert into `rong-manage`.tb_private_funds_current_pfund_ranking
+        SELECT * FROM `rong-manage`.tb_private_funds_current_pfund_ranking_temp
+    </update>
+
+    <update id="resetPrivatePerfTemp">
+        truncate table `tong-rong`.tb_private_funds_current_maxdate_perf_temp;
+        insert into `tong-rong`.tb_private_funds_current_maxdate_perf_temp
+        SELECT a.* FROM `tong-rong`.pfund_perf_indic a
+        ,(SELECT SECURITY_ID,WINDOW,MAX(END_DATE) END_DATE FROM `tong-rong`.pfund_perf_indic GROUP BY SECURITY_ID,WINDOW) b
+        WHERE a.SECURITY_ID = b.SECURITY_ID AND a.END_DATE = b.END_DATE AND a.WINDOW = b.WINDOW
+    </update>
+
+    <select id="resetPrivatePerfTempCount" resultType="java.lang.Integer">
+        select count(1) from `tong-rong`.tb_private_funds_current_maxdate_perf_temp
+    </select>
+
+    <update id="resetPrivatePerf">
+        truncate table `tong-rong`.tb_private_funds_current_maxdate_perf;
+        insert into `tong-rong`.tb_private_funds_current_maxdate_perf
+        SELECT * FROM `tong-rong`.tb_private_funds_current_maxdate_perf_temp
+    </update>
+
+    <delete id="deleteNewsSummary">
+        DELETE FROM `tong-rong`.vnews_summary_v1 WHERE TO_DAYS(NOW()) - TO_DAYS(UPDATE_TIME) > 10
+    </delete>
+</mapper>

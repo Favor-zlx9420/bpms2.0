@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundFeeMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundFee" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="DATE" />
+    <result column="IS_EXE" property="isExe" jdbcType="TINYINT" />
+    <result column="BEGIN_DATE" property="beginDate" jdbcType="DATE" />
+    <result column="END_DATE" property="endDate" jdbcType="DATE" />
+    <result column="CHARGE_TYPE" property="chargeType" jdbcType="VARCHAR" />
+    <result column="CHARGE_MODE" property="chargeMode" jdbcType="VARCHAR" />
+    <result column="CHARGE_EXCH_CD" property="chargeExchCd" jdbcType="VARCHAR" />
+    <result column="CHARGE_P" property="chargeP" jdbcType="VARCHAR" />
+    <result column="CLIENT_TYPE" property="clientType" jdbcType="VARCHAR" />
+    <result column="MIN_CHAR_RATE" property="minCharRate" jdbcType="DECIMAL" />
+    <result column="MAX_CHAR_RATE" property="maxCharRate" jdbcType="DECIMAL" />
+    <result column="CHARGE_UNIT" property="chargeUnit" jdbcType="VARCHAR" />
+    <result column="CHARGE_DESC" property="chargeDesc" jdbcType="VARCHAR" />
+    <result column="CHAR_CON_DESC" property="charConDesc" jdbcType="VARCHAR" />
+    <result column="CHAR_CON1" property="charCon1" jdbcType="VARCHAR" />
+    <result column="CHAR_CON_NO1" property="charConNo1" jdbcType="TINYINT" />
+    <result column="CHAR_CON_UNIT1" property="charConUnit1" jdbcType="VARCHAR" />
+    <result column="CHAR_START1" property="charStart1" jdbcType="DECIMAL" />
+    <result column="CHAR_END1" property="charEnd1" jdbcType="DECIMAL" />
+    <result column="IS_CHAR_START1" property="isCharStart1" jdbcType="TINYINT" />
+    <result column="IS_CHAR_END1" property="isCharEnd1" jdbcType="TINYINT" />
+    <result column="CHAR_CON2" property="charCon2" jdbcType="VARCHAR" />
+    <result column="CHAR_CON_NO2" property="charConNo2" jdbcType="TINYINT" />
+    <result column="CHAR_CON_UNIT2" property="charConUnit2" jdbcType="VARCHAR" />
+    <result column="CHAR_START2" property="charStart2" jdbcType="DECIMAL" />
+    <result column="CHAR_END2" property="charEnd2" jdbcType="DECIMAL" />
+    <result column="IS_CHAR_START2" property="isCharStart2" jdbcType="TINYINT" />
+    <result column="IS_CHAR_END2" property="isCharEnd2" jdbcType="TINYINT" />
+    <result column="NOTES" property="notes" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundFee" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundFee" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`SECURITY_ID`, e.`PUBLISH_DATE`, e.`IS_EXE`, e.`BEGIN_DATE`, e.`END_DATE`, 
+    e.`CHARGE_TYPE`, e.`CHARGE_MODE`, e.`CHARGE_EXCH_CD`, e.`CHARGE_P`, e.`CLIENT_TYPE`, 
+    e.`MIN_CHAR_RATE`, e.`MAX_CHAR_RATE`, e.`CHARGE_UNIT`, e.`CHARGE_DESC`, e.`CHAR_CON_DESC`, 
+    e.`CHAR_CON1`, e.`CHAR_CON_NO1`, e.`CHAR_CON_UNIT1`, e.`CHAR_START1`, e.`CHAR_END1`, 
+    e.`IS_CHAR_START1`, e.`IS_CHAR_END1`, e.`CHAR_CON2`, e.`CHAR_CON_NO2`, e.`CHAR_CON_UNIT2`, 
+    e.`CHAR_START2`, e.`CHAR_END2`, e.`IS_CHAR_START2`, e.`IS_CHAR_END2`, e.`NOTES`, 
+    e.`UPDATE_TIME`, e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_fee` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundFee" >
+    select count(1) as recordCount from `tong-rong`.`fund_fee` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundFee" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

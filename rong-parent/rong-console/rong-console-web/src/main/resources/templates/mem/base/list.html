@@ -1,0 +1,108 @@
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+    #btnAdd{display:none !important;}
+</style>
+
+<div class="box-search">
+    <div>注册时间：<input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>登录时间：<input type="text" placeholder="开始时间" class="timeSearch w85" name="e.lastLoginDate.ge" id="beginLastLoginDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.lastLoginDate.le" id="endLastLoginDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>真实姓名：<input placeholder="请输入真实姓名" type="text" value='' class="input textSearch w189" name="mb.realName.like" /></div>
+</div>
+
+<div class="clear"></div>
+<div class="box-search">
+    <div>用户类型：<select class="selSearch no-render w194"
+        >
+            <option value="">全部</option>
+            <option value="">金融从业者认证</option>
+            <option value="">合格投资者认证</option>
+            <option value="">普通用户</option>
+            <option value="">两者都认证</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>注册来源：<select class="selSearch no-render w194" >
+            <option value="">全部</option>
+            <option value="">邀请码</option>
+            <option value="">手机号码注册</option>
+            <option value="">其他</option>
+        </select>
+    </div>
+</div>
+<div class="box-search">
+    <div>　手机号：<input placeholder="请输入手机号" type="text" value='' class="input textSearch w189" name="e.phone.like" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>　邀请人：<input placeholder="请输入邀请人姓名" type="text" value='' class="input textSearch w190" name="recommendUser" /></div>
+</div>
+<div class="box-search">
+    <div>　邀请码：<input placeholder="请输入邀请码" type="text" value='' class="input textSearch w189" name="e.recommendCode.like" /></div>
+</div>
+<script>
+    //初始化信息重写
+    ifwin.width=1250;
+    ifwin.showView = false;
+    ifwin.listEditWidth = 160;
+    function showEditInfo(tr, v, i) {
+        var html = "<a class='btn-list-view' style='margin-right:5px;' data-id='" + v + "'>查看详情</a>";
+        // html += "<a class=\"btn-list-alter\" data-id=\"" + v + "\">" + ifwin.listEditText + "</a>";
+        <#if hasDelPermission!false >
+            html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+        </#if>
+        return html;
+    }
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+        $('#beginLastLoginDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endLastLoginDate').getDateValue()})}
+        });
+        $('#endLastLoginDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginLastLoginDate').getDateValue()})}
+        });
+        $(viyGrid.selector).on("click",".level-opera",function(){
+            var _this = $(this);
+            lBox.newWin("审核","/mem/base/level-opera?userId="+_this.attr("data-id"), ifwin.width, ifwin.height, true);
+        });
+        $(viyGrid.selector).on("click",".label-opera",function(){
+            var _this = $(this);
+            var tr = viyGrid.p.dataList[_this.closest("tr").index()];
+            lBox.newWin("会员["+tr["userName"]+"/"+tr["realName"]+"]标签配置","/mem/base/label-opera?userId="+tr["id"], ifwin.width, ifwin.height, true);
+        });
+    });
+    function bindLevelOperaFunc(tr,v,i){
+        var html ="<div class=\"viyui-btn viyui-btn-xs list-btn level-opera\" data-id='"+tr["id"]+"'>操作</div>";
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.MemLevel,tr["level"])+"</div>";
+        return html;
+    }
+    function bindUserLabelFunc(tr,v,i){
+        var html ="<div class=\"viyui-btn viyui-btn-xs list-btn label-opera\">标签设置</div>";
+        var labelName = tr["labelName"];
+        if(null != labelName) {
+            html += "<div class='f-right'>" + tr["labelName"] + "</div>";
+        }
+        return html;
+    }
+    function bindQualifiedResultFunc(tr,v,i){
+        return Consts.InvestorQualifiedResult[tr["qualifiedResult"]];
+    }
+    function bindRecommendUserFunc(tr,v,i){
+        return !LE.isEmpty(tr["recommendUser"]) ? tr["recommendUser"] : "-";
+    }
+</script>

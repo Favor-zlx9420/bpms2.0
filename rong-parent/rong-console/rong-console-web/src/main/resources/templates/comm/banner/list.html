@@ -1,0 +1,59 @@
+
+<div class="box-search">
+    <div>上传时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>搜索：<input placeholder="请输入banner标题" type="text" value='' class="input textSearch w189" name="e.title.like" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>审核状态：
+        <select class="selSearch no-render w194" name="e.state.in"
+        >
+            <option value="">全部</option>
+            <option value="1">显示</option>
+            <option value="0">隐藏</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    param.pageInfo.sortField = "e.pageType";
+    param.pageInfo.sortDistanct = "DESC";
+    function bindPageTypeFunc(tr,v,i){
+        var desc = findNameByValueFromConsts(Consts.BannerPage,v);
+        return desc;
+    }
+    function bindCreateNameFunc(tr,v,i){
+        return "-";
+    }
+    function bindStateFunc0(tr,v,i){
+        return tr["state"] == "1" ? "显示" :"隐藏";
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function () {
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})
+            }
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})
+            }
+        });
+    });
+</script>

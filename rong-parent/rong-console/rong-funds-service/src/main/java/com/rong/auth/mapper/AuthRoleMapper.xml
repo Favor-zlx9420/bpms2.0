@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.auth.mapper.AuthRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.auth.module.entity.TbAuthRole" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="symbol" property="symbol" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.auth.module.view.TvAuthRole" extends="BaseResultMap" />
+  <resultMap id="RoleResourceResultMap" type="com.rong.auth.module.view.TvAuthRole" extends="BaseResultMap" >
+    <result column="resourceType" property="resourceType" />
+    <collection property="resources" ofType="java.lang.String">
+      <result column="url_pattern" />
+    </collection>
+  </resultMap>
+  <resultMap id="ViewResultMap" type="com.rong.auth.module.view.TvAuthRole" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`name`, 
+    e.`description`, e.`symbol`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      <if test="entity.id != null" >
+        and e.id = #{entity.id}
+      </if>
+      <if test="entity.deltag != null" >
+        and e.deltag = #{entity.deltag}
+      </if>
+      <if test="entity.state != null" >
+        and e.state = #{entity.state}
+      </if>
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_auth_role e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.auth.module.query.TsAuthRole" >
+    select count(1) as recordCount from tb_auth_role e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.auth.module.query.TsAuthRole" >
+    <include refid="select_for_list_tv" />
+    where 1=1
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="getResourcesOfAuthRole" resultMap="RoleResourceResultMap" parameterType="com.rong.auth.module.request.TqAuthRole" >
+    select
+    e.id,e.name,e.symbol
+    ,ar.type resourceType
+    ,ar.url_pattern
+    from tb_auth_role e
+    left join tb_auth_role_resources arr on arr.role_id = e.id
+    left join tb_auth_resources ar on ar.id=arr.resources_id
+    where 1=1
+    <include refid="query_condition" />
+    and arr.deltag = e.deltag
+    and ar.deltag = e.deltag
+    and ar.state = e.state
+    order by e.id
+  </select>
+</mapper>

@@ -1,0 +1,117 @@
+
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+</style>
+<div class="boxSearch searchLong">
+    <div>审核状态：</div>
+    <div>
+        <select class="selSearch no-render" name="e.auditState.in" multiple="multiple" size="5"
+                data-enumber="Consts.CustomerAuditState"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.visible.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>申请用户：</div>
+    <div><input type="text" value='' class="input textSearch" name="mb.realName.like" /></div>
+    <div>机构名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="mi.partyFullName.like" /></div>
+</div>
+<script>
+    ifwin.width = 900;
+    ifwin.height = 600;
+    param.pageInfo.sortField="e.id";
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["id"],"recommend",v);
+    }
+    function bindAuditStateFunc(tr,v,i){
+        var html="";
+        if(tr["auditState"] == Consts.CustomerAuditState.待审核 || tr["auditState"] == Consts.CustomerAuditState.再次提交){
+            html +="<div class=\"viyui-btn viyui-btn-xs list-btn list-audit\" data-id='"+tr["id"]+"'>审核</div>";
+        }
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.CustomerAuditState,tr["auditState"])+"</div>";
+        return html;
+    }
+    function bindUserNameFunc(tr,v,i){
+        return tr["appUserName"]+"/"+tr["appRealName"];
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function() {
+        $(viyGrid.selector).on("click",".list-audit",function(){
+            var _this = $(this);
+            lBox.newWin("审核","${auditAction}?id="+_this.attr("data-id"), ifwin.width, ifwin.height, true);
+        });
+    });
+    function _audit(title,result,id,memo){
+        lBox.confirm({
+            title:"确定将记录"+title+"吗？",
+            content:"将记录"+title+"[警告，操作成功将不能回滚]",
+            btnConfirmFunc:function(){
+                var w = lBox.wait({content:"操作中..."});
+                $.ajax({
+                    url: "${auditAction}",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        entity: {
+                            id: id,
+                            auditState: result,
+                            memo: memo
+                        },
+                        memo:memo
+                    }),
+                    dataType: "json",
+                    success: function (data) {
+                        w.close(function () {
+                            if (!checkResultIsOk(data)) {
+                                return;
+                            }
+                            lBox.ok({
+                                delay: 2000, title: "操作通知", content: data.message, success: function () {
+                                    lBox.closeWin();
+                                    viyGrid.reload.call(viyGrid);
+                                }
+                            });
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        w.close(function () {
+                            lBox.alert({
+                                content: "保存时出现异常！", success: function () {
+                                    LET.openEvt = true;
+                                }
+                            });
+                        })
+                    }
+                });
+            }
+        });
+    }
+</script>

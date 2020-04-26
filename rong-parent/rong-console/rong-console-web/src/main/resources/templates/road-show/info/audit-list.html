@@ -1,0 +1,155 @@
+
+<style type="text/css">
+    .list-btn{float:right;width:40px !important;margin-left:5px;}
+    #btnAdd{display:none !important;}
+</style>
+
+<div class="box-search">
+    <div>上传时间：
+        <input type="text" placeholder="开始时间" class="timeSearch w85" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch w85" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search">
+    <div>搜索：<input placeholder="请输入路演标题、主讲人、上传者名称" type="text" value='' class="input textSearch " name="keyword" /></div>
+</div>
+<div class="box-search">
+    <div>手机号：<input placeholder="请输入上传者手机号" type="text" value='' class="input textSearch w189" name="e.phone.like" /></div>
+</div>
+<div class="clear"></div>
+<div class="box-search">
+    <div>审核状态：
+        <select class="selSearch no-render w194" name="e.state.in"
+        >
+            <option value="">全部</option>
+            <option value="1">通过审核</option>
+            <option value="-1">拒绝</option>
+            <option value="0">待审核</option>
+        </select>
+    </div>
+</div>
+
+<script type="text/javascript">
+    param.pageInfo.sortField = "e.createDate";
+    param.pageInfo.sortDistanct = "DESC";
+    param.queryParams["e.from.eq"] = 0;
+    //初始化信息重写
+    ifwin.width = 1200;
+    ifwin.height = 700;
+    ifwin.showView = false;
+    $(document).ready(function () {
+        $('#beginShowDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endShowDate').getDateValue()})
+            }
+        });
+        $('#endShowDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginShowDate').getDateValue()})
+            }
+        });
+        $(viyGrid.selector).on("click",".list-audit",function(){
+            var _this = $(this);
+            lBox.newWin("审核路演","${auditAction}?id="+_this.attr("data-id"), ifwin.width, ifwin.height, true);
+        });
+    });
+    function bindAuditStateFunc(tr,v,i){
+        var html="";
+        // <#if hasAuditPermission!false>
+        //     if(tr["state"] == Consts.CustomerAuditState.待审核 || tr["state"] == Consts.CustomerAuditState.再次提交){
+        //         html +="<div class=\"viyui-btn viyui-btn-xs list-btn list-audit\" data-id='"+tr["id"]+"'>审核</div>";
+        //     }
+        // </#if>
+        html += "<div class='f-right'>"+findNameByValueFromConsts(Consts.CustomerAuditState,v)+"</div>";
+        return html;
+    }
+    function _audit(title,result,id,memo){
+        lBox.confirm({
+            title:"确定将记录"+title+"吗？",
+            content:"将id=["+id+"]的记录"+title+"[警告，操作成功将不能回滚]",
+            btnConfirmFunc:function(){
+                var w = lBox.wait({content:"操作中..."});
+                $.ajax({
+                    url: "${auditAction}",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        entity: {
+                            id: id,
+                            state: result
+                        },
+                        rejectReason: memo
+                    }),
+                    dataType: "json",
+                    success: function (data) {
+                        w.close(function () {
+                            if (!checkResultIsOk(data)) {
+                                return;
+                            }
+                            lBox.ok({
+                                delay: 2000, title: "操作通知", content: data.message, success: function () {
+                                    lBox.closeWin();
+                                    viyGrid.reload.call(viyGrid);
+                                }
+                            });
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        w.close(function () {
+                            lBox.alert({
+                                content: "保存时出现异常！", success: function () {
+                                    LET.openEvt = true;
+                                }
+                            });
+                        })
+                    }
+                });
+            }
+        });
+    }
+    function showEditInfo(tr, v, i) {
+        var html = "";
+
+        if(tr["state"] == Consts.CustomerAuditState.待审核 || tr["state"] == Consts.CustomerAuditState.再次提交){
+            html +="<a class=\"viyui-btn viyui-btn-xs list-audit\" data-id='"+tr["id"]+"'>审核</a>";
+        }else{
+            html += "<a class='btn-list-view' style='margin-right:5px;' data-id='" + tr["id"] + "'>查看详情</a>";
+        }
+        <#if hasDelPermission!false >
+            html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+        </#if>
+        return html;
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(document).ready(function () {
+        //
+        $("#btnAdd").unbind("click").click(function () {
+            lBox.newWin(ifwin.btnAddText, "${viewModel.addAction}?cateId=" + cateId, ifwin.width, ifwin.height, true);
+        });
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})
+            }
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {
+                this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})
+            }
+        });
+    });
+    function bindImgShow(tr,v,i){
+        var html="";
+        html += "<img src='"+tr["coverImageUrl"]+"' width='50px' height='25px'>";
+        return html;
+    }
+</script>

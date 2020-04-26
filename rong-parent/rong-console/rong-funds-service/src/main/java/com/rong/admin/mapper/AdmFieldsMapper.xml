@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.admin.mapper.AdmFieldsMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.admin.module.entity.TbAdmFields" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="DECIMAL" />
+    <result column="adm_user_id" property="admUserId" jdbcType="BIGINT" />
+    <result column="column_id" property="columnId" jdbcType="BIGINT" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="table_alias" property="tableAlias" jdbcType="VARCHAR" />
+    <result column="table_header" property="tableHeader" jdbcType="VARCHAR" />
+    <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    <result column="visible_template" property="visibleTemplate" jdbcType="VARCHAR" />
+    <result column="row_width" property="rowWidth" jdbcType="INTEGER" />
+    <result column="sortable" property="sortable" jdbcType="TINYINT" />
+    <result column="row_group" property="rowGroup" jdbcType="INTEGER" />
+    <result column="col_group" property="colGroup" jdbcType="INTEGER" />
+    <result column="fixed" property="fixed" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.admin.module.view.TvAdmFields" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.admin.module.view.TvAdmFields" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`state`, e.`sort`, e.`adm_user_id`, 
+    e.`column_id`, e.`table_name`, e.`table_alias`, e.`table_header`, e.`field_name`, 
+    e.`visible_template`, e.`row_width`, e.`sortable`, e.`row_group`, e.`col_group`, 
+    e.`fixed`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_adm_fields e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.admin.module.query.TsAdmFields" >
+    select count(1) as recordCount from tb_adm_fields e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.admin.module.query.TsAdmFields" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

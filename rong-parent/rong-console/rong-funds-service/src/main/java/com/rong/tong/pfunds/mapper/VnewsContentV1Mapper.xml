@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.VnewsContentV1Mapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbVnewsContentV1" >
+    <id column="news_id" property="newsId" jdbcType="BIGINT" />
+    <result column="NEWS_ORIGIN_SOURCE" property="newsOriginSource" jdbcType="VARCHAR" />
+    <result column="news_author" property="newsAuthor" jdbcType="VARCHAR" />
+    <result column="news_url" property="newsUrl" jdbcType="VARCHAR" />
+    <result column="news_title" property="newsTitle" jdbcType="VARCHAR" />
+    <result column="NEWS_PUBLISH_SITE" property="newsPublishSite" jdbcType="VARCHAR" />
+    <result column="news_publish_time" property="newsPublishTime" jdbcType="TIMESTAMP" />
+    <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvVnewsContentV1" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvVnewsContentV1" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`news_id`, e.`NEWS_ORIGIN_SOURCE`, e.`news_author`, e.`news_url`, e.`news_title`, 
+    e.`NEWS_PUBLISH_SITE`, e.`news_publish_time`, e.`effective_time`, e.`update_time`, 
+    e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from vnews_content_v1 e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsVnewsContentV1" >
+    select count(1) as recordCount from vnews_content_v1 e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsVnewsContentV1" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    SELECT COUNT(1)
+    FROM
+    `tong-rong`.vnews_content_v1 a
+    JOIN `tong-rong`.news_s3_store b ON a.NEWS_ID = b.outer_id
+    JOIN `tong-rong`.news_popularity c ON a.NEWS_ID = c.NEWS_ID
+    JOIN `tong-rong`.news_industry_new e ON a.NEWS_ID = e.NEWS_ID
+    WHERE 1=1
+    <if test="key != null and key != ''">
+      AND a.NEWS_TITLE LIKE #{key}
+    </if>
+    <if test="startDate != null">
+      AND a.EFFECTIVE_TIME >= #{startDate}
+    </if>
+    AND a.news_id not in (SELECT news_id FROM `rong-manage`.tb_third_news_manage WHERE visible = false)
+  </select>
+
+  <select id="pageList" resultType="com.rong.tong.pfunds.module.view.TvNewsList">
+    SELECT  a.NEWS_ID id
+    ,a.NEWS_TITLE title
+    ,a.NEWS_PUBLISH_SITE source
+    ,a.EFFECTIVE_TIME publishTimeMd
+    ,a.EFFECTIVE_TIME publishTime
+    ,d.NEWS_SUMMARY summary
+    ,1 type
+    FROM
+    `tong-rong`.vnews_content_v1 a
+    LEFT JOIN `tong-rong`.vnews_summary_v1 d ON a.NEWS_ID = d.NEWS_ID
+    JOIN `tong-rong`.news_s3_store b ON a.NEWS_ID = b.outer_id
+    JOIN `tong-rong`.news_popularity c ON a.NEWS_ID = c.NEWS_ID
+    JOIN `tong-rong`.news_industry_new e ON a.NEWS_ID = e.NEWS_ID
+    WHERE 1=1
+    <if test="key != null and key != ''">
+      AND a.NEWS_TITLE LIKE #{key}
+    </if>
+    <if test="startDate != null">
+      AND a.EFFECTIVE_TIME >= #{startDate}
+    </if>
+    AND a.news_id not in (SELECT news_id FROM `rong-manage`.tb_third_news_manage WHERE visible = false)
+    ORDER BY a.EFFECTIVE_TIME DESC
+    LIMIT #{limitStart},#{limitEnd}
+  </select>
+
+  <select id="detail" resultType="com.rong.tong.pfunds.module.view.TvNewsDetail">
+    SELECT  a.NEWS_ID id
+    ,a.NEWS_TITLE title
+    ,a.NEWS_PUBLISH_SITE source
+    ,a.EFFECTIVE_TIME publishTimeMd
+    ,a.EFFECTIVE_TIME publishTime
+    ,a.NEWS_AUTHOR author
+    ,a.NEWS_URL url
+    ,d.S3_URL s3Url
+    ,1 type
+    FROM
+    `tong-rong`.vnews_content_v1 a
+    JOIN `tong-rong`.news_s3_store d ON a.NEWS_ID = d.outer_id
+    WHERE a.NEWS_ID = #{id}
+  </select>
+
+  <select id="hotSearch" resultType="com.rong.tong.pfunds.module.view.TvNewsList">
+    SELECT a.id
+    ,a.title
+    ,a.come_from source
+    ,a.displaydate publishTimeMd
+    ,a.displaydate publishTime
+    ,a.description summary
+    ,2 type
+    ,SUBSTRING_INDEX(pic_list, ',', 1) picUrl
+    FROM
+    `rong-manage`.tb_cms_news a,
+	`rong-manage`.tb_cms_category b
+    WHERE 1=1
+    AND a.published = 1
+	AND a.deltag = false
+	and a.top = true
+	AND a.cate_id = b.id
+	AND b.parent_id = 9
+    ORDER BY displaydate DESC
+  </select>
+
+  <select id="detailSelf" resultType="com.rong.tong.pfunds.module.view.TvNewsDetail">
+    SELECT
+    id
+    ,title
+    ,come_from source
+    ,displaydate publishTimeMd
+    ,displaydate publishTime
+    ,author
+    ,content body
+    ,2 type
+    ,SUBSTRING_INDEX(pic_list, ',', 1) picUrl
+    FROM
+    `rong-manage`.tb_cms_news
+    WHERE id = #{id}
+  </select>
+
+  <select id="pageListSelfCount" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM
+    `rong-manage`.tb_cms_news
+    WHERE 1=1
+    AND published = 1
+    AND deltag = false
+    <if test="key != null and key != ''">
+      AND title LIKE #{key}
+    </if>
+    <if test="cateId != null and cateId != ''">
+      AND cate_id = #{cateId}
+    </if>
+  </select>
+
+  <select id="pageListSelf" resultType="com.rong.tong.pfunds.module.view.TvNewsList">
+    SELECT id
+    ,title
+    ,come_from source
+    ,displaydate publishTimeMd
+    ,displaydate publishTime
+    ,description summary
+    ,2 type
+    ,SUBSTRING_INDEX(pic_list, ',', 1) picUrl
+    FROM
+    `rong-manage`.tb_cms_news
+    WHERE 1=1
+    AND published = 1
+	AND deltag = false
+	<if test="key != null and key != ''">
+      AND title LIKE #{key}
+    </if>
+    <if test="cateId != null and cateId != ''">
+      AND cate_id = #{cateId}
+    </if>
+    ORDER BY displaydate DESC
+    LIMIT #{limitStart},#{limitEnd}
+  </select>
+
+  <select id="newsCate" resultType="com.rong.tong.pfunds.module.view.TvNewsCate">
+    SELECT
+    id cateId
+    ,name
+    FROM
+    `rong-manage`.tb_cms_category
+    WHERE parent_id = 9
+    ORDER BY sort
+  </select>
+</mapper>

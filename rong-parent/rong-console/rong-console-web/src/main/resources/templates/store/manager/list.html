@@ -1,0 +1,54 @@
+
+<div class="boxSearch searchLong">
+    <div>是否可见：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.visible.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>是否推荐：</div>
+    <div>
+        <select class="selSearch no-render" size="5"
+                data-enumber="Consts.YesOrNo"
+                data-load='{"defaultItem":{"全部":""}}'
+                name="e.recommend.eq"
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>用户姓名：</div>
+    <div><input type="text" value='' class="input textSearch" name="m.realName.like" /></div>
+    <div>用户职位：</div>
+    <div><input type="text" value='' class="input textSearch" name="m.position.like" /></div>
+</div>
+<script>
+    ifwin.btnAddText = "基金经理入驻";
+    ifwin.width = 700;
+    ifwin.height = 450;
+    param.pageInfo.sortField="e.id";
+    function showEditInfo(tr,v,i){
+        return "--";
+    }
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function bindRecommendFunc(tr,v,i) {
+        return defaultBindSwitchItem(tr["id"],"recommend",v);
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+</script>

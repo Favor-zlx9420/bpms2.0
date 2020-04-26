@@ -1,0 +1,30 @@
+<div class="boxSearch searchLong">
+    <div>使用状态：</div>
+    <div>
+        <select class="selSearch no-render" name="e.state.in" multiple="multiple" size="5"
+                data-enumber="Consts.State"
+                data-load='{"defaultItem":{"全部":""}}'
+        >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>类型：</div>
+    <div>
+        <select class="selSearch no-render" name="e.type.in" size="5"
+            data-enumber="Consts.LabelType"
+            data-load='{"defaultItem":{"全部":""}}'
+            >
+        </select>
+    </div>
+</div>
+<div class="boxSearch searchLong">
+    <div>标签名称：</div>
+    <div><input type="text" value='' class="input textSearch" name="e.name.like" /></div>
+</div>
+<script>
+    function labelTypeFunc(tr,v,i){
+        var desc = findNameByValueFromConsts(Consts.LabelType,v);
+        return desc;
+    }
+</script>

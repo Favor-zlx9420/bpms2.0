@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.member.mapper.MemPersonalCreditfileMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.member.module.entity.TbMemPersonalCreditfile" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="deltag" property="deltag" jdbcType="TINYINT" />
+    <result column="education_level" property="educationLevel" jdbcType="INTEGER" />
+    <result column="graduated_school" property="graduatedSchool" jdbcType="VARCHAR" />
+    <result column="education_certify_urls" property="educationCertifyUrls" jdbcType="VARCHAR" />
+    <result column="education_certify_state" property="educationCertifyState" jdbcType="INTEGER" />
+    <result column="discipline_info" property="disciplineInfo" jdbcType="VARCHAR" />
+    <result column="jobs_years" property="jobsYears" jdbcType="INTEGER" />
+    <result column="technical_titles" property="technicalTitles" jdbcType="VARCHAR" />
+    <result column="jobs_certify_urls" property="jobsCertifyUrls" jdbcType="VARCHAR" />
+    <result column="jobs_certify_state" property="jobsCertifyState" jdbcType="INTEGER" />
+    <result column="jobs_info" property="jobsInfo" jdbcType="VARCHAR" />
+    <result column="driver_license" property="driverLicense" jdbcType="VARCHAR" />
+    <result column="driver_license_certify_urls" property="driverLicenseCertifyUrls" jdbcType="VARCHAR" />
+    <result column="driver_license_certify_state" property="driverLicenseCertifyState" jdbcType="INTEGER" />
+    <result column="car_info" property="carInfo" jdbcType="VARCHAR" />
+    <result column="car_certify_urls" property="carCertifyUrls" jdbcType="VARCHAR" />
+    <result column="car_certify_state" property="carCertifyState" jdbcType="INTEGER" />
+    <result column="estate_info" property="estateInfo" jdbcType="VARCHAR" />
+    <result column="estate_certify_urls" property="estateCertifyUrls" jdbcType="VARCHAR" />
+    <result column="estate_certify_state" property="estateCertifyState" jdbcType="INTEGER" />
+    <result column="stock_fund" property="stockFund" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_urls" property="stockFundCertifyUrls" jdbcType="VARCHAR" />
+    <result column="stock_fund_certify_state" property="stockFundCertifyState" jdbcType="INTEGER" />
+    <result column="other_info" property="otherInfo" jdbcType="VARCHAR" />
+    <result column="other_info_certify_urls" property="otherInfoCertifyUrls" jdbcType="VARCHAR" />
+    <result column="other_info_certify_state" property="otherInfoCertifyState" jdbcType="INTEGER" />
+    <result column="credit_points" property="creditPoints" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.member.module.view.TvMemPersonalCreditfile" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.member.module.view.TvMemPersonalCreditfile" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`id`, e.`create_date`, e.`update_date`, e.`deltag`, e.`education_level`, e.`graduated_school`, 
+    e.`education_certify_urls`, e.`education_certify_state`, e.`discipline_info`, e.`jobs_years`, 
+    e.`technical_titles`, e.`jobs_certify_urls`, e.`jobs_certify_state`, e.`jobs_info`, 
+    e.`driver_license`, e.`driver_license_certify_urls`, e.`driver_license_certify_state`, 
+    e.`car_info`, e.`car_certify_urls`, e.`car_certify_state`, e.`estate_info`, e.`estate_certify_urls`, 
+    e.`estate_certify_state`, e.`stock_fund`, e.`stock_fund_certify_urls`, e.`stock_fund_certify_state`, 
+    e.`other_info`, e.`other_info_certify_urls`, e.`other_info_certify_state`, e.`credit_points`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mem_personal_creditfile e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.member.module.query.TsMemPersonalCreditfile" >
+    select count(1) as recordCount from tb_mem_personal_creditfile e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.member.module.query.TsMemPersonalCreditfile" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,68 @@
+<script>
+    function setItem(type){
+        var sel = $("#orgInfo");
+        var param = sel.data("param");
+        var val = sel.val();
+        if(!LE.isEmpty(val)){
+            var obj = param.selectedItems;
+            if(null != obj) {
+                LET.dataBind("#userInfoBox",obj[0]);
+                $("#userId").val(obj[0].id);
+            }
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.partyId" id="partyId" />
+    <input type="hidden" name="entity.id" id="id" />
+    <input type="hidden" name="entity.userId" id="userId" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box" id="userInfoBox">
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择系统用户</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element" style="width:300px;z-index:999;">
+                        <select id="orgInfo"
+                                data-rules="required"
+                                class="validator"
+                                data-load='{"url":"/mem/base/manager-list?e.type.in=1,2,4","queryFields":{"e.realName.like":""},"listFields":{"textField":"realName","valueField":"id"},"lazy":true,"readonly":false,"placeHolder":"请输入查询","defaultItem":{"id":"","realName":"请输入查询"}}'
+                                data-change="function(){setItem(1);}"
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户名</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="userName"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>真实姓名</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="realName"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>职位</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="position"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号码</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="phone"></div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户等级</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left" id="level" data-bind-function="bindUserLevelFunc"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

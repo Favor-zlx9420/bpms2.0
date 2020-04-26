@@ -1,0 +1,154 @@
+<style type="text/css">
+    .viy-ui-tbody-box{max-height:88%;}
+</style>
+<#if hasDelPermission!false>
+    <div id="delDiv" class="viyui-btn viyui-btn-m viyui-danger"><i class="icon-trash"></i>删除</div>
+    <div id="recycleDiv" class="viyui-btn viyui-btn-m viyui-color-purple hide"><i class='icon-hdd'></i>回收站</div>
+</#if>
+<#if hasAddPermission!false>
+        <div id="btnAdd" class="viyui-btn viyui-btn-m"><i class="icon-plus"></i>新增</div>
+</#if>
+<script type="text/javascript">
+    var viyGrid;
+    var param = {
+        form:"#treeQueryForm",
+        theads:${theads},
+        //dataList:pageList["list"],
+        pager:false,
+        pageInfo: {
+            pageIndex: 1,
+            pageSize: 99999,
+            sortField:"e.sort",
+            sortDistanct:"ASC"
+        },
+        treeFields:{
+            expand:true
+        },
+        success:function(data){
+            //参数校验设置
+            LET.intCheckFormTip("#treeQueryForm,#viyGrid");
+        }
+    }
+    var ifwin = {
+        width : 1000,
+        height : 600,
+        listViewText : "查看",
+        listEditText:"编辑",
+        listAddText:"新增下级",
+        btnAddText:"新增"
+    };
+    $(function(){
+        $("#deltag").val(Consts.Deltag["正常"]);
+       <#if hasAddPermission!false>
+            param.theads.push({
+            tableHeader:ifwin.listAddText,
+            sortable:false,
+            rowWidth:90,
+            align:"center",
+            fieldName:"id",
+            fixed:"right",
+            visibleTemplate:function(row,value,index){
+            return "<div class=\"viyui-btn viyui-btn-xs btn-list-add\" data-id=\""+value+"\"><i class=\"icon-plus\"></i>"+ifwin.listAddText+"</div>";
+            }
+            });
+        </#if>
+        <#if hasEditPermission!false>
+        param.theads.push({
+            tableHeader:ifwin.listEditText,
+            sortable:false,
+            rowWidth:70,
+            align:"center",
+            fieldName:"id",
+            fixed:"right",
+            visibleTemplate:function(row,value,index){
+                return "<a class=\"btn-list-alter\" data-id=\""+value+"\">"+ifwin.listEditText+"</a>";
+            }
+        });
+        </#if>
+        <#if hasViewPermission!false>
+        param.theads.push({
+            tableHeader:ifwin.listViewText,
+            sortable:false,
+            rowWidth:70,
+            align:"center",
+            fieldName:"id",
+            fixed:"right",
+            visibleTemplate:function(row,value,index){
+                return "<div class=\"viyui-btn viyui-btn-xs btn-list-view\" data-id=\""+value+"\"><i class=\"icon-file-text-o\"></i>"+ifwin.listViewText+"</div>";
+            }
+        });
+        </#if>
+        //高度自适应
+        $(".viy-ui-table").css("height",function(){
+            return $(document.body).height()-$(this).prev().visibleHeight()-7;
+        });
+        viyGrid = $("#viyGrid").treeGrid(param);
+        viyGrid.reload();
+        $("#delDiv").click(function(){
+            var _this = $(this);
+            var items = viyGrid.getSelecteds();
+            if(items.length == 0){
+                lBox.alert({content:"未选择任何项"});
+                return;
+            }
+            var ids = $(items).map(function(){return this.id}).get().join(",");
+            var title,deltag,content;
+            if(_this.hasClass("recycle-btn")){
+                title="恢复选中项";
+                content="确定将这些选中项进行恢复吗？";
+                deltag = Consts.Deltag["正常"];
+            }else{
+                title="删除选中项";
+                content="确定将这些选中项进行删除吗？";
+                deltag = Consts.Deltag["已删除"];
+            }
+            var f = {
+                ids:ids,
+                "deltag" : deltag
+            };
+            lBox.confirm({
+                title:title,
+                content:content,
+                btnConfirmFunc:function(){
+                    var m = lBox.wait({content:"正在操作，请稍后..."});
+                    $.post("${viewModel.delOrRecAction}", f, function (data) {
+                        m.immeClose(function(){
+                            if(checkResultIsOk(data)){
+                                lBox.ok({delay:500,content:"操作成功！",success:function(){
+                                    viyGrid.reload.call(viyGrid);
+                                }});
+                            }
+                        });
+                    },"json");
+                }
+            });
+        });
+        $("#recycleDiv").click(function(){
+            var _this = $(this);
+            if(!_this.hasClass("recycle-btn")){
+                _this.addClass("recycle-btn").html("<i class='icon-reply'></i>常规项");
+                _this.siblings("#delDiv").addClass("recycle-btn").removeClass("viyui-danger").html("<i class='icon-history'></i>还原");
+                $(viyGrid.p.form).children("#deltag").val(Consts.Deltag["已删除"]);
+            }else{
+                _this.removeClass("recycle-btn").html("<i class='icon-hdd'></i>回收站");
+                _this.siblings("#delDiv").removeClass("recycle-btn").addClass("viyui-danger").html("<i class='icon-trash'></i>删除");
+                $(viyGrid.p.form).children("#deltag").val(Consts.Deltag["正常"]);
+            }
+            viyGrid.reload();
+        });
+        $("#btnAdd").html("<i class=\"icon icon-plus\"></i>"+ifwin.btnAddText).click(function(){
+            lBox.newWin(ifwin.btnAddText,"${viewModel.addAction}", ifwin.width, ifwin.height, true);
+        });
+        //list action
+        $(viyGrid.selector).on("click",".btn-list-alter,.btn-list-view,.btn-list-add",function(){
+            var _this = $(this);
+            if(_this.hasClass("btn-list-alter")){
+                lBox.newWin(ifwin.listEditText,"${viewModel.editAction}?id="+_this.attr("data-id"),ifwin.width,ifwin.height, true);
+            }else if(_this.hasClass("btn-list-view")){
+                lBox.newWin(ifwin.listViewText,"${viewModel.viewAction}?id="+_this.attr("data-id"),ifwin.width,ifwin.height, true);
+            }else if(_this.hasClass("btn-list-add")){
+                lBox.newWin(ifwin.listAddText,"${viewModel.addAction}?parentId="+_this.attr("data-id"),ifwin.width,ifwin.height, true);
+            }
+        });
+    });
+</script>

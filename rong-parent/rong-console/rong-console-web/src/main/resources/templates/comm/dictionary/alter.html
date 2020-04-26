@@ -1,0 +1,67 @@
+<script>
+    alterBindParam = {
+        afterBindFunc:function(entity){
+            if(entity.id > 0){
+                $("#old_value").val(entity.value);
+                $("#key").attr({"readonly":true});
+            }
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <input type="hidden" name="entity.state" id="state" />
+    <input type="hidden" value="" name="old_value" id="old_value" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择类型</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <select name="entity.type"
+                                id="type"
+                                class="validator no-render"
+                                data-rules="required"
+                                data-enumber="Consts.DictionaryType"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>字典键</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,127}$"
+                                data-tip="字典键,不可重复,长度1-127"
+                                type="text" class="input validator had-edit" name="entity.key" id="key" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>字典值</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        	<textarea
+                                    data-rules="required"
+                                    class="input validator textarea had-edit"
+                                    name="entity.value" id="value" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.description" id="description" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

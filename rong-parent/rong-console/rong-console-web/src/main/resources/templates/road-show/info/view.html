@@ -1,0 +1,72 @@
+<script>
+    var viewParam = {
+        otherFunc:function(entity){
+            $("#coverImageUrlShow").attr("src",entity["coverImageUrl"]);
+            $("#videoSource").attr("src",entity["videoUrl"]);
+            //参数校验设置
+            if(entity.from == "1"){
+                $(".reject-box").addClass("hide");
+            }
+        }
+    }
+</script>
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演标题</div></div>
+                <div class="comm-item-content"><div class="f-left" id="title"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>主讲人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="presenter"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演时间</div></div>
+                <div class="comm-item-content">
+                    <span id="commentUserName"></span>/<span id="showDate" data-bind-function="bindDateTimeFunc"></span>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>所属机构</div></div>
+                <div class="comm-item-content"><div class="f-left" id="orgName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>上传者姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="uploadUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="uploadUserPhone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>上传时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>封面图</div></div>
+                <div class="comm-item-content"><div class="f-left">
+                    <img id="coverImageUrlShow" style="width:320px;height:200px;" />
+                </div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>路演视频</div></div>
+                <div class="comm-item-content"><div class="f-left">
+                    <video width="320" height="240" controls="controls">
+                        <source id="videoSource">
+                        Your browser does not support the video tag.
+                    </video>
+                </div></div>
+            </div>
+            <div class="comm-item-box reject-box">
+                <div class="comm-item-title"><div>拒绝时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="rejectTime" data-bind-function="dateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box reject-box">
+                <div class="comm-item-title"><div>拒绝原因</div></div>
+                <div class="comm-item-content"><div class="f-left" id="rejectDescription"></div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

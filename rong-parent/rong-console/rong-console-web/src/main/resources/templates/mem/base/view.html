@@ -1,0 +1,68 @@
+
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="realName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="phone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户类型</div></div>
+                <div class="comm-item-content"><div class="f-left">--</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>邀请人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="recommendUser" data-bind-function="bindRecommendUserFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>邀请码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="recommendCode"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>注册时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>实名身份证号码</div></div>
+                <div class="comm-item-content"><div class="f-left" id="idNo"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>邮箱</div></div>
+                <div class="comm-item-content"><div class="f-left" id="email"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>微信号</div></div>
+                <div class="comm-item-content"><div class="f-left">--</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>所在地</div></div>
+                <div class="comm-item-content"><div class="f-left">--</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>个人简介</div></div>
+                <div class="comm-item-content"><div class="f-left" id="description"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>投资类型</div></div>
+                <div class="comm-item-content"><div class="f-left" id="qualifiedResult" data-bind-function="bindQualifiedResultFunc"></div></div>
+            </div>
+            <div class="comm-item-box ">
+                <div class="comm-item-title"><div style="font-weight: bold;color:#1b1a1a;">理财标签</div></div>
+                <div class="comm-item-content"><div class="f-left"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>期望收益</div></div>
+                <div class="comm-item-content"><div class="f-left">--</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>策略偏好</div></div>
+                <div class="comm-item-content"><div class="f-left">--</div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

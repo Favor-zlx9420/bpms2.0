@@ -1,0 +1,47 @@
+<form autocomplete="off" class="comm-view-form comm-iframe-form viy-form">
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>姓名</div></div>
+                <div class="comm-item-content"><div class="f-left" id="investorUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>手机号</div></div>
+                <div class="comm-item-content"><div class="f-left" id="investorUserPhone"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>用户类型</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>聊天时长</div></div>
+                <div class="comm-item-content"><div class="f-left">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>预约类型</div></div>
+                <div class="comm-item-content"><div class="f-left" id="type" data-bind-function="bindTypeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>预约对象</div></div>
+                <div class="comm-item-content"><div class="f-left" id="content">-</div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>接待人</div></div>
+                <div class="comm-item-content"><div class="f-left" id="customerUserRealName"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>处理状态</div></div>
+                <div class="comm-item-content"><div class="f-left" id="auditResult" data-bind-function="bindAuditResultFunc">></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>发起时间</div></div>
+                <div class="comm-item-content"><div class="f-left" id="createDate" data-bind-function="bindDateTimeFunc"></div></div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>处理内容</div></div>
+                <div class="comm-item-content"><div class="f-left" id="replyMessage"></div></div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/comm-view-btn.html" />
+</form>

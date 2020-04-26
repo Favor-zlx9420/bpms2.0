@@ -1,0 +1,126 @@
+<style type="text/css">
+    .btn-select-icon{float:right !important;}
+</style>
+<script type="text/javascript">
+    var oldPindex = 0;
+    var submitOpt={
+        successFunc:function(){
+            lBox.ok({content:"操作成功了哟."});
+        }
+    }
+    var alterBindParam={
+        afterRenderFunc:function(entity){
+            $("#iconShow").addClass(entity["icon"]);
+            var s = $("#parentId").data("param")["selectedItems"];
+            if(null != s && s.length > 0){
+                oldPindex = s[0]["dataIndex"];
+            }
+            $(".btn-select-icon").click(function(){
+                lBox.newWin("选择图标","/contents/html/icon-select.html",650,400);
+            });
+        }
+    }
+    function checkParent(){
+        var form = $("#columnForm");
+        var thisId = parseInt($("#id",form).val());
+        if(thisId > 0){
+            var param = $("#parentId",form).data("param");
+            if(param.selectedItems.length  > 0 && ViyGrid.checkOffspringOrSelf(param,oldPindex,{id:thisId},param.selectedItems[0])){
+                return "上一级分类不能为自己或者自己后代分类";
+            }
+        }
+        return ResultStatus.ok;
+    }
+    function selectIcon(cl){
+    $("#iconShow").attr("class",cl);
+    $("#icon").val(cl);
+}
+</script>
+<form id="columnForm" autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>栏目名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,63}$"
+                                data-tip="长度1-63"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title"><div>选择上级栏目</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element tree-render" style="width:300px;">
+                        <select name="entity.parentId" id="parentId"
+                                data-extra-rules="checkParent"
+                                class="validator"
+                                data-load='{"url":"${viewModel.basePath}dataGrid?&e.state.eq=1&pageInfo.pageSize=2000&e.deltag.eq=false&pageInfo.sortField=e.sort&pageInfo.sortDistanct=asc","treeFields":{"expand":true}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>栏目uri</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-regex="^\S{0,127}$"
+                                data-tip="长度0-127"
+                                type="text" class="input validator" name="entity.urlLink" id="urlLink" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>旗下权限url</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                            <textarea
+                                    data-regex="^\S{0,8191}$"
+                                    data-tip="以“,”分隔,长度0-8191"
+                                    name="entity.rightUrls" id="rightUrls" class="input textarea validator had-edit" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>选择图标</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left pic-view">
+                        <div class="icon-select-box"><i class="icon" id="iconShow"></i></div>
+                        <input type="hidden" value="" name="entity.icon" id="icon" />
+                    </div>
+                    <div class="viyui-btn viyui-btn-sm btn-select-img btn-select-icon">设置图标</div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>是否按钮</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:50px;">
+                        <input type="hidden" class="switch" name="entity.isBtn" id="isBtn"
+                               data-text="是|否"
+                               data-value="true|false"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>是否可见</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:50px;">
+                        <input type="hidden" class="switch" name="entity.visible" id="visible"
+                               data-text="是|否"
+                               data-value="true|false"
+                        />
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

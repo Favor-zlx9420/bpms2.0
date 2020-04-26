@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.PfundInstAmacMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbPfundInstAmac" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="INST_ID" property="instId" jdbcType="VARCHAR" />
+    <result column="PARTY_FULL_NAME" property="partyFullName" jdbcType="VARCHAR" />
+    <result column="PARTY_FULL_NAME_EN" property="partyFullNameEn" jdbcType="VARCHAR" />
+    <result column="REG_CD" property="regCd" jdbcType="VARCHAR" />
+    <result column="BIZ_CD" property="bizCd" jdbcType="VARCHAR" />
+    <result column="RECORD_DATE" property="recordDate" jdbcType="DATE" />
+    <result column="REG_DATE" property="regDate" jdbcType="DATE" />
+    <result column="REG_ADDR" property="regAddr" jdbcType="VARCHAR" />
+    <result column="OFFICE_ADDR" property="officeAddr" jdbcType="VARCHAR" />
+    <result column="REG_CAP" property="regCap" jdbcType="DECIMAL" />
+    <result column="ACT_CAP" property="actCap" jdbcType="DECIMAL" />
+    <result column="INST_NATURE" property="instNature" jdbcType="VARCHAR" />
+    <result column="ACT_CAP_RATE" property="actCapRate" jdbcType="DECIMAL" />
+    <result column="INST_TYPE" property="instType" jdbcType="VARCHAR" />
+    <result column="SERVICE_TYPE" property="serviceType" jdbcType="VARCHAR" />
+    <result column="EMP_NUM" property="empNum" jdbcType="BIGINT" />
+    <result column="WEBSITE" property="website" jdbcType="VARCHAR" />
+    <result column="IS_QUALIFIED_ADVISER" property="isQualifiedAdviser" jdbcType="VARCHAR" />
+    <result column="IS_MEMBER" property="isMember" jdbcType="VARCHAR" />
+    <result column="MEMBER_REP" property="memberRep" jdbcType="VARCHAR" />
+    <result column="MEMBER_TYPE" property="memberType" jdbcType="VARCHAR" />
+    <result column="INITIATION_TIME" property="initiationTime" jdbcType="DATE" />
+    <result column="LEGAL_OP_STATUS" property="legalOpStatus" jdbcType="VARCHAR" />
+    <result column="LAW_FIRM" property="lawFirm" jdbcType="VARCHAR" />
+    <result column="LAWYER_NAME" property="lawyerName" jdbcType="VARCHAR" />
+    <result column="LEGAL_REP" property="legalRep" jdbcType="VARCHAR" />
+    <result column="IS_QUALIFIED" property="isQualified" jdbcType="VARCHAR" />
+    <result column="QUALIFY_WAY" property="qualifyWay" jdbcType="VARCHAR" />
+    <result column="LAST_REPORT_DATE" property="lastReportDate" jdbcType="DATE" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="RECORD_STATUS" property="recordStatus" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+    <result column="EMP_NUM_QUALIFIED" property="empNumQualified" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.rong.tong.pfunds.module.entity.TbPfundInstAmac" extends="BaseResultMap" >
+    <result column="INST_INT_INF" property="instIntInf" jdbcType="LONGVARCHAR" />
+    <result column="NOTE" property="note" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstAmac" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvPfundInstAmac" extends="ListResultMap" >
+    <result column="INST_INT_INF" property="instIntInf" jdbcType="LONGVARCHAR" />
+    <result column="NOTE" property="note" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`INST_ID`, e.`PARTY_FULL_NAME`, e.`PARTY_FULL_NAME_EN`, e.`REG_CD`, e.`BIZ_CD`, 
+    e.`RECORD_DATE`, e.`REG_DATE`, e.`REG_ADDR`, e.`OFFICE_ADDR`, e.`REG_CAP`, e.`ACT_CAP`, 
+    e.`INST_NATURE`, e.`ACT_CAP_RATE`, e.`INST_TYPE`, e.`SERVICE_TYPE`, e.`EMP_NUM`, 
+    e.`WEBSITE`, e.`IS_QUALIFIED_ADVISER`, e.`IS_MEMBER`, e.`MEMBER_REP`, e.`MEMBER_TYPE`, 
+    e.`INITIATION_TIME`, e.`LEGAL_OP_STATUS`, e.`LAW_FIRM`, e.`LAWYER_NAME`, e.`LEGAL_REP`, 
+    e.`IS_QUALIFIED`, e.`QUALIFY_WAY`, e.`LAST_REPORT_DATE`, e.`PARTY_ID`, e.`RECORD_STATUS`, 
+    e.`UPDATE_TIME`, e.`TMSTAMP`, e.`EMP_NUM_QUALIFIED`
+  </sql>
+  <sql id="Blob_Column_List" >
+    e.`INST_INT_INF`, e.`NOTE`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.pfund_inst_amac e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstAmac" >
+    select count(1) as recordCount from `tong-rong`.pfund_inst_amac e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsPfundInstAmac" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

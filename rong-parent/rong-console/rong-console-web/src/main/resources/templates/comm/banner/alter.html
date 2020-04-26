@@ -1,0 +1,193 @@
+<script type="text/javascript">
+    var alterBindParam = {
+        afterBindFunc: function (entity) {
+            if (entity["pics"] == undefined) {
+                entity["pics"] = [
+                    {
+                        id: 0,
+                        picUrl: "/contents/images/pic.png",
+                        link: ""
+                    }
+                ];
+            }
+            submitOpt.otherPostParams.pics = entity["pics"];
+        }
+    }
+    //图片
+    //默认是ad
+    Dictionary.img_upload_type = "banner";
+    Dictionary.img_upload_dir = "img";
+    Dictionary.img_is_resize = "0";
+
+    //添加图片
+    function addImg(src) {
+        helpApp.currentPar.picUrl = src;
+    }
+
+    var submitOpt = {
+        otherPostParams: {
+            delPicIds: [],
+            pics: []
+        }
+    }
+    helpApp = null;
+    helpApp = new Vue({
+        el: '#imgBox',
+        data: {
+            otherPostParams: submitOpt.otherPostParams,
+            currentPar:{}
+        },
+        methods: {
+
+            addPics: function () {
+                var item = {
+                    id: 0,
+                    picUrl: "/contents/images/pic.png",
+                    link: ""
+                };
+                var dl = helpApp.otherPostParams.pics.length;
+                helpApp.otherPostParams.pics.push(item);
+                this.setFormTip("#imgBox .in-pic:last");
+            },
+            removeItem: function (e) {
+                if($(".in-pic").length == 1){
+                    lBox.alert({content:"至少需要一张banner图"});
+                    return false;
+                }
+                var index = $(e.target).closest(".in-pic").index();
+                var element = helpApp.otherPostParams.pics.splice(index, 1)[0];
+                if (element.id != 0) {
+                    submitOpt.otherPostParams.delPicIds[submitOpt.otherPostParams.delPicIds.length] = element.id;
+                }
+            },
+            setPic:function(e){
+                var index = $(e.target).closest(".in-pic").index();
+                this.currentPar = helpApp.otherPostParams.pics[index];
+                lBox.newWin2('设置banner图片','/comm/imagesams/img?r='+LE.ranStr(),700,400);
+            },
+            setFormTip: function (selector) {
+                setTimeout(function () {
+                    //参数校验设置
+                    LET.intCheckFormTip();
+                }, 10);
+            }
+        },
+        mounted: function () {
+            this.setFormTip("#imgBox");
+        }
+    });
+</script>
+<style type="text/css">
+    .pic-view {
+        height: 114px;
+    }
+
+    .pic-view img {
+        width: 300px;
+        height: 112px;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+    .btn-select-img {
+        top: 5px;
+    }
+
+    .btn-remove-pic {
+        left: 389px;
+    }
+</style>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form"
+      action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0"/>
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>banner描述</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,255}$"
+                                data-tip="长度1-255,[请勿输入','，'|'等特殊字符串]"
+                                type="text" class="input validator had-edit" name="entity.title" id="title"/>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box">
+                <div class="comm-item-title">
+                    <div>页面类型</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element" style="width:300px;">
+                        <select name="entity.pageType" id="pageType"
+                                class="validator no-render had-edit"
+                                data-rules="required"
+                                data-enumber="Consts.BannerPage"
+                                data-load='{"defaultItem":{"请选择":""}}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        显示状态
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left le-form-element switch" style="width:60px;">
+                        <input type="hidden" class="switch" name="entity.state" id="state"
+                               data-text="显示|隐藏"
+                               data-value="1|0"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div><h3>banner图</h3></div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                    </div>
+                </div>
+            </div>
+            <div id="imgBox">
+                <div class="in-pic" v-for="(it,ii) in otherPostParams.pics">
+                    <div class="comm-item-box img-box">
+                        <div class="comm-item-title">
+                            <div class="picDesc">图{{ii+1}}</div>
+                        </div>
+                        <div class="comm-item-content">
+                            <div class="f-left">
+                                <div class="pic-view"><img v-bind:src="it.picUrl" v-on:click="setPic" /><span style="color:red;">*</span>666 * 888
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comm-item-box link-box">
+                        <div class="comm-item-title">
+                            <div>链接地址</div>
+                        </div>
+                        <div class="comm-item-content">
+                            <div class="f-left">
+                                <input
+                                        placeholder="最多输入255个字"
+                                        type="text" class="input" v-model="it.link"/>
+                            </div>
+                            <div class="viyui-btn viyui-btn-sm btn-select-img" v-on:click="addPics">添加图片</div>
+                            <div class="viyui-btn viyui-btn-sm btn-select-img btn-remove-pic" v-on:click="removeItem">
+                                删除图片
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include "../../layout/comm-alter-btn.html" />
+</form>

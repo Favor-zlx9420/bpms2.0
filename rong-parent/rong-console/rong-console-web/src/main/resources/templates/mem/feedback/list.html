@@ -1,0 +1,41 @@
+<div class="box-search">
+    <div>反馈时间：
+        <input type="text" placeholder="开始时间" class="timeSearch" name="e.createDate.gt" id="beginCreateDate" value=''/>
+        ~
+        <input type="text" placeholder="结束时间" class="timeSearch" name="e.createDate.lt" id="endCreateDate" value=''/>
+    </div>
+</div>
+<div class="box-search searchLong">
+    <div>搜索：<input placeholder="请输入反馈内容" type="text" value='' class="input textSearch" name="e.content.like" /></div>
+</div>
+<script>
+    ifwin.listEditText = "回复";
+    function bindVisibleFunc(tr,v,i){
+        return defaultBindSwitchItem(tr["id"],"visible",v);
+    }
+    function showEditInfo(tr, v, i) {
+        var html = "";
+    <#if hasDelPermission!false >
+        html += "<span style='margin-left:5px;margin-right:5px;'>&nbsp;</span><a class=\"btn-list-del\" data-id=\"" + v + "\">删除</a>";
+    </#if>
+        return html;
+    }
+    function editItem(id,item,value){
+        var param = {
+            url:"${viewModel.editAction}",
+            entity:{
+                id:id
+            }
+        }
+        param.entity[item] = value;
+        editParam(param);
+    }
+    $(function(){
+        $('#beginCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({maxDateTime: $('#endCreateDate').getDateValue()})}
+        });
+        $('#endCreateDate').datetimepicker({
+            onShow: function (ct) {this.setOptions({minDateTime: $('#beginCreateDate').getDateValue()})}
+        });
+    });
+</script>

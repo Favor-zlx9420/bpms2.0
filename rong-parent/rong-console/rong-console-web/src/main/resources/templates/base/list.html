@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>${viewModel.title!""}</title>
+    <#include  "../layout/css-js.html" />
+</head>
+<body>
+<form autocomplete="off" id="commQueryForm" name="com_form_action" class="comm-query-form" action="${viewModel.dataGridAction}" method="post" onsubmit="return false;">
+    <div class="s_top_Pannel s-top-btn-box">
+        <#include  "../layout/ordinary-search-btn.html" />
+    </div>
+    <div id="searchContent" class="tapContentBox search-content singleSearchBox">
+        <#include  "${viewModel.listAction}.html" />
+    </div>
+    <input type="hidden" id="deltag" name="e.deltag.eq" />
+</form>
+<div id="commGrid" class="viy-ui-table com-con-info"></div>
+</body>
+</html>

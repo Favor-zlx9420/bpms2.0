@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.fund.mapper.FundManagerNewMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.fund.module.entity.TbFundManagerNew" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="PERSON_ID" property="personId" jdbcType="BIGINT" />
+    <result column="FUND_ID" property="fundId" jdbcType="BIGINT" />
+    <result column="SECURITY_ID" property="securityId" jdbcType="BIGINT" />
+    <result column="PUBLISH_DATE" property="publishDate" jdbcType="DATE" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="IS_INCUMBENT" property="isIncumbent" jdbcType="TINYINT" />
+    <result column="ACCESSION_DATE" property="accessionDate" jdbcType="DATE" />
+    <result column="DIMISSION_DATE" property="dimissionDate" jdbcType="DATE" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.fund.module.view.TvFundManagerNew" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.fund.module.view.TvFundManagerNew" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`ID`, e.`PERSON_ID`, e.`FUND_ID`, e.`SECURITY_ID`, e.`PUBLISH_DATE`, e.`POSITION`, 
+    e.`IS_INCUMBENT`, e.`ACCESSION_DATE`, e.`DIMISSION_DATE`, e.`PARTY_ID`, e.`UPDATE_TIME`, 
+    e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.`fund_manager_new` e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.fund.module.query.TsFundManagerNew" >
+    select count(1) as recordCount from `tong-rong`.`fund_manager_new` e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.fund.module.query.TsFundManagerNew" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>

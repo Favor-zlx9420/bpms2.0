@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>${viewModel.title!""}</title>
+    <#include  "../../layout/css-js.html" />
+</head>
+<body>
+<form autocomplete="off" class="comm-alter-form viy-form" name="comm-alter-form" action="${viewModel.basePath}config">
+    <div class="tab-panel-box" data-control=".tab-content-box">
+        <div class="tab">基本配置</div>
+        <div class="tab">默认信用积分配置</div>
+    </div>
+    <div class="tab-content-box comm-outer-box">
+        <div class="comm-inner-box tab-content-comm-item">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员昵称最长长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_NICKNAME_MAX_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员昵称最短长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_NICKNAME_MIN_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员用户密码最长长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_PWD_MAX_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员用户密码最短长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_PWD_MIN_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员用户名最长长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_NAME_MAX_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员用户名最短长度
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_NAME_MIN_LEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        浏览器登录几次失败后需要验证码
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEM_TRY_LORR_COUNT" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        每天尝试密保问题次数
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="SECURITY_TRY_COUNT" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        会员token保存时长(单位：秒)
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="MEMBER_TOKEN" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        身份校验通过有效期(秒)
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="IDENTITY_VERIFY_VALITY" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        手机验证码错误次数上限
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                placeholder="一天错误多少次数不可再输入且不可再发送"
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="DAY_VERIFYCODE_TRY_COUNT" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        每天登录信息错误次数上限
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                placeholder="每天登录信息错误几次当天无法再次登录"
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="DAY_MEM_TRY_LOGIN_COUNT" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="comm-inner-box tab-content-comm-item">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        公司资产认证
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,63}$"
+                                data-tip="长度1-63"
+                                type="number" class="input validator" name="CREDITFILE_COMPANY_COMPANY_ASSETS_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        企业注册资本
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_COMPANY_REGISTERED_CAPITAL_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        公司营业执照
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_COMPANY_BUSINESS_LICENSE_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        股票基金
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_STOCK_FUND_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        房产信息
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_ESTATE_INFO_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        车辆认证信息
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_CAR_INFO_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        个人驾照认证
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_PERSONAL_DRIVER_LICENSE_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        个人工作年限认证
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_PERSONAL_JOBS_YEARS_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>
+                        个人学历认证
+                    </div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                class="input validator"
+                                type="number" name="CREDITFILE_PERSONAL_EDUCATION_LEVEL_INTEGRAL" />分
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include  "../../layout/config-alter-btn.html" />
+</form>
+</body>
+<script>
+    $(function(){
+        new LET.Tab(".tab-panel-box");
+    });
+</script>
+</html>

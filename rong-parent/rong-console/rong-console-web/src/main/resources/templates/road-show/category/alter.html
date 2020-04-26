@@ -1,0 +1,106 @@
+<style type="text/css">
+    #labelList{width:70%;}
+    div#labelList a {
+        margin-bottom: 10px;
+    }
+</style>
+<script type="text/javascript">
+    var oldPindex = 0;
+    var submitOpt = {
+        wrap: function (req) {
+            req.entity.labelIds = $("#labelList .selected").map(function () {return $(this).attr("data-val");}).get().join(",");
+        }
+    }
+    var alterBindParam={
+        afterRenderFunc:function(entity){
+            var s = $("#parentId").data("param")["selectedItems"];
+            if(null != s && s.length > 0){
+                oldPindex = s[0]["dataIndex"];
+            }
+            if(entity.id > 0){
+                if(entity["labelIds"] != null){
+                    $("#labelList a").each(function(){
+                        if(LE.in_str(entity.labelIds,$(this).attr("data-val"),",")){
+                            $(this).addClass("selected");
+                        }
+                    });
+                }
+            }
+        }
+    }
+    function checkParent(){
+        var form = $("#categoryForm");
+        var thisId = parseInt($("#id",form).val());
+        if(thisId > 0){
+            var param = $("#parentId",form).data("param");
+            if(param.selectedItems.length  > 0 && ViyGrid.checkOffspringOrSelf(param,oldPindex,{id:thisId},param.selectedItems[0])){
+                return "上一级分类不能为自己或者自己后代分类";
+            }
+        }
+        return ResultStatus.ok;
+    }
+</script>
+<form id="categoryForm" autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" value="0" name="entity.id" id="id" />
+    <input type="hidden" name="entity.deltag" id="deltag" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>分类名称</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <input
+                                data-rules="required"
+                                data-regex="^\S{1,64}$"
+                                data-tip="长度1-64"
+                                type="text" class="input validator" name="entity.name" id="name" />
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box viy-select-item-box hide">
+                <div class="comm-item-title"><div>选择上级分类</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left select-com-box le-form-element tree-render" style="width:300px;">
+                        <select name="entity.parentId" id="parentId"
+                                data-extra-rules="checkParent"
+                                class="validator"
+                                data-load='{"url":"${viewModel.basePath}dataGrid?pageInfo.pageSize=2000"}'
+                        >
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box hide">
+                <div class="comm-item-title"><div>页面关键字</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.keyword" id="keyword" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box hide">
+                <div class="comm-item-title"><div>描述</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <textarea name="entity.description" id="description" class="input textarea" cols="80" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title"><div>标签选择</div></div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="labelList" class="page_pri_div selected-box">
+                            <#list labelList as it>
+                            <a data-val='${it.id?c}' data-fc="function(){$(this).toggleClass('selected');}">${it.name}<i class="icon-zui"></i></a>
+                        </#list>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <#include  "../../layout/comm-alter-state-item.html" />
+            <#include  "../../layout/comm-alter-sort-item.html" />
+        </div>
+    </div>
+    <#include  "../../layout/comm-alter-btn.html" />
+</form>

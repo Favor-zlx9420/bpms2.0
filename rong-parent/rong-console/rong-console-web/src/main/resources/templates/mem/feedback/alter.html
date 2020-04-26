@@ -1,0 +1,105 @@
+<script>
+    alterBindParam = {
+        afterBindFunc:function(entity){
+            if(entity["result"] == Consts.DealStatus.已处理){
+                $("#dealBox").removeClass("hide");
+                $("#commonAlterBox .btn-submit").hide();
+            }else{
+                $("#noDealBox").removeClass("hide");
+            }
+        }
+    }
+</script>
+<style type="text/css">
+    .btn-save-as{display:none !important;}
+</style>
+<form autocomplete="off" class="comm-alter-form comm-iframe-form viy-form" name="comm-alter-form" action="${viewModel.alterActionUrl}">
+    <input type="hidden" name="entity.id" id="id" value="0" />
+    <div class="comm-outer-box">
+        <div class="comm-inner-box">
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>提交用户</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <span id="submitUserName"></span>/<span id="submitUserRealName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>标题</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="title"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>内容</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>相关连接</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="link"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>提交时间</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="createDate" data-bind-function="dateTimeFunc"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="comm-item-box">
+                <div class="comm-item-title">
+                    <div>是否已处理</div>
+                </div>
+                <div class="comm-item-content">
+                    <div class="f-left">
+                        <div id="result" data-bind-function="bindYesOrNoFunc"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="noDealBox" class="hide">
+                <div class="comm-item-box">
+                    <div class="comm-item-title"><div>回复</div></div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <textarea name="entity.replyContent" class="input textarea" cols="80" rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="dealBox" class="hide">
+                <div class="comm-item-box">
+                    <div class="comm-item-title">
+                        <div>回复内容</div>
+                    </div>
+                    <div class="comm-item-content">
+                        <div class="f-left">
+                            <div id="replyContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<#include  "../../layout/comm-alter-btn.html" />
+</form>

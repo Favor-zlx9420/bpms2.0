@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rong.tong.pfunds.mapper.MdSecurityMapper" >
+  <resultMap id="BaseResultMap" type="com.rong.tong.pfunds.module.entity.TbMdSecurity" >
+    <result column="SECURITY_ID" property="securityId" jdbcType="INTEGER" />
+    <result column="TICKER_SYMBOL" property="tickerSymbol" jdbcType="VARCHAR" />
+    <result column="EXCHANGE_CD" property="exchangeCd" jdbcType="VARCHAR" />
+    <result column="SEC_FULL_NAME" property="secFullName" jdbcType="VARCHAR" />
+    <result column="SEC_SHORT_NAME" property="secShortName" jdbcType="VARCHAR" />
+    <result column="CN_SPELL" property="cnSpell" jdbcType="VARCHAR" />
+    <result column="SEC_FULL_NAME_EN" property="secFullNameEn" jdbcType="VARCHAR" />
+    <result column="SEC_SHORT_NAME_EN" property="secShortNameEn" jdbcType="VARCHAR" />
+    <result column="DYID" property="dyid" jdbcType="VARCHAR" />
+    <result column="EX_COUNTRY_CD" property="exCountryCd" jdbcType="CHAR" />
+    <result column="TRANS_CURR_CD" property="transCurrCd" jdbcType="CHAR" />
+    <result column="ASSET_CLASS" property="assetClass" jdbcType="VARCHAR" />
+    <result column="LIST_STATUS_CD" property="listStatusCd" jdbcType="VARCHAR" />
+    <result column="LIST_DATE" property="listDate" jdbcType="DATE" />
+    <result column="DELIST_DATE" property="delistDate" jdbcType="DATE" />
+    <result column="PARTY_ID" property="partyId" jdbcType="BIGINT" />
+    <result column="DY_USE_FLG" property="dyUseFlg" jdbcType="TINYINT" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="TMSTAMP" property="tmstamp" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ListResultMap" type="com.rong.tong.pfunds.module.view.TvMdSecurity" extends="BaseResultMap" />
+  <resultMap id="ViewResultMap" type="com.rong.tong.pfunds.module.view.TvMdSecurity" extends="ListResultMap" />
+  <sql id="Base_Column_List" >
+    e.`SECURITY_ID`, e.`TICKER_SYMBOL`, e.`EXCHANGE_CD`, e.`SEC_FULL_NAME`, e.`SEC_SHORT_NAME`, 
+    e.`CN_SPELL`, e.`SEC_FULL_NAME_EN`, e.`SEC_SHORT_NAME_EN`, e.`DYID`, e.`EX_COUNTRY_CD`, 
+    e.`TRANS_CURR_CD`, e.`ASSET_CLASS`, e.`LIST_STATUS_CD`, e.`LIST_DATE`, e.`DELIST_DATE`, 
+    e.`PARTY_ID`, e.`DY_USE_FLG`, e.`UPDATE_TIME`, e.`TMSTAMP`
+  </sql>
+  <sql id="query_condition" >
+    <if test="entity != null" >
+      
+    </if>
+  </sql>
+  <sql id="select_for_list_tv" >
+    select 
+    <include refid="Base_Column_List" />
+    from `tong-rong`.md_security e
+  </sql>
+  <select id="getCountPaging" resultType="java.lang.Integer" parameterType="com.rong.tong.pfunds.module.query.TsMdSecurity" >
+    select count(1) as recordCount from `tong-rong`.md_security e where 1=1
+    <include refid="query_condition" />
+  </select>
+  <select id="getListByBean" resultMap="ListResultMap" parameterType="com.rong.tong.pfunds.module.query.TsMdSecurity" >
+    <include refid="select_for_list_tv" />
+     where 1=1 
+    <include refid="query_condition" />
+    <if test="orders !=null and orders.size > 0" >
+      order by ${orderStr}
+    </if>
+    <if test="null != pageInfo" >
+      limit #{pageInfo.step},#{pageInfo.pageSize}
+    </if>
+  </select>
+</mapper>
